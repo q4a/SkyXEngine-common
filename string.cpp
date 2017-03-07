@@ -1210,9 +1210,14 @@ DWORD String::find_last_of(const String & str, DWORD pos) const
 }
 
 
-bool operator<(const String & a, const String & b)
+/*bool operator<(const String & a, const String & b)
 {
 	return(strcmp(a.c_str(), b.c_str()) < 0);
+}*/
+
+bool String::operator<(const String & s) const
+{
+	return(strcmp(string, s.string) < 0);
 }
 
 ////////////////////////////////////////////////////////

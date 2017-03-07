@@ -1,7 +1,7 @@
 #ifndef SX_Stack_H
 #define SX_Stack_H
 
-#include <core\MemAlloc.h>
+#include <common/MemAlloc.h>
 
 template <typename T, int pageSize=256>
 class Stack

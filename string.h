@@ -215,7 +215,7 @@ public:
 	inline const char * c_str() const;
 
 	void Reserve(int length);
-	inline void AppendReserve(int length);
+	void AppendReserve(int length);
 
 	inline int		ToInt() const;
 	inline long	ToLongInt() const;
@@ -225,11 +225,13 @@ public:
 
 	inline operator StringW() const;
 
+	bool operator<(const String & s) const;
+
 protected:
 	char * string;
 };
 
-bool operator<(const String & a, const String & b);
+//bool operator<(const String & a, const String & b);
 
 
 

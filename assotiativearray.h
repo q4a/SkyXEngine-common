@@ -1,8 +1,8 @@
 #ifndef SX_AssotiativeArray_H
 #define SX_AssotiativeArray_H
 //#include "DSbase.h"
-#include <core\MemAlloc.h>
-#include <core\Stack.h>
+#include <common/MemAlloc.h>
+#include <common/Stack.h>
 
 #ifndef NULL
 #define NULL 0
