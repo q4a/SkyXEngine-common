@@ -112,10 +112,10 @@ public:
 			DestructInterval(arr.Size, this->Size - 1);
 			this->Size = arr.Size;
 		}
-		for(int i = arr.Size - 1; i >= 0; i--)
-		{
-			(*this)[i] = arr[i];
-		}
+			for(int i = arr.Size - 1; i >= 0; i--)
+			{
+				(*this)[i] = arr[i];
+			}
 		return(*this);
 	}
 
@@ -123,12 +123,10 @@ public:
 	{
 		if(key > ((UINT)-1) - 128)
 		{
-			dbg_break
+			
 		}
-
 			if(key >= this->Size)
 			{
-				//dbg_break
 					if(key >= this->AllocSize)
 					{
 						Realloc(max(this->AllocSize, key) + BlockSize);
@@ -136,7 +134,6 @@ public:
 				ConstructInterval(this->Size, key);
 				this->Size = key + 1;
 			}
-
 		return(Data[key]);
 	}
 
