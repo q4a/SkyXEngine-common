@@ -98,4 +98,25 @@ void StrCutNameNEx(const char* path, char* name)
 	}
 }
 
+//парсинг строки (имени файла) str на имя папки path и имя файла name
+//str = test_file_1.ex - path = test, name = file_1.ex
+inline bool StrParsePathName(const char* str, char* path, char* name)
+{
+	bool IsTruePath = false;
+	//обрезаем имя файла и папку
+	for (int i = 0; i<strlen(str); i++)
+	{
+		if (str[i] == '_')
+		{
+			memcpy(path, str, sizeof(char)*i);
+			path[i] = 0;
+			sprintf(name, "%s", str + i + 1);
+			IsTruePath = true;
+			break;
+		}
+	}
+
+	return IsTruePath;
+}
+
 #endif
