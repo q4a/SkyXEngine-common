@@ -1,4 +1,9 @@
-﻿
+
+/******************************************************
+Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>

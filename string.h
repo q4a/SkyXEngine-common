@@ -1,4 +1,10 @@
-﻿#ifndef String_H
+
+/******************************************************
+Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
+#ifndef String_H
 #define String_H
 
 #include <string.h>

@@ -1,3 +1,9 @@
+
+/******************************************************
+Copyright В© Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
 #ifndef MEMALLOC_H
 #define MEMALLOC_H
 
@@ -21,10 +27,10 @@
 
 struct UsageStats
 {
-	UINT uAllocCount; // количество занятых элементов
-	UINT uFreeCount; // количество свободных элементов
-	ULONG ulSysMem; // Количество выделенной у системы памяти
-	ULONG ulAllocMem; //Количество занятой элементами памяти
+	UINT uAllocCount; // РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РЅСЏС‚С‹С… СЌР»РµРјРµРЅС‚РѕРІ
+	UINT uFreeCount; // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРІРѕР±РѕРґРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ
+	ULONG ulSysMem; // РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹РґРµР»РµРЅРЅРѕР№ Сѓ СЃРёСЃС‚РµРјС‹ РїР°РјСЏС‚Рё
+	ULONG ulAllocMem; //РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РЅСЏС‚РѕР№ СЌР»РµРјРµРЅС‚Р°РјРё РїР°РјСЏС‚Рё
 };
 
 template <typename T, int SizeBlock = 256, int SizePage=16>
