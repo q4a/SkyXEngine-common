@@ -1,3 +1,9 @@
+
+/******************************************************
+Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
 #ifndef sxtypes_h
 #define sxtypes_h
 

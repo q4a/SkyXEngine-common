@@ -1,3 +1,9 @@
+
+/******************************************************
+Copyright В© Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
 #ifndef _SXMath_H_
 #define _SXMath_H_
 
@@ -1706,7 +1712,7 @@ public:
 		w = q.w;
 	}
 
-	SMQuaternion::SMQuaternion():x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+	SMQuaternion::SMQuaternion():x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 	{
 	}
 
@@ -1903,7 +1909,7 @@ __forceinline SMQuaternion SMquaternionSlerp(const SMQuaternion &q, const SMQuat
 	float p1[4];
 	double omega, cosom, sinom, scale0, scale1;
 
-	// косинус угла
+	// РєРѕСЃРёРЅСѓСЃ СѓРіР»Р°
 	cosom = q.x*p.x + q.y*p.y + q.z*p.z + q.w*p.w;
 
 	if(cosom < 0.0)
@@ -1920,7 +1926,7 @@ __forceinline SMQuaternion SMquaternionSlerp(const SMQuaternion &q, const SMQuat
 
 	if((1.0 - cosom) > 0.00001f)
 	{
-		// стандартный случай (slerp)
+		// СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№ (slerp)
 		omega = acos(cosom);
 		sinom = sin(omega);
 		scale0 = sin((1.0 - t) * omega) / sinom;
@@ -1928,7 +1934,7 @@ __forceinline SMQuaternion SMquaternionSlerp(const SMQuaternion &q, const SMQuat
 	}
 	else
 	{
-		// если маленький угол - линейная интерполяция
+		// РµСЃР»Рё РјР°Р»РµРЅСЊРєРёР№ СѓРіРѕР» - Р»РёРЅРµР№РЅР°В¤ РёРЅС‚РµСЂРїРѕР»В¤С†РёВ¤
 		scale0 = 1.0 - t;
 		scale1 = t;
 	}

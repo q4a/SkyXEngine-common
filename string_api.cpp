@@ -1,4 +1,9 @@
 
+/******************************************************
+Copyright В© Vitaliy Buturlin, Evgeny Danilovich, 2017
+See the license in LICENSE
+******************************************************/
+
 #ifndef __string_api
 #define __string_api
 
@@ -98,12 +103,12 @@ void StrCutNameNEx(const char* path, char* name)
 	}
 }
 
-//парсинг строки (имени файла) str на имя папки path и имя файла name
+//РїР°СЂСЃРёРЅРі СЃС‚СЂРѕРєРё (РёРјРµРЅРё С„Р°Р№Р»Р°) str РЅР° РёРјСЏ РїР°РїРєРё path Рё РёРјСЏ С„Р°Р№Р»Р° name
 //str = test_file_1.ex - path = test, name = file_1.ex
 inline bool StrParsePathName(const char* str, char* path, char* name)
 {
 	bool IsTruePath = false;
-	//обрезаем имя файла и папку
+	//РѕР±СЂРµР·Р°РµРј РёРјСЏ С„Р°Р№Р»Р° Рё РїР°РїРєСѓ
 	for (int i = 0; i<strlen(str); i++)
 	{
 		if (str[i] == '_')
