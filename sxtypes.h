@@ -33,6 +33,10 @@ typedef unsigned long ULONG;
 #define dbg_break asm("int $3");
 #endif
 
+#define DECLARE_CLASS(cls, basecls)		\
+	typedef cls ThisClass;				\
+	typedef basecls BaseClass;
+
 #define mem_del(obj) if(obj){delete obj;}
 #define mem_delete(obj) if(obj){delete obj;obj=0;}
 #define mem_delete_a(obj) if(obj){delete[] obj;obj=0;}

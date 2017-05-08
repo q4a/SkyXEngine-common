@@ -10,6 +10,7 @@
 #endif
 #if defined(_WINDOWS)
 #	define wcscmpi wcsicmp
+#	define WIN32_LEAN_AND_MEAN
 #	include <Windows.h>
 #endif
 

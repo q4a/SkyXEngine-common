@@ -19,6 +19,8 @@
 #	pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
 
+#include <common/sxtypes.h>
+
 struct UsageStats
 {
 	UINT uAllocCount; // количество занятых элементов
