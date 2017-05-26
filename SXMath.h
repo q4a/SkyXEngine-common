@@ -261,6 +261,11 @@ __declspec(align(16)) struct float3: public SMVECTOR
 		mmv = _mm_setzero_ps();
 	};
 
+	float3(float x)
+	{
+		mmv = _mm_set_ps(1.0f, x, x, x);
+	};
+
 	float3(float x, float y, float z)
 	{
 		mmv = _mm_set_ps(1.0f, z, y, x);

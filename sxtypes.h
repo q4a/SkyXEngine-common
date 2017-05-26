@@ -43,6 +43,9 @@ typedef unsigned long ULONG;
 	typedef cls ThisClass;				\
 	typedef basecls BaseClass;
 
+#define DECLARE_CLASS_NOBASE(cls)		\
+	typedef cls ThisClass;
+
 #define mem_del(obj) if(obj){delete obj;}
 #define mem_delete(obj) if(obj){delete obj;obj=0;}
 #define mem_delete_a(obj) if(obj){delete[] obj;obj=0;}
