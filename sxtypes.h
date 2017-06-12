@@ -108,4 +108,9 @@ inline const char * strip_prefix(const char * str, const char * pref)
 	return(str);
 }
 
+inline int fstrcmp(const char * str1, const char * str2)
+{
+	return(str1 == str2 ? 0 : strcmp(str1, str2));
+}
+
 #endif
