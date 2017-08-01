@@ -66,6 +66,23 @@ inline float lerpf(float x,float y,float s)
 	return x + s*(y - x);
 }
 
+inline float clampf(float x, float a, float b)
+{
+	if (x >= a && x <= b)
+		return x;
+
+	if (x <= a)
+		return a;
+
+	if (x >= b)
+		return b;
+}
+
+inline float saturatef(float x)
+{
+	return clampf(x, 0.f, 1.f);
+}
+
 __declspec(align(16)) struct SMVECTOR
 {
 	union
