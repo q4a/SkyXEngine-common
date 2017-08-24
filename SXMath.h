@@ -49,21 +49,19 @@ void operator delete[](void* ptr)\
 #define SMToRadian(degree)((degree)*(SM_PI / 180.0f))
 #define SMToAngle(rad)((rad)*(180.0f / SM_PI))
 
-inline float randf(float lowBound, float highBound)
-{
-	if( lowBound >= highBound ) // bad input
-		return lowBound;
-
-	// get random float in [0, 1] interval
-	float f = (rand() % 10000) * 0.0001f; 
-
-	// return float in [lowBound, highBound] interval. 
-	return (f * (highBound - lowBound)) + lowBound; 
-}
-
 inline float lerpf(float x,float y,float s)
 {
 	return x + s*(y - x);
+}
+
+inline float randf(float lowBound, float highBound)
+{
+	if (lowBound >= highBound)
+		return lowBound;
+
+	float f = (rand() % 10000) * 0.0001f;
+
+	return lerpf(lowBound, highBound, f);// (f * (highBound - lowBound)) + lowBound;
 }
 
 inline float clampf(float x, float a, float b)
@@ -2109,9 +2107,9 @@ __forceinline float3 SMMatrixToEuler(const SMMATRIX & mat)
 	return(res);
 }
 
-__forceinline float3 SMEulerToVec(const float3 & in)
+__forceinline float3 SMEulerToVec(const float3 & in, const float3 & basedir)
 {
-	return(SMMatrixRotationX(in.x) * SMMatrixRotationY(in.y) * SMMatrixRotationZ(in.z) * float3(0.0f, -1.0f, 0.0f));
+	return(SMMatrixRotationX(in.x) * SMMatrixRotationY(in.y) * SMMatrixRotationZ(in.z) * basedir);
 }
 
 
