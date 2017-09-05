@@ -48,6 +48,21 @@ public:
 			}
 	}
 
+	inline void swap(Array &arr)
+	{
+		UINT tmpS = Size;
+		Size = arr.Size;
+		arr.Size = tmpS;
+
+		tmpS = AllocSize;
+		AllocSize = arr.AllocSize;
+		arr.AllocSize = tmpS;
+
+		void * tmpD = Data;
+		Data = arr.Data;
+		arr.Data = (T*)tmpD;
+	}
+
 	inline void resize(UINT NewSize)
 	{
 		Realloc(NewSize);
@@ -189,6 +204,15 @@ public:
 		AllocSize = 0;
 		Data = NULL;
 		Alloc();
+	}
+
+	inline void clearFast()
+	{
+		if(Size)
+		{
+			DestructInterval(0, Size - 1);
+		}
+		Size = 0;
 	}
 
 	inline UINT GetAllocSize()

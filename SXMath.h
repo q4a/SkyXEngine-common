@@ -10,6 +10,7 @@ See the license in LICENSE
 #include <xmmintrin.h>
 #include <math.h>
 #include <cstdlib>
+#include <assert.h>
 
 #define SX_ALIGNED_OP_MEM \
 void* operator new(size_t size)\
@@ -74,6 +75,9 @@ inline float clampf(float x, float a, float b)
 
 	if (x >= b)
 		return b;
+
+	assert(a <= b);
+	return(0);
 }
 
 inline float saturatef(float x)
@@ -153,6 +157,10 @@ __declspec(align(16)) struct SMVECTOR
 				return this->z;
 			else if(key == 3)
 				return this->w;
+
+		assert(key >= 0 && key < 4);
+		static float err;
+		return(err);
 	};
 
 	SMVECTOR & operator*=(const float & F);

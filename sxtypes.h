@@ -10,6 +10,7 @@ See the license in LICENSE
 #include <stdint.h>
 #include <string.h>
 #include <memory.h>
+#include <ctype.h>
 
 
 typedef float float32_t;
@@ -111,6 +112,33 @@ inline const char * strip_prefix(const char * str, const char * pref)
 inline int fstrcmp(const char * str1, const char * str2)
 {
 	return(str1 == str2 ? 0 : strcmp(str1, str2));
+}
+
+inline int parse_str(char * str, char ** ppOut, int iMaxSize, char delim=',')
+{
+	//" val ; qwe;asd "
+	int c = 0;
+	while(*str && (c < iMaxSize || !ppOut))
+	{
+		while(*str && (*str == delim || isspace(*str))){++str;}
+		if(ppOut)
+		{
+			ppOut[c++] = str;
+		}
+		else
+		{
+			++c;
+		}
+		while(*str && *str != delim && !isspace(*str)){++str;}
+		if(!*str) break;
+		if(ppOut)
+		{
+			*str = 0;
+		}
+		++str;
+		//while(*str && (*str == delim || isspace(*str))){++str;}
+	}
+	return(c);
 }
 
 #endif
