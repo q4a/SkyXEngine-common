@@ -18,6 +18,7 @@ static_assert(sizeof(float32_t) == 4, "Please check float32_t on your platform. 
 
 typedef int32_t ID;
 typedef unsigned long DWORD;
+typedef unsigned long ULONG;
 typedef unsigned short WORD;
 typedef unsigned int size_t;
 typedef int BOOL;

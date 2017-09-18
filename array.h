@@ -15,17 +15,15 @@ See the license in LICENSE
 		Ёлемент массива не имеет гарантированного расположени¤ в пам¤ти.
 */
 
-#ifdef s4g_stack_h
+#ifdef S4G
 template <typename T, int BlockSize = 16>
-class s4g_stack;
+class s4g_Stack;
 
 template<typename T, int BlockSize = 16>
-class s4g_stack_register;
-#endif
+class s4g_StackRegister;
 
-#ifdef s4g_h
-class s4g_table;
-class s4g_gc;
+class s4g_Table;
+class s4g_GC;
 #endif
 
 template<typename T, int BlockSize=16>
@@ -134,10 +132,10 @@ public:
 			DestructInterval(arr.Size, this->Size - 1);
 			this->Size = arr.Size;
 		}
-			for(int i = arr.Size - 1; i >= 0; i--)
-			{
-				(*this)[i] = arr[i];
-			}
+		for(int i = arr.Size - 1; i >= 0; i--)
+		{
+			(*this)[i] = arr[i];
+		}
 		return(*this);
 	}
 
@@ -145,7 +143,7 @@ public:
 	{
 		if(key > ((UINT)-1) - 128)
 		{
-			
+
 		}
 			if(key >= this->Size)
 			{
@@ -222,14 +220,12 @@ public:
 
 protected:
 
-#ifdef s4g_stack_h
-	friend s4g_stack<T, BlockSize>;
-	friend s4g_stack_register<T, BlockSize>;
-#endif
+#ifdef S4G
+	friend s4g_Stack<T, BlockSize>;
+	friend s4g_StackRegister<T, BlockSize>;
 
-#ifdef s4g_h
-	friend s4g_table;
-	friend s4g_gc;
+	friend s4g_Table;
+	friend s4g_GC;
 #endif
 	inline void Alloc()
 	{

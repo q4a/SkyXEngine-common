@@ -15,7 +15,7 @@ See the license in LICENSE
 #else
 #	include <new>
 #endif
-
+#include "sxtypes.h"
 #if defined(_WINDOWS)
 #	pragma warning(disable:4018)
 #endif
@@ -24,8 +24,6 @@ See the license in LICENSE
 #	pragma GCC diagnostic push
 #	pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
-
-#include <common/sxtypes.h>
 
 struct UsageStats
 {
