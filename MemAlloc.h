@@ -333,6 +333,42 @@ public:
 		us->ulAllocMem = us->uAllocCount * sizeof(T);
 		us->ulSysMem = (us->uAllocCount + us->uFreeCount) * sizeof(T) + NumCurBlockCount * sizeof(MemBlock);
 	}
+
+	void releaseEmptyPages()
+	{
+		int iPrevFreeBlock = -1;
+		for(int i = 0; i < this->NumCurBlockCount; ++i)
+		{
+			if(this->memblocks[i].mem)
+			{
+				bool isFree = true;
+				for(int j = 0; j < this->memblocks[i].size; j++)
+				{
+					if(!(this->memblocks[i].mem[j].IsFree & 0x80000000))
+					{
+						isFree = false;
+						break;
+					}
+				}
+				if(isFree)
+				{
+					iPrevFreeBlock = i;
+					mem_free(this->memblocks[i].mem);
+					this->memblocks[i].mem = NULL;
+				}
+				else if(iPrevFreeBlock >= 0)
+				{
+					if(NumCurBlock == i)
+					{
+						NumCurBlock = iPrevFreeBlock;
+					}
+					this->memblocks[iPrevFreeBlock] = this->memblocks[i];
+					memset(&this->memblocks[i], 0, sizeof(this->memblocks[i]));
+					++iPrevFreeBlock;
+				}
+			}
+		}
+	}
 };
 
 #if defined(_WINDOWS)
