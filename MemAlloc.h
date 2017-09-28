@@ -336,8 +336,8 @@ public:
 
 	void releaseEmptyPages()
 	{
-		int iPrevFreeBlock = -1;
-		for(int i = 0; i < this->NumCurBlockCount; ++i)
+		int iPrevFreeBlock = 0;
+		for(int i = 1; i < this->NumCurBlockCount; ++i)
 		{
 			if(this->memblocks[i].mem)
 			{
