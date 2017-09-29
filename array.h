@@ -15,16 +15,11 @@ See the license in LICENSE
 		Ёлемент массива не имеет гарантированного расположени¤ в пам¤ти.
 */
 
-#ifdef S4G
+/*#ifdef S4G
 template <typename T, int BlockSize = 16>
 class s4g_Stack;
 
-template<typename T, int BlockSize = 16>
-class s4g_StackRegister;
-
-class s4g_Table;
-class s4g_GC;
-#endif
+#endif*/
 
 template<typename T, int BlockSize=16>
 class Array
@@ -219,14 +214,10 @@ public:
 	}
 
 protected:
-
+	/*
 #ifdef S4G
 	friend s4g_Stack<T, BlockSize>;
-	friend s4g_StackRegister<T, BlockSize>;
-
-	friend s4g_Table;
-	friend s4g_GC;
-#endif
+#endif*/
 	inline void Alloc()
 	{
 		Realloc(BlockSize);
