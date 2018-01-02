@@ -25,7 +25,7 @@ struct AAString
 		tmpName = NULL;
 	}
 
-	__forceinline const char * GetName() const
+	__forceinline const char * getName() const
 	{
 		return(tmpName ? tmpName : Name);
 	}
