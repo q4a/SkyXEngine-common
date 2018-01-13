@@ -213,6 +213,17 @@ public:
 		return AllocSize;
 	}
 
+	template <typename L>
+	void quickSort(const L& CompareFunc)
+	{
+		//don't sort 0 or 1 elements
+		if(size()>1)
+		{
+			quickSortInternal(CompareFunc, 0, size() - 1);
+		}
+	}
+
+
 protected:
 	/*
 #ifdef S4G
@@ -254,6 +265,44 @@ protected:
 			{
 				(&this->Data[i])->~T();
 			}
+	}
+
+
+
+	template <typename L>
+	void quickSortInternal(const L& CompareFunc, int lo, int hi)
+	{
+		//  lo is the lower index, hi is the upper index
+		//  of the region of array a that is to be sorted
+		int i = lo, j = hi;
+		T x = Data[(lo + hi) / 2];
+
+		//  partition
+		do
+		{
+			while(CompareFunc(Data[i], x))
+				i++;
+			while(CompareFunc(x, Data[j]))
+				j--;
+			if(i <= j)
+			{
+				swap(i, j);
+				i++; j--;
+			}
+		}
+		while(i <= j);
+
+		//  recursion
+		if(lo<j)
+			quickSortInternal(CompareFunc, lo, j);
+		if(i<hi)
+			quickSortInternal(CompareFunc, i, hi);
+	}
+	void swap(int index0, int index1)
+	{
+		T temp = Data[index0];
+		Data[index0] = Data[index1];
+		Data[index1] = temp;
 	}
 
 	T * Data;
