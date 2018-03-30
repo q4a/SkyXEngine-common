@@ -49,6 +49,7 @@ void StrCutNameNEx(const char* path, char* name);
 //str = test_file_1.ex - path = test, name = file_1.ex
 bool StrParsePathName(const char* str, char* path, char* name);
 
+//##########################################################################
 
 class StringW;
 

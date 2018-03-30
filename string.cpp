@@ -149,7 +149,7 @@ bool StrParsePathName(const char* str, char* path, char* name)
 	return IsTruePath;
 }
 
-//////////////////////
+//##########################################################################
 
 const char * String::c_str() const
 {
@@ -2528,7 +2528,7 @@ String::operator StringW() const
 	StringW dst;
 	dst.Reserve(length());
 #if defined(_WINDOWS)
-	MultiByteToWideChar(1251, CP_ACP, string, length() + 1, dst.string, length() + 1);
+	MultiByteToWideChar(CP_UTF8, CP_ACP, string, length() + 1, dst.string, length() + 1);
 #else
 	mbstowcs(dst.string, string, length() + 1);
 #endif
@@ -2540,7 +2540,7 @@ StringW::operator String() const
 	String dst;
 	dst.Reserve(length());
 #if defined(_WINDOWS)
-	WideCharToMultiByte(1251, CP_ACP, string, length() + 1, dst.string, length() + 1, " ", NULL);
+	WideCharToMultiByte(CP_UTF8, CP_ACP, string, length() + 1, dst.string, length() + 1, " ", NULL);
 #else
 	wcstombs(dst.string, string, sizeof(WCHAR) * (length() + 1));
 #endif
