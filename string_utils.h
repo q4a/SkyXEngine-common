@@ -1,11 +1,11 @@
 
 /******************************************************
-Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2017
+Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2018
 See the license in LICENSE
 ******************************************************/
 
-#ifndef STRING_FUNC_H
-#define STRING_FUNC_H
+#ifndef __STRING_UTILS_H
+#define __STRING_UTILS_H
 
 #include "string.h"
 #include "array.h"
@@ -52,9 +52,7 @@ int StrSubstrCount(const char *szStr, const char *szFinder);
 //! возвращает количество вхождений строки szFinder в строку szStr, без учета регистра
 int StrSubstrICount(const char *szStr, const char *szFinder);
 
-
-
-
+//##########################################################################
 
 //! преобразует строку в нижний регистр
 String StrToLower(const char *szStr);

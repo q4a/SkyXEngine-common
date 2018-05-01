@@ -1,10 +1,10 @@
 
 /******************************************************
-Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2017
+Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2018
 See the license in LICENSE
 ******************************************************/
 
-#include "string_func.h"
+#include "string_utils.h"
 
 Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty)
 {
@@ -181,6 +181,17 @@ String StrToLower(const char *szStr)
 	for (int i = 0, il = strlen(szStr); i < il; ++i)
 	{
 		sNewStr[i] = tolower((unsigned char)sNewStr[i]);
+	}
+
+	return sNewStr;
+}
+
+String StrToUpper(const char *szStr)
+{
+	String sNewStr = szStr;
+	for (int i = 0, il = strlen(szStr); i < il; ++i)
+	{
+		sNewStr[i] = toupper((unsigned char)sNewStr[i]);
 	}
 
 	return sNewStr;
