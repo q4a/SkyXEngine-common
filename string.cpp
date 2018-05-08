@@ -32,158 +32,57 @@ See the license in LICENSE
 
 #pragma once
 
-#define def_str_validate(str) (str && str[0]!=0 && str[0]!='0')
-
-bool StrValidate(const char* str)
-{
-	if (str && str[0] != 0 && str[0] != '0')
-		return true;
-	return false;
-}
-
-void StrCutMesh(const char* path, char* name)
-{
-	for (int i = 0; i<strlen(path); i++)
-	{
-		if (path[strlen(path) - i] == '\\')
-		{
-			if (i + 6 > 0 && i + 6 < strlen(path) &&
-				(path[(strlen(path) - i) - 1] == 's' || path[(strlen(path) - i) - 1] == 'S') &&
-				(path[(strlen(path) - i) - 2] == 'e' || path[(strlen(path) - i) - 2] == 'E') &&
-				(path[(strlen(path) - i) - 3] == 'h' || path[(strlen(path) - i) - 3] == 'H') &&
-				(path[(strlen(path) - i) - 4] == 's' || path[(strlen(path) - i) - 4] == 'S') &&
-				(path[(strlen(path) - i) - 5] == 'e' || path[(strlen(path) - i) - 5] == 'E') &&
-				(path[(strlen(path) - i) - 6] == 'm' || path[(strlen(path) - i) - 6] == 'M')
-				)
-			{
-				memcpy(name, path + (strlen(path) - i) + 1, i - 1);
-				name[(i - 1)] = 0;
-				break;
-			}
-		}
+#ifndef SAFE_DELETE_A
+#define SAFE_DELETE_A(p) if(p)\
+	{\
+	delete[](p); \
+	(p) = NULL; \
 	}
-}
+#endif
 
-void StrCutSound(const char* path, char* name)
-{
-	for (int i = 0; i<strlen(path); i++)
-	{
-		if (path[strlen(path) - i] == '\\')
-		{
-			if (i + 6 > 0 && i + 6 < strlen(path) &&
-				(path[(strlen(path) - i) - 1] == 's' || path[(strlen(path) - i) - 1] == 'S') &&
-				(path[(strlen(path) - i) - 2] == 'd' || path[(strlen(path) - i) - 2] == 'D') &&
-				(path[(strlen(path) - i) - 3] == 'n' || path[(strlen(path) - i) - 3] == 'N') &&
-				(path[(strlen(path) - i) - 4] == 'u' || path[(strlen(path) - i) - 4] == 'U') &&
-				(path[(strlen(path) - i) - 5] == 'o' || path[(strlen(path) - i) - 5] == 'O') &&
-				(path[(strlen(path) - i) - 6] == 's' || path[(strlen(path) - i) - 6] == 'S')
-				)
-			{
-				memcpy(name, path + (strlen(path) - i) + 1, i - 1);
-				name[(i - 1)] = 0;
-				break;
-			}
-		}
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(p) if(p)\
+	{\
+	delete (p); \
+	(p) = NULL; \
 	}
-}
-
-void StrCutName(const char* path, char* name)
-{
-	name[0] = 0;
-	for (int i = 0; i<strlen(path); i++)
-	{
-		if (path[strlen(path) - i] == '\\')
-		{
-			memcpy(name, path + (strlen(path) - i) + 1, i - 1);
-			name[(i - 1)] = 0;
-			break;
-		}
-	}
-
-	if (name[0] == 0)
-	{
-		sprintf(name, "%s", path);
-	}
-}
-
-void StrCutNameNEx(const char* path, char* name)
-{
-	name[0] = 0;
-	int pointpoint = 0;
-	for (int i = 0; i<strlen(path); i++)
-	{
-		if (path[strlen(path) - i] == '\\')
-		{
-			memcpy(name, path + (strlen(path) - i) + 1, (i - 1) - pointpoint);
-			name[(i - 1) - pointpoint] = 0;
-			break;
-		}
-		else if (path[strlen(path) - i] == '.')
-			pointpoint = i;
-	}
-
-	if (name[0] == 0)
-	{
-		sprintf(name, "%s", path);
-	}
-}
-
-//парсинг строки (имени файла) str на имя папки path и имя файла name
-//str = test_file_1.ex - path = test, name = file_1.ex
-bool StrParsePathName(const char* str, char* path, char* name)
-{
-	bool IsTruePath = false;
-	//обрезаем имя файла и папку
-	for (int i = 0; i<strlen(str); i++)
-	{
-		if (str[i] == '_')
-		{
-			memcpy(path, str, sizeof(char)*i);
-			path[i] = 0;
-			sprintf(name, "%s", str + i + 1);
-			IsTruePath = true;
-			break;
-		}
-	}
-
-	return IsTruePath;
-}
+#endif
 
 //##########################################################################
 
 const char * String::c_str() const
 {
-	return(string);
+	return(m_szString);
 }
 
 String::String()
 {
-	string = new char[1];
-	string[0] = 0;
+	m_szString = new char[1];
+	m_szString[0] = 0;
 }
 
 String::String(const char * str)
 {
-	string = new char[strlen(str) + 1];
-	//sprintf(string,"%s",str);
-	memcpy(string, str, strlen(str));
-	string[strlen(str)] = 0;
+	m_szString = new char[strlen(str) + 1];
+	//sprintf(m_szString,"%s",str);
+	memcpy(m_szString, str, strlen(str));
+	m_szString[strlen(str)] = 0;
 }
 
 String::String(char sym)
 {
-	string = new char[2];
-	//sprintf(string,"%s",&sym);
-	string[0] = sym;
-	string[1] = 0;
+	m_szString = new char[2];
+	//sprintf(m_szString,"%s",&sym);
+	m_szString[0] = sym;
+	m_szString[1] = 0;
 }
 
 String::String(int num)
 {
 	char * tmp = new char[64];
 	sprintf(tmp, "%d", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 }
 
@@ -191,8 +90,8 @@ String::String(WORD num)
 {
 	char * tmp = new char[64];
 	sprintf(tmp, "%u", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 }
 
@@ -200,8 +99,8 @@ String::String(DWORD num)
 {
 	char * tmp = new char[64];
 	sprintf(tmp, "%lu", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 }
 
@@ -209,8 +108,8 @@ String::String(long num)
 {
 	char * tmp = new char[64];
 	sprintf(tmp, "%ld", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 }
 
@@ -218,45 +117,45 @@ String::String(double num)
 {
 	char * tmp = new char[64];
 	sprintf(tmp, "%G", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 }
 
 String::String(bool bf)
 {
-	string = new char[bf ? 5 : 6];
-	sprintf(string, "%s", bf ? "true" : "false");
+	m_szString = new char[bf ? 5 : 6];
+	sprintf(m_szString, "%s", bf ? "true" : "false");
 }
 
 String::String(const String & str)
 {
-	string = new char[str.length() + 1];
-	memcpy(string, str.c_str(), str.length() + 1);
+	m_szString = new char[str.length() + 1];
+	memcpy(m_szString, str.c_str(), str.length() + 1);
 }
 
 String::String(const String * str)
 {
-	string = new char[str->length() + 1];
-	memcpy(string, str->c_str(), str->length() + 1);
+	m_szString = new char[str->length() + 1];
+	memcpy(m_szString, str->c_str(), str->length() + 1);
 }
 
 String::String(String && other)
 {
-	//SAFE_DELETE_A(string);
-	string = other.string;
-	other.string = NULL;
+	//SAFE_DELETE_A(m_szString);
+	m_szString = other.m_szString;
+	other.m_szString = NULL;
 }
 
 String::~String()
 {
-	Release();
+	release();
 }
 
 
-void String::Release()
+void String::release()
 {
-	SAFE_DELETE_A(string);
+	SAFE_DELETE_A(m_szString);
 }
 
 ////////////////////////////////////////////
@@ -264,7 +163,7 @@ void String::Release()
 String String::operator+(const String &str) const
 {
 	char * ns = new char[length() + str.length() + 1];
-	sprintf(ns, "%s%s", string, str.c_str());
+	sprintf(ns, "%s%s", m_szString, str.c_str());
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -273,7 +172,7 @@ String String::operator+(const String &str) const
 String String::operator+(const String *str)
 {
 	char * ns = new char[length() + str->length() + 1];
-	sprintf(ns, "%s%s", string, str->c_str());
+	sprintf(ns, "%s%s", m_szString, str->c_str());
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -282,7 +181,7 @@ String String::operator+(const String *str)
 String String::operator+(const char * str)
 {
 	char * ns = new char[length() + strlen(str) + 1];
-	sprintf(ns, "%s%s", string, str);
+	sprintf(ns, "%s%s", m_szString, str);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -291,7 +190,7 @@ String String::operator+(const char * str)
 String String::operator+(const char & sym)
 {
 	char * ns = new char[length() + 2];
-	sprintf(ns, "%s%c", string, sym);
+	sprintf(ns, "%s%c", m_szString, sym);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -300,7 +199,7 @@ String String::operator+(const char & sym)
 String String::operator+(const int & num)
 {
 	char * ns = new char[length() + 64];
-	sprintf(ns, "%s%d", string, num);
+	sprintf(ns, "%s%d", m_szString, num);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -309,7 +208,7 @@ String String::operator+(const int & num)
 String String::operator+(const WORD & num)
 {
 	char * ns = new char[length() + 64];
-	sprintf(ns, "%s%hu", string, num);
+	sprintf(ns, "%s%hu", m_szString, num);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -318,7 +217,7 @@ String String::operator+(const WORD & num)
 String String::operator+(const DWORD & num)
 {
 	char * ns = new char[length() + 64];
-	sprintf(ns, "%s%lu", string, num);
+	sprintf(ns, "%s%lu", m_szString, num);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -327,7 +226,7 @@ String String::operator+(const DWORD & num)
 String String::operator+(const long & num)
 {
 	char * ns = new char[length() + 64];
-	sprintf(ns, "%s%ld", string, num);
+	sprintf(ns, "%s%ld", m_szString, num);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -336,7 +235,7 @@ String String::operator+(const long & num)
 String String::operator+(const double & num)
 {
 	char * ns = new char[length() + 64];
-	sprintf(ns, "%s%G", string, num);
+	sprintf(ns, "%s%G", m_szString, num);
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -345,7 +244,7 @@ String String::operator+(const double & num)
 String String::operator+(const bool & bf)
 {
 	char * ns = new char[length() + (bf ? 5 : 6)];
-	sprintf(ns, "%s%s", string, bf ? "true" : "false");
+	sprintf(ns, "%s%s", m_szString, bf ? "true" : "false");
 	String newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -356,97 +255,97 @@ String String::operator+(const bool & bf)
 
 String & String::operator=(const String & str)
 {
-	Release();
-	string = new char[str.length() + 1];
-	memcpy(string, str.c_str(), str.length() + 1);
+	release();
+	m_szString = new char[str.length() + 1];
+	memcpy(m_szString, str.c_str(), str.length() + 1);
 	return(*this);
 }
 
 String & String::operator=(const String * str)
 {
-	Release();
-	string = new char[str->length() + 1];
-	memcpy(string, str->c_str(), str->length() + 1);
+	release();
+	m_szString = new char[str->length() + 1];
+	memcpy(m_szString, str->c_str(), str->length() + 1);
 	return(*this);
 }
 
 String & String::operator=(const char * str)
 {
-	Release();
-	string = new char[strlen(str) + 1];
-	memcpy(string, str, strlen(str) + 1);
+	release();
+	m_szString = new char[strlen(str) + 1];
+	memcpy(m_szString, str, strlen(str) + 1);
 	return(*this);
 }
 
 String & String::operator=(const char & sym)
 {
-	Release();
-	string = new char[2];
-	string[0] = sym;
-	string[1] = 0;
+	release();
+	m_szString = new char[2];
+	m_szString[0] = sym;
+	m_szString[1] = 0;
 	return(*this);
 }
 
 String & String::operator=(const int & num)
 {
-	Release();
+	release();
 	char * tmp = new char[64];
 	sprintf(tmp, "%d", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 String & String::operator=(const WORD & num)
 {
-	Release();
+	release();
 	char * tmp = new char[64];
 	sprintf(tmp, "%hu", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 String & String::operator=(const DWORD & num)
 {
-	Release();
+	release();
 	char * tmp = new char[64];
 	sprintf(tmp, "%lu", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 String & String::operator=(const long & num)
 {
-	Release();
+	release();
 	char * tmp = new char[64];
 	sprintf(tmp, "%ld", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 String & String::operator=(const double & num)
 {
-	Release();
+	release();
 	char * tmp = new char[64];
 	sprintf(tmp, "%G", num);
-	string = new char[strlen(tmp) + 1];
-	memcpy(string, tmp, strlen(tmp) + 1);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 String & String::operator=(const bool & bf)
 {
-	Release();
-	string = new char[bf ? 5 : 6];
-	sprintf(string, "%s", bf ? "true" : "false");
+	release();
+	m_szString = new char[bf ? 5 : 6];
+	sprintf(m_szString, "%s", bf ? "true" : "false");
 	return(*this);
 }
 
@@ -454,9 +353,9 @@ String & String::operator=(String && other)
 {
 	if(this != &other)
 	{
-		SAFE_DELETE(string);
-		string = other.string;
-		other.string = NULL;
+		SAFE_DELETE(m_szString);
+		m_szString = other.m_szString;
+		other.m_szString = NULL;
 	}
 	return(*this);
 }
@@ -467,90 +366,90 @@ String & String::operator=(String && other)
 String & String::operator+=(const String & str)
 {
 	char * ns = new char[length() + str.length() + 1];
-	sprintf(ns, "%s%s", string, str.c_str());
-	SAFE_DELETE_A(string);
-	string = ns;
+	sprintf(ns, "%s%s", m_szString, str.c_str());
+	SAFE_DELETE_A(m_szString);
+	m_szString = ns;
 	return(*this);
 }
 
 String & String::operator+=(const String * str)
 {
 	char * ns = new char[length() + str->length() + 1];
-	sprintf(ns, "%s%s", string, str->c_str());
-	SAFE_DELETE_A(string);
-	string = ns;
+	sprintf(ns, "%s%s", m_szString, str->c_str());
+	SAFE_DELETE_A(m_szString);
+	m_szString = ns;
 	return(*this);
 }
 
 String & String::operator+=(const char * str)
 {
 	char * newstring = new char[length() + strlen(str) + 1];
-	sprintf(newstring, "%s%s", string, str);
-	SAFE_DELETE_A(string);
-	string = newstring;
+	sprintf(newstring, "%s%s", m_szString, str);
+	SAFE_DELETE_A(m_szString);
+	m_szString = newstring;
 	return(*this);
 }
 
 String & String::operator+=(const char & sym)
 {
 	char * newstring = new char[length() + 2];
-	sprintf(newstring, "%s%c", string, sym);
-	SAFE_DELETE_A(string);
-	string = newstring;
+	sprintf(newstring, "%s%c", m_szString, sym);
+	SAFE_DELETE_A(m_szString);
+	m_szString = newstring;
 	return(*this);
 }
 
 String & String::operator+=(const int & num)
 {
 	char * tmp = new char[length() + 64];
-	sprintf(tmp, "%s%d", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%d", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 String & String::operator+=(const WORD & num)
 {
 	char * tmp = new char[length() + 64];
-	sprintf(tmp, "%s%hu", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%hu", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 String & String::operator+=(const DWORD & num)
 {
 	char * tmp = new char[length() + 64];
-	sprintf(tmp, "%s%lu", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%lu", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 String & String::operator+=(const long & num)
 {
 	char * tmp = new char[length() + 64];
-	sprintf(tmp, "%s%ld", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%ld", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 String & String::operator+=(const double & num)
 {
 	char * tmp = new char[length() + 64];
-	sprintf(tmp, "%s%G", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%G", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 String & String::operator+=(const bool & bf)
 {
 	char * tmp = new char[length() + (bf ? 5 : 6)];
-	sprintf(tmp, "%s%s", string, bf ? "true" : "false");
-	SAFE_DELETE_A(string);
-	string = tmp;
+	sprintf(tmp, "%s%s", m_szString, bf ? "true" : "false");
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
@@ -559,70 +458,70 @@ String & String::operator+=(const bool & bf)
 String String::operator-(const String & str)
 {
 	String newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const String * str)
 {
 	String newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const char * str)
 {
 	String newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const char & sym)
 {
 	String newStr = this;
-	newStr.Replace(sym, "", 0);
+	newStr.replace(sym, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const int & num)
 {
 	String newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const WORD & num)
 {
 	String newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const DWORD & num)
 {
 	String newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const long & num)
 {
 	String newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const double & num)
 {
 	String newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 String String::operator-(const bool & bf)
 {
 	String newStr = this;
-	newStr.Replace(bf, "", 0);
+	newStr.replace(bf, "", 0);
 	return(newStr);
 }
 
@@ -630,61 +529,61 @@ String String::operator-(const bool & bf)
 
 String & String::operator-=(const String & str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const String * str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const char * str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const char & sym)
 {
-	Replace(sym, "", 0);
+	replace(sym, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const int & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const WORD & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const DWORD & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const long & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const double & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 String & String::operator-=(const bool & bf)
 {
-	Replace(bf, "", 0);
+	replace(bf, "", 0);
 	return(*this);
 }
 
@@ -693,70 +592,70 @@ String & String::operator-=(const bool & bf)
 String String::operator/(const String & str)
 {
 	String newStr = this;
-	newStr.ReplaceAll(str, "");
+	newStr.replaceAll(str, "");
 	return(newStr);
 }
 
 String String::operator/(const String * str)
 {
 	String newStr = this;
-	newStr.ReplaceAll(str, "");
+	newStr.replaceAll(str, "");
 	return(newStr);
 }
 
 String String::operator/(const char * str)
 {
 	String newStr = this;
-	newStr.ReplaceAll(str, "");
+	newStr.replaceAll(str, "");
 	return(newStr);
 }
 
 String String::operator/(const char & sym)
 {
 	String newStr = this;
-	newStr.ReplaceAll(sym, "");
+	newStr.replaceAll(sym, "");
 	return(newStr);
 }
 
 String String::operator/(const int & num)
 {
 	String newStr = this;
-	newStr.ReplaceAll(num, "");
+	newStr.replaceAll(num, "");
 	return(newStr);
 }
 
 String String::operator/(const WORD & num)
 {
 	String newStr = this;
-	newStr.ReplaceAll(num, "");
+	newStr.replaceAll(num, "");
 	return(newStr);
 }
 
 String String::operator/(const DWORD & num)
 {
 	String newStr = this;
-	newStr.ReplaceAll(num, "");
+	newStr.replaceAll(num, "");
 	return(newStr);
 }
 
 String String::operator/(const long & num)
 {
 	String newStr = this;
-	newStr.ReplaceAll(num, "");
+	newStr.replaceAll(num, "");
 	return(newStr);
 }
 
 String String::operator/(const double & num)
 {
 	String newStr = this;
-	newStr.ReplaceAll(num, "");
+	newStr.replaceAll(num, "");
 	return(newStr);
 }
 
 String String::operator/(const bool & bf)
 {
 	String newStr = this;
-	newStr.ReplaceAll(bf, "");
+	newStr.replaceAll(bf, "");
 	return(newStr);
 }
 
@@ -764,61 +663,61 @@ String String::operator/(const bool & bf)
 
 String & String::operator/=(const String & str)
 {
-	ReplaceAll(str, "");
+	replaceAll(str, "");
 	return(*this);
 }
 
 String & String::operator/=(const String * str)
 {
-	ReplaceAll(str, "");
+	replaceAll(str, "");
 	return(*this);
 }
 
 String & String::operator/=(const char * str)
 {
-	ReplaceAll(str, "");
+	replaceAll(str, "");
 	return(*this);
 }
 
 String & String::operator/=(const char & sym)
 {
-	ReplaceAll(sym, "");
+	replaceAll(sym, "");
 	return(*this);
 }
 
 String & String::operator/=(const int & num)
 {
-	ReplaceAll(num, "");
+	replaceAll(num, "");
 	return(*this);
 }
 
 String & String::operator/=(const WORD & num)
 {
-	ReplaceAll(num, "");
+	replaceAll(num, "");
 	return(*this);
 }
 
 String & String::operator/=(const DWORD & num)
 {
-	ReplaceAll(num, "");
+	replaceAll(num, "");
 	return(*this);
 }
 
 String & String::operator/=(const long & num)
 {
-	ReplaceAll(num, "");
+	replaceAll(num, "");
 	return(*this);
 }
 
 String & String::operator/=(const double & num)
 {
-	ReplaceAll(num, "");
+	replaceAll(num, "");
 	return(*this);
 }
 
 String & String::operator/=(const bool & bf)
 {
-	ReplaceAll(bf, "");
+	replaceAll(bf, "");
 	return(*this);
 }
 
@@ -831,7 +730,7 @@ bool String::operator==(const String & str) const
 	DWORD len = this->length();
 	for(DWORD i = 0; i<len; i++)
 	{
-	if(this->string[i] != str.string[i])
+	if(this->m_szString[i] != str.m_szString[i])
 	return false;
 	}
 	}
@@ -849,7 +748,7 @@ bool String::operator==(const String * str) const
 		DWORD len = length();
 		for(DWORD i = 0; i<len; i++)
 		{
-			if(string[i] != str->string[i])
+			if(m_szString[i] != str->m_szString[i])
 				return false;
 		}
 	}
@@ -873,7 +772,7 @@ bool String::operator==(const char * str) const
 		DWORD len = length();
 		for(DWORD i = 0; i<len; i++)
 		{
-			if(string[i] != str[i])
+			if(m_szString[i] != str[i])
 				return false;
 		}
 	}
@@ -887,7 +786,7 @@ bool String::operator==(const char & sym) const
 {
 	if(length() == 1)
 	{
-		if(string[0] != sym)
+		if(m_szString[0] != sym)
 			return false;
 	}
 	else
@@ -913,25 +812,25 @@ bool String::operator==(const WORD & num) const
 
 bool String::operator==(const DWORD & num) const
 {
-	DWORD Value = ToUnsLongInt();
+	DWORD Value = toUnsLongInt();
 	return(Value == num);
 }
 
 bool String::operator==(const long & num) const
 {
-	long Value = ToLongInt();
+	long Value = toLongInt();
 	return(Value == num);
 }
 
 bool String::operator==(const double & num) const
 {
-	double Value = ToDouble();
+	double Value = toDouble();
 	return(Value == num);
 }
 
 bool String::operator==(const bool & bf) const
 {
-	bool Value = ToBool();
+	bool Value = toBool();
 	return(Value == bf);
 }
 
@@ -1021,31 +920,31 @@ bool String::operator!=(const bool & bf) const
 
 char & String::operator[](const DWORD & num)
 {
-	return(string[num]);
+	return(m_szString[num]);
 }
 
 const char & String::operator[](const DWORD & num) const
 {
-	return(string[num]);
+	return(m_szString[num]);
 }
 
 ////////////////////////////////////////////////////////
 
 DWORD String::length() const
 {
-	return(strlen(string));
+	return(strlen(m_szString));
 }
 
 DWORD String::find(const char * str, DWORD pos) const
 {
 	//DWORD BeginPos = pos;
-	//char *newChar = new char[strlen(string+BeginPos)];
-	//sprintf(newChar,"%s",string+BeginPos);
-	char *Find = strstr(string + pos, str);
+	//char *newChar = new char[strlen(m_szString+BeginPos)];
+	//sprintf(newChar,"%s",m_szString+BeginPos);
+	char *Find = strstr(m_szString + pos, str);
 
 	if(Find != NULL)
-		// return Find - (string + pos) + pos; // - pos + pos == 0 ? �����?
-		return(Find - string);
+		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
+		return(Find - m_szString);
 	else
 		return -1;
 }
@@ -1063,7 +962,7 @@ DWORD String::find(const String & str, DWORD pos) const
 	return(find(str.c_str(), pos));
 }
 
-DWORD String::Replace(const char * str, const char * replace, DWORD pos)
+DWORD String::replace(const char * str, const char * replace, DWORD pos)
 {
 	DWORD PosBeginFmt = find(str, pos);
 	DWORD StrLen = strlen(str);
@@ -1075,22 +974,22 @@ DWORD String::Replace(const char * str, const char * replace, DWORD pos)
 	char * CountStr = new char[CountStrLen + 1];
 
 	//sprintf(CountStr,"%s%s%s",SubStr(0,PosBeginFmt),replace,SubStr(PosBeginFmt+StrLen,length() - (PosBeginFmt+StrLen)));
-	memcpy(CountStr, string, PosBeginFmt);
+	memcpy(CountStr, m_szString, PosBeginFmt);
 	memcpy(CountStr + PosBeginFmt, replace, strlen(replace));
-	memcpy(CountStr + PosBeginFmt + strlen(replace), string + PosBeginFmt + StrLen, length() - (PosBeginFmt + StrLen));
-	SAFE_DELETE_A(string);
-	string = CountStr;
-	string[CountStrLen] = 0;
+	memcpy(CountStr + PosBeginFmt + strlen(replace), m_szString + PosBeginFmt + StrLen, length() - (PosBeginFmt + StrLen));
+	SAFE_DELETE_A(m_szString);
+	m_szString = CountStr;
+	m_szString[CountStrLen] = 0;
 
 	return(PosBeginFmt);
 }
 
-DWORD String::Replace(const String & str, const String & replace, DWORD pos)
+DWORD String::replace(const String & str, const String & sReplace, DWORD pos)
 {
-	return(Replace(str.c_str(), replace.c_str(), pos));
+	return(replace(str.c_str(), sReplace.c_str(), pos));
 }
 
-DWORD String::ReplaceAll(const char * str, const char * replace)
+DWORD String::replaceAll(const char * str, const char * replace)
 {
 	DWORD PosCodeBegin = 0;
 	DWORD PosCodeOld = 0;
@@ -1113,7 +1012,7 @@ DWORD String::ReplaceAll(const char * str, const char * replace)
 	DWORD count_str_len = length() + (CountCodeFMT * (strlen(replace) - StrLen));
 
 	//MessageBox(0,ToPointChar(ToString(length()) + "|" + ToString(CountCodeFMT) + "|" + ToString(StrLen)),ToPointChar(count_str_len),0);
-	//MessageBox(0,string,ToPointChar(DWORD(strlen(string))),0);
+	//MessageBox(0,m_szString,ToPointChar(DWORD(strlen(m_szString))),0);
 
 	char * count_str = new char[count_str_len + 1];
 	DWORD PosBeginFmt = 0;
@@ -1124,12 +1023,12 @@ DWORD String::ReplaceAll(const char * str, const char * replace)
 	{
 		//sprintf(count_str,"%s%s",SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,count_str,"count_str1",0);
-		/*memcpy(count_str,string+OldPosEndFmt,count_str_last_len);
+		/*memcpy(count_str,m_szString+OldPosEndFmt,count_str_last_len);
 		count_str_last_len += PosBeginFmt-OldPosEndFmt;
 		memcpy(count_str+count_str_last_len,replace,strlen(replace));
 		count_str_last_len += strlen(replace);
 		OldPosEndFmt = PosBeginFmt+StrLen;*/
-		memcpy(count_str, string + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
+		memcpy(count_str, m_szString + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
 		memcpy(count_str + count_str_last_len, replace, strlen(replace));
 		count_str_last_len += strlen(replace);
@@ -1144,7 +1043,7 @@ DWORD String::ReplaceAll(const char * str, const char * replace)
 	{
 		//sprintf(count_str,"%s%s%s",count_str,SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,ToPointChar(PosBeginFmt),"PosBeginFmt",0);
-		memcpy(count_str + count_str_last_len, string + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
+		memcpy(count_str + count_str_last_len, m_szString + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
 
 		memcpy(count_str + count_str_last_len, replace, strlen(replace));
@@ -1155,32 +1054,32 @@ DWORD String::ReplaceAll(const char * str, const char * replace)
 	//MessageBox(0,SubStr(OldPosEndFmt,length()-OldPosEndFmt),"SubStr(OldPosEndFmt,length()-OldPosEndFmt)",0);
 	//MessageBox(0,count_str,"count_str----",0);
 	//sprintf(count_str,"%s%s",count_str,SubStr(OldPosEndFmt,length()-OldPosEndFmt));
-	memcpy(count_str + count_str_last_len, string + OldPosEndFmt, length() - OldPosEndFmt);
+	memcpy(count_str + count_str_last_len, m_szString + OldPosEndFmt, length() - OldPosEndFmt);
 	count_str[count_str_len] = 0;
-	SAFE_DELETE_A(string);
-	string = count_str;
+	SAFE_DELETE_A(m_szString);
+	m_szString = count_str;
 
 	//MessageBox(0,count_str,"count_str++++++",0);
 
 	return OldPosEndFmt - StrLen;
 }
 
-DWORD String::ReplaceAll(const String & str, const String & replace)
+DWORD String::replaceAll(const String & str, const String & replace)
 {
-	return(ReplaceAll(str.c_str(), replace.c_str()));
+	return(replaceAll(str.c_str(), replace.c_str()));
 }
 
 /*char* String::SubStr(DWORD pos, DWORD lenght)
 {
 char *str = new char[lenght];
-memcpy(str, string + pos, lenght);
+memcpy(str, m_szString + pos, lenght);
 str[lenght] = 0;
 return str;
 }*/
 
 String String::substr(DWORD pos, DWORD len) const
 {
-	char * ns = string + pos;
+	char * ns = m_szString + pos;
 	if(!len || len > length() - pos)
 	{
 		len = length() - pos;
@@ -1193,14 +1092,14 @@ String String::substr(DWORD pos, DWORD len) const
 	return(res);
 }
 
-UINT String::Delete(DWORD pos, DWORD len)
+UINT String::remove(DWORD pos, DWORD len)
 {
 	/*char *str = SubStr(pos,lenght);
 	char *OneSubStr = SubStr(0,pos);
 	char *SecondSubStr = SubStr(pos + lenght,length() - (pos + lenght));
 	char *newStr = new char[strlen(OneSubStr) + strlen(SecondSubStr)];
 	sprintf(newStr,"%s%s",OneSubStr,SecondSubStr);
-	string = newStr;
+	m_szString = newStr;
 	return str;*/
 
 	//char *str = SubStr(pos, lenght);
@@ -1220,12 +1119,12 @@ UINT String::Delete(DWORD pos, DWORD len)
 	}
 
 	char * newStr = new char[StrLen + 1];
-	//sprintf(string,"%s%s",SubStr(0,pos),SubStr(PosLenght,length() - PosLenght));
-	memcpy(newStr, string, pos);
-	memcpy(newStr + pos, string + PosLenght, length() - PosLenght);
-	SAFE_DELETE_A(string);
-	string = newStr;
-	string[StrLen] = 0;
+	//sprintf(m_szString,"%s%s",SubStr(0,pos),SubStr(PosLenght,length() - PosLenght));
+	memcpy(newStr, m_szString, pos);
+	memcpy(newStr + pos, m_szString + PosLenght, length() - PosLenght);
+	SAFE_DELETE_A(m_szString);
+	m_szString = newStr;
+	m_szString[StrLen] = 0;
 
 	return(len);
 }
@@ -1236,7 +1135,7 @@ String String::trim()
 	UINT len = 0;
 	for(UINT i = 0, l = length(); i < l; ++i)
 	{
-		if(!isspace(string[i]))
+		if(!isspace(m_szString[i]))
 		{
 			if(i < pos)
 			{
@@ -1254,7 +1153,7 @@ StringW StringW::trim()
 	UINT len = 0;
 	for(UINT i = 0, l = length(); i < l; ++i)
 	{
-		if(!iswspace(string[i]))
+		if(!iswspace(m_szString[i]))
 		{
 			if(i < pos)
 			{
@@ -1268,37 +1167,37 @@ StringW StringW::trim()
 
 ////////////////////////////////////////////
 
-int String::ToInt() const
+int String::toInt() const
 {
 	int out;
-	sscanf(string, "%d", &out);
+	sscanf(m_szString, "%d", &out);
 	return(out);
 }
 
-long String::ToLongInt() const
+long String::toLongInt() const
 {
 	long out;
-	sscanf(string, "%ld", &out);
+	sscanf(m_szString, "%ld", &out);
 	return(out);
 }
 
-DWORD String::ToUnsLongInt() const
+DWORD String::toUnsLongInt() const
 {
 	DWORD num;
-	sscanf(string, "%lu", &num);
+	sscanf(m_szString, "%lu", &num);
 	return(num);
 }
 
-double String::ToDouble() const
+double String::toDouble() const
 {
 	float out;
-	sscanf(string, "%f", &out);
+	sscanf(m_szString, "%f", &out);
 	return(out);
 }
 
-bool String::ToBool() const
+bool String::toBool() const
 {
-	return(ToInt() == 1 || stricmp(string, "true") == 0);
+	return(toInt() == 1 || stricmp(m_szString, "true") == 0);
 }
 
 DWORD String::find_last_of(const char * str, DWORD pos) const
@@ -1306,15 +1205,15 @@ DWORD String::find_last_of(const char * str, DWORD pos) const
 
 	char * Find = NULL;
 	char * tmpFind = NULL;
-	while((Find = strstr(string + pos, str)))
+	while((Find = strstr(m_szString + pos, str)))
 	{
-		pos = Find - string + 1;
+		pos = Find - m_szString + 1;
 		tmpFind = Find;
 	}
 
 	if(tmpFind != NULL)
-		// return Find - (string + pos) + pos; // - pos + pos == 0 ? �����?
-		return(tmpFind - string);
+		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
+		return(tmpFind - m_szString);
 	else
 		return -1;
 }
@@ -1340,7 +1239,7 @@ DWORD String::find_last_of(const String & str, DWORD pos) const
 
 bool String::operator<(const String & s) const
 {
-	return(strcmp(string, s.string) < 0);
+	return(strcmp(m_szString, s.m_szString) < 0);
 }
 
 ////////////////////////////////////////////////////////
@@ -1353,38 +1252,38 @@ bool String::operator<(const String & s) const
 
 const WCHAR * StringW::c_str() const
 {
-	return(string);
+	return(m_szString);
 }
 
 StringW::StringW()
 {
-	string = new WCHAR[1];
-	string[0] = 0;
+	m_szString = new WCHAR[1];
+	m_szString[0] = 0;
 }
 
 StringW::StringW(const WCHAR * str)
 {
 
-	string = new WCHAR[wcslen(str) + 1];
-	//sprintf(string,"%s",str);
-	memcpy(string, str, sizeof(WCHAR) * wcslen(str));
-	string[wcslen(str)] = 0;
+	m_szString = new WCHAR[wcslen(str) + 1];
+	//sprintf(m_szString,"%s",str);
+	memcpy(m_szString, str, sizeof(WCHAR) * wcslen(str));
+	m_szString[wcslen(str)] = 0;
 }
 
 StringW::StringW(WCHAR sym)
 {
-	string = new WCHAR[2];
-	//sprintf(string,"%s",&sym);
-	string[0] = sym;
-	string[1] = 0;
+	m_szString = new WCHAR[2];
+	//sprintf(m_szString,"%s",&sym);
+	m_szString[0] = sym;
+	m_szString[1] = 0;
 }
 
 StringW::StringW(int num)
 {
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%d", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 }
 
@@ -1392,8 +1291,8 @@ StringW::StringW(WORD num)
 {
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%hu", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 }
 
@@ -1401,8 +1300,8 @@ StringW::StringW(DWORD num)
 {
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%lu", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 }
 
@@ -1410,8 +1309,8 @@ StringW::StringW(long num)
 {
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%ld", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 }
 
@@ -1419,45 +1318,45 @@ StringW::StringW(double num)
 {
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%G", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 }
 
 StringW::StringW(bool bf)
 {
-	string = new WCHAR[bf ? 5 : 6];
-	swprintf(string, bf ? 5 : 6, L"%ls", bf ? L"true" : L"false");
+	m_szString = new WCHAR[bf ? 5 : 6];
+	swprintf(m_szString, bf ? 5 : 6, L"%ls", bf ? L"true" : L"false");
 }
 
 StringW::StringW(const StringW & str)
 {
-	string = new WCHAR[str.length() + 1];
-	memcpy(string, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
+	m_szString = new WCHAR[str.length() + 1];
+	memcpy(m_szString, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
 }
 
 StringW::StringW(const StringW * str)
 {
-	string = new WCHAR[str->length() + 1];
-	memcpy(string, str->c_str(), sizeof(WCHAR) * (str->length() + 1));
+	m_szString = new WCHAR[str->length() + 1];
+	memcpy(m_szString, str->c_str(), sizeof(WCHAR) * (str->length() + 1));
 }
 
 StringW::StringW(StringW && other)
 {
-	//SAFE_DELETE_A(string);
-	string = other.string;
-	other.string = NULL;
+	//SAFE_DELETE_A(m_szString);
+	m_szString = other.m_szString;
+	other.m_szString = NULL;
 }
 
 StringW::~StringW()
 {
-	Release();
+	release();
 }
 
 
-void StringW::Release()
+void StringW::release()
 {
-	SAFE_DELETE_A(string);
+	SAFE_DELETE_A(m_szString);
 }
 
 ////////////////////////////////////////////
@@ -1466,7 +1365,7 @@ StringW StringW::operator+(const StringW &str) const
 {
 	size_t len = length() + str.length() + 1;
 	WCHAR * ns = new WCHAR[len];
-	swprintf(ns, len, L"%ls%ls", string, str.c_str());
+	swprintf(ns, len, L"%ls%ls", m_szString, str.c_str());
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1475,7 +1374,7 @@ StringW StringW::operator+(const StringW &str) const
 StringW StringW::operator+(const StringW *str)
 {
 	WCHAR * ns = new WCHAR[length() + str->length() + 1];
-	swprintf(ns, length() + str->length() + 1, L"%ls%ls", string, str->c_str());
+	swprintf(ns, length() + str->length() + 1, L"%ls%ls", m_szString, str->c_str());
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1484,7 +1383,7 @@ StringW StringW::operator+(const StringW *str)
 StringW StringW::operator+(const WCHAR * str)
 {
 	WCHAR * ns = new WCHAR[length() + wcslen(str) + 1];
-	swprintf(ns, length() + wcslen(str) + 1, L"%ls%ls", string, str);
+	swprintf(ns, length() + wcslen(str) + 1, L"%ls%ls", m_szString, str);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1493,7 +1392,7 @@ StringW StringW::operator+(const WCHAR * str)
 StringW StringW::operator+(const WCHAR & sym)
 {
 	WCHAR * ns = new WCHAR[length() + 2];
-	swprintf(ns, length() + 2, L"%ls%lc", string, sym);
+	swprintf(ns, length() + 2, L"%ls%lc", m_szString, sym);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1502,7 +1401,7 @@ StringW StringW::operator+(const WCHAR & sym)
 StringW StringW::operator+(const int & num)
 {
 	WCHAR * ns = new WCHAR[length() + 64];
-	swprintf(ns, length() + 64, L"%ls%d", string, num);
+	swprintf(ns, length() + 64, L"%ls%d", m_szString, num);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1511,7 +1410,7 @@ StringW StringW::operator+(const int & num)
 StringW StringW::operator+(const WORD & num)
 {
 	WCHAR * ns = new WCHAR[length() + 64];
-	swprintf(ns, length() + 64, L"%ls%hu", string, num);
+	swprintf(ns, length() + 64, L"%ls%hu", m_szString, num);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1520,7 +1419,7 @@ StringW StringW::operator+(const WORD & num)
 StringW StringW::operator+(const DWORD & num)
 {
 	WCHAR * ns = new WCHAR[length() + 64];
-	swprintf(ns, length() + 64, L"%ls%lu", string, num);
+	swprintf(ns, length() + 64, L"%ls%lu", m_szString, num);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1529,7 +1428,7 @@ StringW StringW::operator+(const DWORD & num)
 StringW StringW::operator+(const long & num)
 {
 	WCHAR * ns = new WCHAR[length() + 64];
-	swprintf(ns, length() + 64, L"%ls%ld", string, num);
+	swprintf(ns, length() + 64, L"%ls%ld", m_szString, num);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1538,7 +1437,7 @@ StringW StringW::operator+(const long & num)
 StringW StringW::operator+(const double & num)
 {
 	WCHAR * ns = new WCHAR[length() + 64];
-	swprintf(ns, length() + 64, L"%ls%G", string, num);
+	swprintf(ns, length() + 64, L"%ls%G", m_szString, num);
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1547,7 +1446,7 @@ StringW StringW::operator+(const double & num)
 StringW StringW::operator+(const bool & bf)
 {
 	WCHAR * ns = new WCHAR[length() + (bf ? 5 : 6)];
-	swprintf(ns, length() + (bf ? 5 : 6), L"%ls%ls", string, bf ? L"true" : L"false");
+	swprintf(ns, length() + (bf ? 5 : 6), L"%ls%ls", m_szString, bf ? L"true" : L"false");
 	StringW newSXStr = ns;
 	SAFE_DELETE_A(ns);
 	return(newSXStr);
@@ -1558,97 +1457,97 @@ StringW StringW::operator+(const bool & bf)
 
 StringW & StringW::operator=(const StringW & str)
 {
-	Release();
-	string = new WCHAR[str.length() + 1];
-	memcpy(string, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
+	release();
+	m_szString = new WCHAR[str.length() + 1];
+	memcpy(m_szString, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
 	return(*this);
 }
 
 StringW & StringW::operator=(const StringW * str)
 {
-	Release();
-	string = new WCHAR[str->length() + 1];
-	memcpy(string, str->c_str(), sizeof(WCHAR) * (str->length() + 1));
+	release();
+	m_szString = new WCHAR[str->length() + 1];
+	memcpy(m_szString, str->c_str(), sizeof(WCHAR) * (str->length() + 1));
 	return(*this);
 }
 
 StringW & StringW::operator=(const WCHAR * str)
 {
-	Release();
-	string = new WCHAR[wcslen(str) + 1];
-	memcpy(string, str, sizeof(WCHAR) * (wcslen(str) + 1));
+	release();
+	m_szString = new WCHAR[wcslen(str) + 1];
+	memcpy(m_szString, str, sizeof(WCHAR) * (wcslen(str) + 1));
 	return(*this);
 }
 
 StringW & StringW::operator=(const WCHAR & sym)
 {
-	Release();
-	string = new WCHAR[2];
-	string[0] = sym;
-	string[1] = 0;
+	release();
+	m_szString = new WCHAR[2];
+	m_szString[0] = sym;
+	m_szString[1] = 0;
 	return(*this);
 }
 
 StringW & StringW::operator=(const int & num)
 {
-	Release();
+	release();
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%d", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 StringW & StringW::operator=(const WORD & num)
 {
-	Release();
+	release();
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%hu", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 StringW & StringW::operator=(const DWORD & num)
 {
-	Release();
+	release();
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%lu", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 StringW & StringW::operator=(const long & num)
 {
-	Release();
+	release();
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%ld", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 StringW & StringW::operator=(const double & num)
 {
-	Release();
+	release();
 	WCHAR * tmp = new WCHAR[64];
 	swprintf(tmp, 64, L"%G", num);
-	string = new WCHAR[wcslen(tmp) + 1];
-	memcpy(string, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
+	m_szString = new WCHAR[wcslen(tmp) + 1];
+	memcpy(m_szString, tmp, sizeof(WCHAR) * (wcslen(tmp) + 1));
 	SAFE_DELETE_A(tmp);
 	return(*this);
 }
 
 StringW & StringW::operator=(const bool & bf)
 {
-	Release();
-	string = new WCHAR[bf ? 5 : 6];
-	swprintf(string, bf ? 5 : 6, L"%ls", bf ? L"true" : L"false");
+	release();
+	m_szString = new WCHAR[bf ? 5 : 6];
+	swprintf(m_szString, bf ? 5 : 6, L"%ls", bf ? L"true" : L"false");
 	return(*this);
 }
 
@@ -1656,9 +1555,9 @@ StringW & StringW::operator=(StringW && other)
 {
 	if(this != &other)
 	{
-		SAFE_DELETE(string);
-		string = other.string;
-		other.string = NULL;
+		SAFE_DELETE(m_szString);
+		m_szString = other.m_szString;
+		other.m_szString = NULL;
 	}
 	return(*this);
 }
@@ -1669,90 +1568,90 @@ StringW & StringW::operator=(StringW && other)
 StringW & StringW::operator+=(const StringW & str)
 {
 	WCHAR * ns = new WCHAR[length() + str.length() + 1];
-	swprintf(ns, length() + str.length() + 1, L"%ls%ls", string, str.c_str());
-	SAFE_DELETE_A(string);
-	string = ns;
+	swprintf(ns, length() + str.length() + 1, L"%ls%ls", m_szString, str.c_str());
+	SAFE_DELETE_A(m_szString);
+	m_szString = ns;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const StringW * str)
 {
 	WCHAR * ns = new WCHAR[length() + str->length() + 1];
-	swprintf(ns, length() + str->length() + 1, L"%ls%ls", string, str->c_str());
-	SAFE_DELETE_A(string);
-	string = ns;
+	swprintf(ns, length() + str->length() + 1, L"%ls%ls", m_szString, str->c_str());
+	SAFE_DELETE_A(m_szString);
+	m_szString = ns;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const WCHAR * str)
 {
 	WCHAR * newstring = new WCHAR[length() + wcslen(str) + 1];
-	swprintf(newstring, length() + wcslen(str) + 1, L"%ls%ls", string, str);
-	SAFE_DELETE_A(string);
-	string = newstring;
+	swprintf(newstring, length() + wcslen(str) + 1, L"%ls%ls", m_szString, str);
+	SAFE_DELETE_A(m_szString);
+	m_szString = newstring;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const WCHAR & sym)
 {
 	WCHAR * newstring = new WCHAR[length() + 2];
-	swprintf(newstring, length() + 2, L"%ls%lc", string, sym);
-	SAFE_DELETE_A(string);
-	string = newstring;
+	swprintf(newstring, length() + 2, L"%ls%lc", m_szString, sym);
+	SAFE_DELETE_A(m_szString);
+	m_szString = newstring;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const int & num)
 {
 	WCHAR * tmp = new WCHAR[length() + 64];
-	swprintf(tmp, length() + 64, L"%ls%d", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + 64, L"%ls%d", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const WORD & num)
 {
 	WCHAR * tmp = new WCHAR[length() + 64];
-	swprintf(tmp, length() + 64, L"%ls%hu", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + 64, L"%ls%hu", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const DWORD & num)
 {
 	WCHAR * tmp = new WCHAR[length() + 64];
-	swprintf(tmp, length() + 64, L"%ls%lu", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + 64, L"%ls%lu", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const long & num)
 {
 	WCHAR * tmp = new WCHAR[length() + 64];
-	swprintf(tmp, length() + 64, L"%ls%ld", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + 64, L"%ls%ld", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const double & num)
 {
 	WCHAR * tmp = new WCHAR[length() + 64];
-	swprintf(tmp, length() + 64, L"%ls%G", string, num);
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + 64, L"%ls%G", m_szString, num);
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
 StringW & StringW::operator+=(const bool & bf)
 {
 	WCHAR * tmp = new WCHAR[length() + (bf ? 5 : 6)];
-	swprintf(tmp, length() + (bf ? 5 : 6), L"%ls%ls", string, bf ? L"true" : L"false");
-	SAFE_DELETE_A(string);
-	string = tmp;
+	swprintf(tmp, length() + (bf ? 5 : 6), L"%ls%ls", m_szString, bf ? L"true" : L"false");
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmp;
 	return(*this);
 }
 
@@ -1761,70 +1660,70 @@ StringW & StringW::operator+=(const bool & bf)
 StringW StringW::operator-(const StringW & str)
 {
 	StringW newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const StringW * str)
 {
 	StringW newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const WCHAR * str)
 {
 	StringW newStr = this;
-	newStr.Replace(str, "", 0);
+	newStr.replace(str, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const WCHAR & sym)
 {
 	StringW newStr = this;
-	newStr.Replace(sym, "", 0);
+	newStr.replace(sym, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const int & num)
 {
 	StringW newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const WORD & num)
 {
 	StringW newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const DWORD & num)
 {
 	StringW newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const long & num)
 {
 	StringW newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const double & num)
 {
 	StringW newStr = this;
-	newStr.Replace(num, "", 0);
+	newStr.replace(num, "", 0);
 	return(newStr);
 }
 
 StringW StringW::operator-(const bool & bf)
 {
 	StringW newStr = this;
-	newStr.Replace(bf, "", 0);
+	newStr.replace(bf, "", 0);
 	return(newStr);
 }
 
@@ -1832,61 +1731,61 @@ StringW StringW::operator-(const bool & bf)
 
 StringW & StringW::operator-=(const StringW & str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const StringW * str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const WCHAR * str)
 {
-	Replace(str, "", 0);
+	replace(str, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const WCHAR & sym)
 {
-	Replace(sym, "", 0);
+	replace(sym, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const int & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const WORD & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const DWORD & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const long & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const double & num)
 {
-	Replace(num, "", 0);
+	replace(num, "", 0);
 	return(*this);
 }
 
 StringW & StringW::operator-=(const bool & bf)
 {
-	Replace(bf, "", 0);
+	replace(bf, "", 0);
 	return(*this);
 }
 
@@ -1895,70 +1794,70 @@ StringW & StringW::operator-=(const bool & bf)
 StringW StringW::operator/(const StringW & str)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(str, L"");
+	newStr.replaceAll(str, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const StringW * str)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(str, L"");
+	newStr.replaceAll(str, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const WCHAR * str)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(str, L"");
+	newStr.replaceAll(str, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const WCHAR & sym)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(sym, L"");
+	newStr.replaceAll(sym, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const int & num)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(num, L"");
+	newStr.replaceAll(num, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const WORD & num)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(num, L"");
+	newStr.replaceAll(num, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const DWORD & num)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(num, L"");
+	newStr.replaceAll(num, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const long & num)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(num, L"");
+	newStr.replaceAll(num, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const double & num)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(num, L"");
+	newStr.replaceAll(num, L"");
 	return(newStr);
 }
 
 StringW StringW::operator/(const bool & bf)
 {
 	StringW newStr = this;
-	newStr.ReplaceAll(bf, L"");
+	newStr.replaceAll(bf, L"");
 	return(newStr);
 }
 
@@ -1966,61 +1865,61 @@ StringW StringW::operator/(const bool & bf)
 
 StringW & StringW::operator/=(const StringW & str)
 {
-	ReplaceAll(str, L"");
+	replaceAll(str, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const StringW * str)
 {
-	ReplaceAll(str, L"");
+	replaceAll(str, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const WCHAR * str)
 {
-	ReplaceAll(str, L"");
+	replaceAll(str, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const WCHAR & sym)
 {
-	ReplaceAll(sym, L"");
+	replaceAll(sym, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const int & num)
 {
-	ReplaceAll(num, L"");
+	replaceAll(num, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const WORD & num)
 {
-	ReplaceAll(num, L"");
+	replaceAll(num, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const DWORD & num)
 {
-	ReplaceAll(num, L"");
+	replaceAll(num, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const long & num)
 {
-	ReplaceAll(num, L"");
+	replaceAll(num, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const double & num)
 {
-	ReplaceAll(num, L"");
+	replaceAll(num, L"");
 	return(*this);
 }
 
 StringW & StringW::operator/=(const bool & bf)
 {
-	ReplaceAll(bf, L"");
+	replaceAll(bf, L"");
 	return(*this);
 }
 
@@ -2033,7 +1932,7 @@ bool StringW::operator==(const StringW & str) const
 	DWORD len = this->length();
 	for(DWORD i = 0; i<len; i++)
 	{
-	if(this->string[i] != str.string[i])
+	if(this->m_szString[i] != str.m_szString[i])
 	return false;
 	}
 	}
@@ -2051,7 +1950,7 @@ bool StringW::operator==(const StringW * str) const
 		DWORD len = length();
 		for(DWORD i = 0; i<len; i++)
 		{
-			if(string[i] != str->string[i])
+			if(m_szString[i] != str->m_szString[i])
 				return false;
 		}
 	}
@@ -2075,7 +1974,7 @@ bool StringW::operator==(const WCHAR * str) const
 		DWORD len = length();
 		for(DWORD i = 0; i<len; i++)
 		{
-			if(string[i] != str[i])
+			if(m_szString[i] != str[i])
 				return false;
 		}
 	}
@@ -2089,7 +1988,7 @@ bool StringW::operator==(const WCHAR & sym) const
 {
 	if(length() == 1)
 	{
-		if(string[0] != sym)
+		if(m_szString[0] != sym)
 			return false;
 	}
 	else
@@ -2115,25 +2014,25 @@ bool StringW::operator==(const WORD & num) const
 
 bool StringW::operator==(const DWORD & num) const
 {
-	DWORD Value = ToUnsLongInt();
+	DWORD Value = toUnsLongInt();
 	return(Value == num);
 }
 
 bool StringW::operator==(const long & num) const
 {
-	long Value = ToLongInt();
+	long Value = toLongInt();
 	return(Value == num);
 }
 
 bool StringW::operator==(const double & num) const
 {
-	double Value = ToDouble();
+	double Value = toDouble();
 	return(Value == num);
 }
 
 bool StringW::operator==(const bool & bf) const
 {
-	bool Value = ToBool();
+	bool Value = toBool();
 	return(Value == bf);
 }
 
@@ -2223,12 +2122,12 @@ bool StringW::operator!=(const bool & bf) const
 
 WCHAR & StringW::operator[](const DWORD & num)
 {
-	return(string[num]);
+	return(m_szString[num]);
 }
 
 const WCHAR & StringW::operator[](const DWORD & num) const
 {
-	return(string[num]);
+	return(m_szString[num]);
 }
 
 
@@ -2236,20 +2135,20 @@ const WCHAR & StringW::operator[](const DWORD & num) const
 
 DWORD StringW::length() const
 {
-	return(wcslen(string));
+	return(wcslen(m_szString));
 }
 
 DWORD StringW::find(const WCHAR * str, DWORD pos) const
 {
 	//DWORD BeginPos = pos;
-	//WCHAR *newWCHAR = new WCHAR[strlen(string+BeginPos)];
-	//sprintf(newWCHAR,"%s",string+BeginPos);
+	//WCHAR *newWCHAR = new WCHAR[strlen(m_szString+BeginPos)];
+	//sprintf(newWCHAR,"%s",m_szString+BeginPos);
 
-	WCHAR *Find = wcsstr(string + pos, str);
+	WCHAR *Find = wcsstr(m_szString + pos, str);
 
 	if(Find != NULL)
-		// return Find - (string + pos) + pos; // - pos + pos == 0 ? �����?
-		return(Find - string);
+		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
+		return(Find - m_szString);
 	else
 		return -1;
 }
@@ -2267,7 +2166,7 @@ DWORD StringW::find(const StringW & str, DWORD pos) const
 	return(find(str.c_str(), pos));
 }
 
-DWORD StringW::Replace(const WCHAR * str, const WCHAR * replace, DWORD pos)
+DWORD StringW::replace(const WCHAR * str, const WCHAR * replace, DWORD pos)
 {
 	DWORD PosBeginFmt = find(str, pos);
 	DWORD StrLen = wcslen(str);
@@ -2279,22 +2178,22 @@ DWORD StringW::Replace(const WCHAR * str, const WCHAR * replace, DWORD pos)
 	WCHAR * CountStr = new WCHAR[CountStrLen + 1];
 
 	//sprintf(CountStr,"%s%s%s",SubStr(0,PosBeginFmt),replace,SubStr(PosBeginFmt+StrLen,length() - (PosBeginFmt+StrLen)));
-	memcpy(CountStr, string, PosBeginFmt);
+	memcpy(CountStr, m_szString, PosBeginFmt);
 	memcpy(CountStr + PosBeginFmt, replace, sizeof(WCHAR) * wcslen(replace));
-	memcpy(CountStr + PosBeginFmt + wcslen(replace), string + PosBeginFmt + StrLen, sizeof(WCHAR) * (length() - (PosBeginFmt + StrLen)));
-	SAFE_DELETE_A(string);
-	string = CountStr;
-	string[CountStrLen] = 0;
+	memcpy(CountStr + PosBeginFmt + wcslen(replace), m_szString + PosBeginFmt + StrLen, sizeof(WCHAR) * (length() - (PosBeginFmt + StrLen)));
+	SAFE_DELETE_A(m_szString);
+	m_szString = CountStr;
+	m_szString[CountStrLen] = 0;
 
 	return(PosBeginFmt);
 }
 
-DWORD StringW::Replace(const StringW & str, const StringW & replace, DWORD pos)
+DWORD StringW::replace(const StringW & str, const StringW & sReplace, DWORD pos)
 {
-	return(Replace(str.c_str(), replace.c_str(), pos));
+	return(replace(str.c_str(), sReplace.c_str(), pos));
 }
 
-DWORD StringW::ReplaceAll(const WCHAR * str, const WCHAR * replace)
+DWORD StringW::replaceAll(const WCHAR * str, const WCHAR * replace)
 {
 	DWORD PosCodeBegin = 0;
 	DWORD PosCodeOld = 0;
@@ -2317,7 +2216,7 @@ DWORD StringW::ReplaceAll(const WCHAR * str, const WCHAR * replace)
 	DWORD count_str_len = length() + (CountCodeFMT * (wcslen(replace) - StrLen));
 
 	//MessageBox(0,ToPointWCHAR(ToString(length()) + "|" + ToString(CountCodeFMT) + "|" + ToString(StrLen)),ToPointWCHAR(count_str_len),0);
-	//MessageBox(0,string,ToPointWCHAR(DWORD(strlen(string))),0);
+	//MessageBox(0,m_szString,ToPointWCHAR(DWORD(strlen(m_szString))),0);
 
 	WCHAR * count_str = new WCHAR[count_str_len + 1];
 	DWORD PosBeginFmt = 0;
@@ -2328,12 +2227,12 @@ DWORD StringW::ReplaceAll(const WCHAR * str, const WCHAR * replace)
 	{
 		//sprintf(count_str,"%s%s",SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,count_str,"count_str1",0);
-		/*memcpy(count_str,string+OldPosEndFmt,count_str_last_len);
+		/*memcpy(count_str,m_szString+OldPosEndFmt,count_str_last_len);
 		count_str_last_len += PosBeginFmt-OldPosEndFmt;
 		memcpy(count_str+count_str_last_len,replace,strlen(replace));
 		count_str_last_len += strlen(replace);
 		OldPosEndFmt = PosBeginFmt+StrLen;*/
-		memcpy(count_str, string + OldPosEndFmt, sizeof(WCHAR) * (PosBeginFmt - OldPosEndFmt));
+		memcpy(count_str, m_szString + OldPosEndFmt, sizeof(WCHAR) * (PosBeginFmt - OldPosEndFmt));
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
 		memcpy(count_str + count_str_last_len, replace, sizeof(WCHAR) * wcslen(replace));
 		count_str_last_len += wcslen(replace);
@@ -2348,7 +2247,7 @@ DWORD StringW::ReplaceAll(const WCHAR * str, const WCHAR * replace)
 	{
 		//sprintf(count_str,"%s%s%s",count_str,SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,ToPointWCHAR(PosBeginFmt),"PosBeginFmt",0);
-		memcpy(count_str + count_str_last_len, string + OldPosEndFmt, sizeof(WCHAR) * (PosBeginFmt - OldPosEndFmt));
+		memcpy(count_str + count_str_last_len, m_szString + OldPosEndFmt, sizeof(WCHAR) * (PosBeginFmt - OldPosEndFmt));
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
 
 		memcpy(count_str + count_str_last_len, replace, sizeof(WCHAR) * wcslen(replace));
@@ -2359,32 +2258,32 @@ DWORD StringW::ReplaceAll(const WCHAR * str, const WCHAR * replace)
 	//MessageBox(0,SubStr(OldPosEndFmt,length()-OldPosEndFmt),"SubStr(OldPosEndFmt,length()-OldPosEndFmt)",0);
 	//MessageBox(0,count_str,"count_str----",0);
 	//sprintf(count_str,"%s%s",count_str,SubStr(OldPosEndFmt,length()-OldPosEndFmt));
-	memcpy(count_str + count_str_last_len, string + OldPosEndFmt, sizeof(WCHAR) * (length() - OldPosEndFmt));
+	memcpy(count_str + count_str_last_len, m_szString + OldPosEndFmt, sizeof(WCHAR) * (length() - OldPosEndFmt));
 	count_str[count_str_len] = 0;
-	SAFE_DELETE_A(string);
-	string = count_str;
+	SAFE_DELETE_A(m_szString);
+	m_szString = count_str;
 
 	//MessageBox(0,count_str,"count_str++++++",0);
 
 	return OldPosEndFmt - StrLen;
 }
 
-DWORD StringW::ReplaceAll(const StringW & str, const StringW & replace)
+DWORD StringW::replaceAll(const StringW & str, const StringW & replace)
 {
-	return(ReplaceAll(str.c_str(), replace.c_str()));
+	return(replaceAll(str.c_str(), replace.c_str()));
 }
 
 /*WCHAR* StringW::SubStr(DWORD pos, DWORD lenght)
 {
 WCHAR *str = new WCHAR[lenght];
-memcpy(str, string + pos, lenght);
+memcpy(str, m_szString + pos, lenght);
 str[lenght] = 0;
 return str;
 }*/
 
 StringW StringW::substr(DWORD pos, DWORD len) const
 {
-	WCHAR * ns = string + pos;
+	WCHAR * ns = m_szString + pos;
 	if(!len || len > length() - pos)
 	{
 		len = length() - pos;
@@ -2397,14 +2296,14 @@ StringW StringW::substr(DWORD pos, DWORD len) const
 	return(res);
 }
 
-UINT StringW::Delete(DWORD pos, DWORD len)
+UINT StringW::remove(DWORD pos, DWORD len)
 {
 	/*WCHAR *str = SubStr(pos,lenght);
 	WCHAR *OneSubStr = SubStr(0,pos);
 	WCHAR *SecondSubStr = SubStr(pos + lenght,length() - (pos + lenght));
 	WCHAR *newStr = new WCHAR[strlen(OneSubStr) + strlen(SecondSubStr)];
 	sprintf(newStr,"%s%s",OneSubStr,SecondSubStr);
-	string = newStr;
+	m_szString = newStr;
 	return str;*/
 
 	//WCHAR *str = SubStr(pos, lenght);
@@ -2424,50 +2323,50 @@ UINT StringW::Delete(DWORD pos, DWORD len)
 	}
 
 	WCHAR * newStr = new WCHAR[StrLen + 1];
-	//sprintf(string,"%s%s",SubStr(0,pos),SubStr(PosLenght,length() - PosLenght));
-	memcpy(newStr, string, sizeof(WCHAR) * pos);
-	memcpy(newStr + pos, string + PosLenght, sizeof(WCHAR) * (length() - PosLenght));
-	SAFE_DELETE_A(string);
-	string = newStr;
-	string[StrLen] = 0;
+	//sprintf(m_szString,"%s%s",SubStr(0,pos),SubStr(PosLenght,length() - PosLenght));
+	memcpy(newStr, m_szString, sizeof(WCHAR) * pos);
+	memcpy(newStr + pos, m_szString + PosLenght, sizeof(WCHAR) * (length() - PosLenght));
+	SAFE_DELETE_A(m_szString);
+	m_szString = newStr;
+	m_szString[StrLen] = 0;
 
 	return(len);
 }
 
 ////////////////////////////////////////////
 
-int StringW::ToInt() const
+int StringW::toInt() const
 {
 	int tmp;
-	swscanf(string, L"%d", &tmp);
+	swscanf(m_szString, L"%d", &tmp);
 	return(tmp);
 }
 
-long StringW::ToLongInt() const
+long StringW::toLongInt() const
 {
 	long tmp;
-	swscanf(string, L"%ld", &tmp);
+	swscanf(m_szString, L"%ld", &tmp);
 	return(tmp);
 }
 
-DWORD StringW::ToUnsLongInt() const
+DWORD StringW::toUnsLongInt() const
 {
 	DWORD num;
-	swscanf(string, L"%lu", &num);
+	swscanf(m_szString, L"%lu", &num);
 	return(num);
 }
 
-double StringW::ToDouble() const
+double StringW::toDouble() const
 {
-	//return(atof(string));
+	//return(atof(m_szString));
 	double tmp;
-	swscanf(string, L"%G", &tmp);
+	swscanf(m_szString, L"%G", &tmp);
 	return(tmp);
 }
 
-bool StringW::ToBool() const
+bool StringW::toBool() const
 {
-	return(ToInt() == 1 || wcscmpi(string, L"true") == 0);
+	return(toInt() == 1 || wcscmpi(m_szString, L"true") == 0);
 }
 
 DWORD StringW::find_last_of(const WCHAR * str, DWORD pos) const
@@ -2475,15 +2374,15 @@ DWORD StringW::find_last_of(const WCHAR * str, DWORD pos) const
 
 	WCHAR * Find = NULL;
 	WCHAR * tmpFind = NULL;
-	while((Find = wcsstr(string + pos, str)))
+	while((Find = wcsstr(m_szString + pos, str)))
 	{
-		pos = Find - string + 1;
+		pos = Find - m_szString + 1;
 		tmpFind = Find;
 	}
 
 	if(tmpFind != NULL)
-		// return Find - (string + pos) + pos; // - pos + pos == 0 ? �����?
-		return(tmpFind - string);
+		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
+		return(tmpFind - m_szString);
 	else
 		return -1;
 }
@@ -2509,12 +2408,12 @@ void StringW::insert(UINT pos, const StringW & data)
 void StringW::insert(UINT pos, const WCHAR * data)
 {
 	WCHAR * tmpStr = new WCHAR[length() + wcslen(data) + 1];
-	memcpy(tmpStr, string, sizeof(WCHAR) * pos);
+	memcpy(tmpStr, m_szString, sizeof(WCHAR) * pos);
 	memcpy(tmpStr + pos, data, sizeof(WCHAR) * wcslen(data));
-	memcpy(tmpStr + pos + wcslen(data), string + pos, sizeof(WCHAR) * (length() - pos));
+	memcpy(tmpStr + pos + wcslen(data), m_szString + pos, sizeof(WCHAR) * (length() - pos));
 	tmpStr[wcslen(data) + length()] = 0;
-	SAFE_DELETE_A(string);
-	string = tmpStr;
+	SAFE_DELETE_A(m_szString);
+	m_szString = tmpStr;
 }
 
 
@@ -2526,11 +2425,11 @@ void StringW::insert(UINT pos, const WCHAR * data)
 String::operator StringW() const
 {
 	StringW dst;
-	dst.Reserve(length());
+	dst.reserve(length());
 #if defined(_WINDOWS)
-	MultiByteToWideChar(CP_UTF8, CP_ACP, string, length() + 1, dst.string, length() + 1);
+	MultiByteToWideChar(CP_UTF8, CP_ACP, m_szString, length() + 1, dst.m_szString, length() + 1);
 #else
-	mbstowcs(dst.string, string, length() + 1);
+	mbstowcs(dst.m_szString, m_szString, length() + 1);
 #endif
 	return(dst);
 }
@@ -2538,43 +2437,43 @@ String::operator StringW() const
 StringW::operator String() const
 {
 	String dst;
-	dst.Reserve(length());
+	dst.reserve(length());
 #if defined(_WINDOWS)
-	WideCharToMultiByte(CP_UTF8, CP_ACP, string, length() + 1, dst.string, length() + 1, " ", NULL);
+	WideCharToMultiByte(CP_UTF8, CP_ACP, m_szString, length() + 1, dst.m_szString, length() + 1, " ", NULL);
 #else
-	wcstombs(dst.string, string, sizeof(WCHAR) * (length() + 1));
+	wcstombs(dst.m_szString, m_szString, sizeof(WCHAR) * (length() + 1));
 #endif
 	return(dst);
 }
 
-void String::Reserve(int length)
+void String::reserve(int length)
 {
-	SAFE_DELETE_A(string);
-	string = new char[length + 1];
+	SAFE_DELETE_A(m_szString);
+	m_szString = new char[length + 1];
 }
 
-void String::AppendReserve(int length)
+void String::appendReserve(int length)
 {
-	char* tmpnewstr = new char[strlen(string) + length + 1];
-	strcpy(tmpnewstr, string);
-	SAFE_DELETE_A(string);
+	char* tmpnewstr = new char[strlen(m_szString) + length + 1];
+	strcpy(tmpnewstr, m_szString);
+	SAFE_DELETE_A(m_szString);
 
-	string = tmpnewstr;
+	m_szString = tmpnewstr;
 }
 
-void StringW::Reserve(int length)
+void StringW::reserve(int length)
 {
-	SAFE_DELETE_A(string);
-	string = new WCHAR[length + 1];
+	SAFE_DELETE_A(m_szString);
+	m_szString = new WCHAR[length + 1];
 }
 
-void StringW::AppendReserve(int length)
+void StringW::appendReserve(int length)
 {
-	WCHAR* tmpnewstr = new WCHAR[wcslen(string) + length + 1];
-	wcscpy(tmpnewstr, string);
-	SAFE_DELETE_A(string);
+	WCHAR* tmpnewstr = new WCHAR[wcslen(m_szString) + length + 1];
+	wcscpy(tmpnewstr, m_szString);
+	SAFE_DELETE_A(m_szString);
 
-	string = tmpnewstr;
+	m_szString = tmpnewstr;
 }
 /*
 StringW operator+(const WCHAR * a, const StringW & b)

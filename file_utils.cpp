@@ -31,7 +31,7 @@ bool FileExistsDir(const char *szPath)
 	DWORD dwFileAttributes = GetFileAttributes(szPath);
 	if (dwFileAttributes == 0xFFFFFFFF)
 		return false;
-	return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+	return((dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0);
 }
 
 Array<String> FileGetList(const char *szPath, FILE_LIST_TYPE type)
@@ -81,33 +81,34 @@ Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type)
 	aQueue.push_back("");
 	int iCurrDir = 0;
 
-	while (aQueue.size() > iCurrDir)
+	while((int)aQueue.size() > iCurrDir)
 	{
 		String sCurrPath = FileCanonizePathS((sRootPath + aQueue[iCurrDir]).c_str());
-		if (sCurrPath.length() >= 2 && sCurrPath[sCurrPath.length() - 1] != '*')
+		if(sCurrPath.length() >= 2 && sCurrPath[sCurrPath.length() - 1] != '*')
 			sCurrPath += "*";
 
 		HANDLE hFind = ::FindFirstFile(sCurrPath.c_str(), &fd);
-		if (hFind != INVALID_HANDLE_VALUE)
+		if(hFind != INVALID_HANDLE_VALUE)
 		{
 			do
 			{
-				if (!(strlen(fd.cFileName) == 1 && fd.cFileName[0] == '.') && !(strlen(fd.cFileName) == 2 && fd.cFileName[0] == '.' && fd.cFileName[1] == '.'))
+				if(!(strlen(fd.cFileName) == 1 && fd.cFileName[0] == '.') && !(strlen(fd.cFileName) == 2 && fd.cFileName[0] == '.' && fd.cFileName[1] == '.'))
 				{
-					if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+					if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 					{
 						String sNewDir = aQueue[iCurrDir] + fd.cFileName;
 						aQueue.push_back(FileAppendSlash(sNewDir.c_str()));
 					}
 
-					if (
+					if(
 						(type == FILE_LIST_TYPE_FILES && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) ||
 						(type == FILE_LIST_TYPE_DIRS && fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
 						(type == FILE_LIST_TYPE_ALL)
 						)
 						aStrings.push_back(aQueue[iCurrDir] + fd.cFileName);
 				}
-			} while (::FindNextFile(hFind, &fd));
+			}
+			while(::FindNextFile(hFind, &fd));
 
 			::FindClose(hFind);
 		}
@@ -243,14 +244,14 @@ bool FileExistsInPath(const char *szPath, const char *szSubPath)
 			sSubPath[i] = '/';
 	}
 
-	return strstr(sPath.c_str(), sSubPath.c_str());
+	return(strstr(sPath.c_str(), sSubPath.c_str()) != NULL);
 }
 
 bool FileCreateDir(const char *szPath)
 {
 	if (!strstr(szPath, "\\") && !strstr(szPath, "/"))
 	{
-		return CreateDirectory(szPath, 0);
+		return((bool)CreateDirectory(szPath, 0));
 	}
 
 	String sPath = FileAppendSlash(FileCanonizePathS(szPath).c_str());
