@@ -71,7 +71,7 @@ Array<String> FileGetList(const char *szPath, FILE_LIST_TYPE type)
 	return aStrings;
 }
 
-Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type)
+Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type, const char *szExt)
 {
 	Array<String> aStrings;
 	Array<String> aQueue;
@@ -85,7 +85,7 @@ Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type)
 	{
 		String sCurrPath = FileCanonizePathS((sRootPath + aQueue[iCurrDir]).c_str());
 		if (sCurrPath.length() >= 2 && sCurrPath[sCurrPath.length() - 1] != '*')
-			sCurrPath += "*";
+			sCurrPath += "*";// (szExt ? (String("*.") + szExt) : "*");
 
 		HANDLE hFind = ::FindFirstFile(sCurrPath.c_str(), &fd);
 		if (hFind != INVALID_HANDLE_VALUE)
@@ -101,7 +101,7 @@ Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type)
 					}
 
 					if (
-						(type == FILE_LIST_TYPE_FILES && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) ||
+						(type == FILE_LIST_TYPE_FILES && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && szExt && FileStrIsExt(fd.cFileName, szExt)) ||
 						(type == FILE_LIST_TYPE_DIRS && fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
 						(type == FILE_LIST_TYPE_ALL)
 						)
@@ -318,4 +318,23 @@ String FileSetStrExt(const char *szPath, const char *szExt)
 		sPath += szExt;
 
 	return sPath;
+}
+
+bool FileStrIsExt(const char *szPath, const char *szExt)
+{
+	if (!szPath || !szExt)
+		return false;
+
+	int iPosPoint = -1;
+
+	for (int i = 0, il = strlen(szPath); i < il; ++i)
+	{
+		if (szPath[(il - 1) - i] == '.')
+		{
+			iPosPoint = ((il - 1) - i) + 1;
+			break;
+		}
+	}
+
+	return (iPosPoint >= 0 && stricmp(szPath + iPosPoint, szExt) == 0);
 }
