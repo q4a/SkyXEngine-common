@@ -17,38 +17,6 @@ typedef unsigned short WORD;
 typedef unsigned int UINT;
 #endif
 
-#ifndef SAFE_DELETE_A
-#define SAFE_DELETE_A(p) if(p)\
-	{\
-		delete [] (p);\
-		(p) = NULL;\
-	}
-#endif
-
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p) if(p)\
-	{\
-		delete (p);\
-		(p) = NULL;\
-	}
-#endif
-
-#define def_str_validate(str) (str && str[0]!=0 && str[0]!='0')
-
-bool StrValidate(const char* str);
-
-void StrCutMesh(const char* path, char* name);
-
-void StrCutSound(const char* path, char* name);
-
-void StrCutName(const char* path, char* name);
-
-void StrCutNameNEx(const char* path, char* name);
-
-//парсинг строки (имени файла) str на имя папки path и имя файла name
-//str = test_file_1.ex - path = test, name = file_1.ex
-bool StrParsePathName(const char* str, char* path, char* name);
-
 //##########################################################################
 
 class StringW;
@@ -73,12 +41,12 @@ public:
 
 	~String();
 
-	void Release();
+	void release();
 
 	////////////////////////////////////
-	//�������� �������� �����
-	//������������ ���������� ����� ������ String 
-	//������� � �������� ��������� �������� �����
+	//операции сложения строк
+	//возвращается образуется новый объект String 
+	//который и содержит результат сложения строк
 
 	String operator+(const String & str) const;
 	String operator+(const String * str);
@@ -93,7 +61,7 @@ public:
 	String operator+(const bool &	bf);
 
 	////////////////////////////////////
-	//�������� ����������
+	//операции присваивания
 
 	String & operator=(const String & str);
 	String & operator=(const String * str);
@@ -110,7 +78,7 @@ public:
 	String & operator=(String && other);
 
 	////////////////////////////////////
-	//�������� �������� ����� ������� � �������� ����������� �������� � ����������
+	//операции сложения строк объекта к которому применяется сложение и слагаемого
 	String & operator+=(const String &str);
 	String & operator+=(const String *str);
 
@@ -124,8 +92,8 @@ public:
 	String & operator+=(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ������ ���������� �� ������
-	//������������ ����� ������ String, ������� �������� ���������
+	//искоючить первое нахождение из строки
+	//возвращается новый объект String, который содержит результат
 	String operator-(const String & str);
 	String operator-(const String * str);
 
@@ -139,7 +107,7 @@ public:
 	String operator-(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ������ ���������� �� ������� �������
+	//исключает первое нахождение из данного объекта
 	String & operator-=(const String &str);
 	String & operator-=(const String *str);
 
@@ -153,8 +121,8 @@ public:
 	String & operator-=(const bool &	bf);
 
 	//////////////////////////////////////
-	//��������� ��� ������� ����������
-	//������������ ����� ������ String
+	//исключить все похожие нахождения
+	//возвращается новый объект String
 	String operator / (const String &str);
 	String operator / (const String *str);
 
@@ -168,7 +136,7 @@ public:
 	String operator/(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ��� ������� ����������
+	//исключить все похожие нахождения
 	String & operator/=(const String &str);
 	String & operator/=(const String *str);
 
@@ -223,35 +191,35 @@ public:
 	unsigned long find_last_of(const char * str, unsigned long pos = 0) const;
 	unsigned long find_last_of(const String & str, unsigned long pos = 0) const;
 
-	unsigned long Replace(const char * str, const char * replace, unsigned long pos);
-	unsigned long Replace(const String & str, const String & replace, unsigned long pos);
+	unsigned long replace(const char * str, const char * replace, unsigned long pos);
+	unsigned long replace(const String & str, const String & replace, unsigned long pos);
 
-	unsigned long ReplaceAll(const char * str, const char * replace);
-	unsigned long ReplaceAll(const String & str, const String & replace);
+	unsigned long replaceAll(const char * str, const char * replace);
+	unsigned long replaceAll(const String & str, const String & replace);
 
 	//char * SubStr(unsigned long pos, unsigned long lenght); // ��� ������ �� �����
 	String substr(unsigned long pos, unsigned long lenght = 0) const;
-	unsigned int Delete(unsigned long pos, unsigned long lenght);
+	unsigned int remove(unsigned long pos, unsigned long lenght);
 
 	String trim();
 
 	const char * c_str() const;
 
-	void Reserve(int length);
-	void AppendReserve(int length);
+	void reserve(int length);
+	void appendReserve(int length);
 
-	int		ToInt() const;
-	long	ToLongInt() const;
-	unsigned long	ToUnsLongInt() const;
-	double	ToDouble() const;
-	bool	ToBool() const;
+	int		toInt() const;
+	long	toLongInt() const;
+	unsigned long	toUnsLongInt() const;
+	double	toDouble() const;
+	bool	toBool() const;
 
 	operator StringW() const;
 
 	bool operator<(const String & s) const;
 
 protected:
-	char * string;
+	char * m_szString;
 };
 
 //bool operator<(const String & a, const String & b);
@@ -278,12 +246,12 @@ public:
 
 	~StringW();
 
-	void Release();
+	void release();
 
 	////////////////////////////////////
-	//�������� �������� �����
-	//������������ ���������� ����� ������ StringW 
-	//������� � �������� ��������� �������� �����
+	//операции сложения строк
+	//возвращается образуется новый объект StringW 
+	//который и содержит результат сложения строк
 
 	StringW operator+(const StringW & str) const;
 	StringW operator+(const StringW * str);
@@ -298,7 +266,7 @@ public:
 	StringW operator+(const bool &	bf);
 
 	////////////////////////////////////
-	//�������� ����������
+	//операции присвоения
 
 	StringW & operator=(const StringW & str);
 	StringW & operator=(const StringW * str);
@@ -315,7 +283,7 @@ public:
 	StringW & operator=(StringW && other);
 
 	////////////////////////////////////
-	//�������� �������� ����� ������� � �������� ����������� �������� � ����������
+	//операции сложения строк объекта к которому применяется сложение и слагаемого
 	StringW & operator+=(const StringW &str);
 	StringW & operator+=(const StringW *str);
 
@@ -329,8 +297,8 @@ public:
 	StringW & operator+=(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ������ ���������� �� ������
-	//������������ ����� ������ StringW, ������� �������� ���������
+	//искоючить первое нахождение из строки
+	//возвращается новый объект String, который содержит результат
 	StringW operator-(const StringW & str);
 	StringW operator-(const StringW * str);
 
@@ -344,7 +312,7 @@ public:
 	StringW operator-(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ������ ���������� �� ������� �������
+	//исключает первое нахождение из данного объекта
 	StringW & operator-=(const StringW &str);
 	StringW & operator-=(const StringW *str);
 
@@ -358,8 +326,8 @@ public:
 	StringW & operator-=(const bool &	bf);
 
 	//////////////////////////////////////
-	//��������� ��� ������� ����������
-	//������������ ����� ������ StringW
+	//исключить все похожие нахождения
+	//возвращается новый объект StringW
 	StringW operator / (const StringW &str);
 	StringW operator / (const StringW *str);
 
@@ -373,7 +341,7 @@ public:
 	StringW operator/(const bool &	bf);
 
 	////////////////////////////////////
-	//��������� ��� ������� ����������
+	//исключить все похожие нахождения
 	StringW & operator/=(const StringW &str);
 	StringW & operator/=(const StringW *str);
 
@@ -431,32 +399,32 @@ public:
 	unsigned long find_last_of(const WCHAR * str, unsigned long pos = 0) const;
 	unsigned long find_last_of(const StringW & str, unsigned long pos = 0) const;
 
-	unsigned long Replace(const WCHAR * str, const WCHAR * replace, unsigned long pos);
-	unsigned long Replace(const StringW & str, const StringW & replace, unsigned long pos);
+	unsigned long replace(const WCHAR * str, const WCHAR * replace, unsigned long pos);
+	unsigned long replace(const StringW & str, const StringW & replace, unsigned long pos);
 
-	unsigned long ReplaceAll(const WCHAR * str, const WCHAR * replace);
-	unsigned long ReplaceAll(const StringW & str, const StringW & replace);
+	unsigned long replaceAll(const WCHAR * str, const WCHAR * replace);
+	unsigned long replaceAll(const StringW & str, const StringW & replace);
 
 	StringW substr(unsigned long pos, unsigned long lenght = 0) const;
-	unsigned int Delete(unsigned long pos, unsigned long lenght);
+	unsigned int remove(unsigned long pos, unsigned long lenght);
 
 	StringW trim();
 
 	const WCHAR * c_str() const;
 
-	void Reserve(int length);
-	void AppendReserve(int length);
+	void reserve(int length);
+	void appendReserve(int length);
 
-	int		ToInt() const;
-	long	ToLongInt() const;
-	unsigned long	ToUnsLongInt() const;
-	double	ToDouble() const;
-	bool	ToBool() const;
+	int		toInt() const;
+	long	toLongInt() const;
+	unsigned long	toUnsLongInt() const;
+	double	toDouble() const;
+	bool	toBool() const;
 
 	operator String() const;
 
 protected:
-	WCHAR * string;
+	WCHAR * m_szString;
 };
 
 /*bool operator<(const StringW & a, const StringW & b);

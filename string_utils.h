@@ -61,4 +61,17 @@ String StrToLower(const char *szStr);
 String StrToUpper(const char *szStr);
 
 
+
+#define def_str_validate(str) (str && str[0]!=0 && str[0]!='0')
+
+void StrCutMesh(const char* path, char* name);
+
+void StrCutName(const char* path, char* name);
+
+//парсинг строки (имени файла) str на имя папки path и имя файла name
+//str = test_file_1.ex - path = test, name = file_1.ex
+bool StrParsePathName(const char* str, char* path, char* name);
+
+
+
 #endif
