@@ -2020,6 +2020,7 @@ __forceinline float SMVector3FastLength(const float3 & V)
 	return(SM_FSQRT(vLengthSq.x));
 }
 
+#if 0
 __forceinline float SMVector3NonSqrtLength(const float3 & V)
 {
 	SMVECTOR vLengthSq;
@@ -2038,6 +2039,7 @@ __forceinline float SMVector3NonSqrtLength(const float3 & V)
 
 	return(vLengthSq.x);
 }
+#endif
 
 _forceinline float Clamp01(const float &a)
 {

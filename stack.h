@@ -14,16 +14,16 @@ See the license in LICENSE
 #	pragma warning(disable:4715)
 #endif
 
-template <typename T, int pageSize=256>
+template <typename T, int pageSize=256, int alignBy=4>
 class Stack
 {
 	struct StackNode
 	{
-		StackNode * Parent;
 		T data;
+		StackNode * Parent;
 	};
 
-	MemAlloc<StackNode, pageSize> Data;
+	MemAlloc<StackNode, pageSize, 16, alignBy> Data;
 	int SP;
 
 	StackNode * CurrentNode;

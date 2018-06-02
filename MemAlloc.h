@@ -33,14 +33,22 @@ struct UsageStats
 	ULONG ulAllocMem; //Количество занятой элементами памяти
 };
 
-template <typename T, int SizeBlock = 256, int SizePage=16>
+template <typename T, int SizeBlock = 256, int SizePage=16, const int alignBy=4>
 class MemAlloc
 {
+	static_assert(alignBy % 4 == 0 && alignBy >= 4, "alignBy should be multiply of 4");
+	
+#pragma pack(push, 1)
 	struct MemCell
 	{
-		UINT IsFree;
+		union
+		{
+			UINT IsFree;
+			UINT _padding[alignBy / 4];
+		};
 		T data;
 	};
+#pragma pack(pop)
 	struct MemBlock
 	{
 		MemCell * mem;
@@ -70,7 +78,7 @@ public:
 		{
 			this->memblocks[i].size = al.memblocks[i].size;
 			this->memblocks[i].pos = al.memblocks[i].pos;
-			this->memblocks[i].mem = (MemCell*)malloc(al.memblocks[i].size * sizeof(MemCell));
+			this->memblocks[i].mem = (MemCell*)_aligned_malloc(al.memblocks[i].size * sizeof(MemCell), alignBy);
 			//SX_DBG_NEW(al.memblocks[i].size, this->memblocks[i].mem);
 			for(int j = 0; j < al.memblocks[i].size; j++)
 			{
@@ -95,7 +103,7 @@ public:
 					}
 
 				}
-				mem_free(this->memblocks[i].mem);
+				_aligned_free(this->memblocks[i].mem);
 			}
 			//SX_SAFE_DELETE_A(this->memblocks[i].mem);
 		}
@@ -116,7 +124,7 @@ public:
 			}
 			else
 			{
-				this->memblocks[i].mem = (MemCell*)malloc(al.memblocks[i].size * sizeof(MemCell));
+				this->memblocks[i].mem = (MemCell*)_aligned_malloc(al.memblocks[i].size * sizeof(MemCell), alignBy);
 				//SX_DBG_NEW(al.memblocks[i].size, this->memblocks[i].mem);
 				for(int j = 0; (unsigned int)j < al.memblocks[i].size; j++)
 				{
@@ -147,7 +155,7 @@ public:
 					}
 
 				}
-				mem_free(this->memblocks[i].mem);
+				_aligned_free(this->memblocks[i].mem);
 			}
 			//SX_SAFE_DELETE_A(this->memblocks[i].mem);
 		}
@@ -169,7 +177,7 @@ public:
 						(&(this->memblocks[i].mem[j].data))->~T();
 					}
 				}
-				mem_free(this->memblocks[i].mem);
+				_aligned_free(this->memblocks[i].mem);
 			}
 			//SX_SAFE_DELETE_A(this->memblocks[i].mem);
 		}
@@ -202,7 +210,7 @@ public:
 	{
 		if(!this->memblocks[NumCurBlock].mem)
 		{
-			this->memblocks[NumCurBlock].mem = (MemCell*)mem_alloc(size * sizeof(MemCell));
+			this->memblocks[NumCurBlock].mem = (MemCell*)_aligned_malloc(size * sizeof(MemCell), alignBy);
 			//SX_DBG_NEW(size * sizeof(MemCell), this->memblocks[NumCurBlock].mem);
 			for(int i = 0; i < size; i++)
 			{
@@ -294,7 +302,7 @@ public:
 		//find cell
 		//mark cell as free
 
-		UINT * bnum = (UINT*)((intptr_t)pointer - sizeof(UINT));
+		UINT * bnum = (UINT*)((intptr_t)pointer - alignBy);
 		UINT blockID = *bnum;
 		UINT curPos = ((intptr_t)bnum - (intptr_t)memblocks[blockID].mem) / sizeof(MemCell);
 		--this->memblocks[blockID].used;
