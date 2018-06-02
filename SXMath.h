@@ -2125,4 +2125,12 @@ __forceinline float3 SMEulerToVec(const float3 & in, const float3 & basedir)
 
 #define FLOAT_INF ((float)INFINITY)
 
+//##########################################################################
+
+//! возвращает нормаль треугольника
+__forceinline float3 TriGetNormal(const float4 &vPointA, const float4 &vPointB, const float4 &vPointC)
+{
+	return SMVector3Normalize(SMVector3Cross(vPointC - vPointA, vPointB - vPointA));
+}
+
 #endif

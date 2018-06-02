@@ -52,8 +52,11 @@ Array<String> FileGetList(const char *szPath, FILE_LIST_TYPE type);
 #define FileGetListAll(szPath)(FileGetList(szPath, FILE_LIST_TYPE_ALL))
 
 
-//! возвращает список всех файлов или папок (в зависимости от type), szPath не должен содержать фильтров, может быть не канонизирован и без последнего слэша
-Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type);
+/*! возвращает список всех файлов или папок (в зависимости от type), 
+szPath не должен содержать фильтров, может быть не канонизирован и без последнего слэша, 
+szExt - расширение файла без точки
+*/
+Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type, const char *szExt = 0);
 
 
 const char *FileBaseName(const char *szPath);
@@ -84,6 +87,9 @@ bool FileExistsInPath(const char *szPath, const char *szSubPath);
 
 //! установка файлу в строке szPath (путь) расширения szExt, если расширение уже было то будет заменено на новое
 String FileSetStrExt(const char *szPath, const char *szExt);
+
+//! сравнивает расширение файла в строке szPath с расширением szExt (без точки)
+bool FileStrIsExt(const char *szPath, const char *szExt);
 
 
 //! создание директорий, в том числе и вложенных
