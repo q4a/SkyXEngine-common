@@ -295,6 +295,8 @@ UINT FileGetTimeLastModify(const char *szPath)
 
 	uint32_t tLastModify = mktime(&tmObj);
 
+	CloseHandle(hFile);
+
 	return tLastModify;
 }
 
