@@ -2427,7 +2427,7 @@ String::operator StringW() const
 	StringW dst;
 	dst.reserve(length());
 #if defined(_WINDOWS)
-	MultiByteToWideChar(CP_UTF8, CP_ACP, m_szString, length() + 1, dst.m_szString, length() + 1);
+	MultiByteToWideChar(CP_UTF8, 0, m_szString, length() + 1, dst.m_szString, length() + 1);
 #else
 	mbstowcs(dst.m_szString, m_szString, length() + 1);
 #endif
@@ -2439,7 +2439,7 @@ StringW::operator String() const
 	String dst;
 	dst.reserve(length());
 #if defined(_WINDOWS)
-	WideCharToMultiByte(CP_UTF8, CP_ACP, m_szString, length() + 1, dst.m_szString, length() + 1, " ", NULL);
+	WideCharToMultiByte(CP_UTF8, 0, m_szString, length() + 1, dst.m_szString, length() + 1, NULL, NULL);
 #else
 	wcstombs(dst.m_szString, m_szString, sizeof(WCHAR) * (length() + 1));
 #endif
@@ -2485,6 +2485,11 @@ StringW operator+(const StringW & a, const WCHAR * b)
 	return(a + StringW(b));
 }*/
 
+
+bool StringW::operator<(const StringW & s) const
+{
+	return(wcscmp(m_szString, s.m_szString) < 0);
+}
 
 /*
 #ifdef _DBG_MEM

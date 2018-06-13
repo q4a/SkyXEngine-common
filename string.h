@@ -423,6 +423,8 @@ public:
 
 	operator String() const;
 
+	bool operator<(const StringW & s) const;
+
 protected:
 	WCHAR * m_szString;
 };

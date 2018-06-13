@@ -95,7 +95,10 @@ public:
 			if(key < this->Size)
 			{
 				(&this->Data[key])->~T();
-				memcpy(&this->Data[key], &this->Data[key + 1], sizeof(T) * (this->Size - key - 1));
+				if(key < this->Size - 1)
+				{
+					memcpy(&this->Data[key], &this->Data[key + 1], sizeof(T)* (this->Size - key - 1));
+				}
 				this->Size--;
 			}
 			else
