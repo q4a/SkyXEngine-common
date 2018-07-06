@@ -43,7 +43,7 @@ int StrFindI(const char *szStr, const char *szFinder, int iPos = 0);
 int StrFindILast(const char *szStr, const char *szFinder);
 
 
-//! вырезает из строки szStr подстроку начиная с iStart и размером iLen, если iLen < 0 вырезает в обратном направлении, если iLen == 0 вырезает до конца строки
+//! вырезает из строки szStr подстроку начиная с iStart и размером iLen, если iLen == 0 вырезает до конца строки
 String StrSubstr(const char *szStr, int iStart, int iLen=0);
 
 //! возвращает количество вхождений строки szFinder в строку szStr
@@ -60,11 +60,16 @@ String StrToLower(const char *szStr);
 //! преобразует строку в верхний регистр
 String StrToUpper(const char *szStr);
 
+//##########################################################################
+
+//! вырезает из строки szStr подстроку szFinder, единожды
+const char* StrCutStr(const char *szStr, const char *szFinder);
+
+//! вырезает из строки szStr подстроку szFinder, единожды, поиск подстроки без учета регистра
+String StrCutStrI(const char *szStr, const char *szFinder);
 
 
-#define def_str_validate(str) (str && str[0]!=0 && str[0]!='0')
-
-void StrCutMesh(const char* path, char* name);
+#define STR_VALIDATE(str) (str && str[0]!=0 && str[0]!='0')
 
 void StrCutName(const char* path, char* name);
 

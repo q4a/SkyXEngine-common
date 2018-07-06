@@ -184,6 +184,45 @@ String StrTrimR(const char *szStr, const char *szSyms)
 
 //##########################################################################
 
+int StrFind(const char *szStr, const char *szFinder, int iPos)
+{
+	const char *szStrFound = strstr(szStr + iPos, szFinder);
+	if (szStrFound)
+	{
+		return (szStrFound - szStr);
+	}
+	return -1;
+}
+
+int StrFindI(const char *szStr, const char *szFinder, int iPos)
+{
+	String sStr = StrToLower(szStr);
+	String sFinder = StrToLower(szFinder);
+	const char *szStrFound = strstr(sStr.c_str() + iPos, sFinder.c_str());
+	if (szStrFound)
+	{
+		return (szStrFound - sStr.c_str());
+	}
+	return -1;
+}
+
+String StrSubstr(const char *szStr, int iStart, int iLen)
+{
+	const char *szStrBias = szStr + iStart;
+
+	if (!iLen || iLen > strlen(szStrBias))
+		iLen = strlen(szStrBias);
+
+	char *szStrNew = new char[iLen + 1];
+	memcpy(szStrNew, szStrBias, iLen);
+	szStrNew[iLen] = 0;
+	String sStr = szStrNew;
+	mem_delete_a(szStrNew);
+	return(sStr);
+}
+
+//##########################################################################
+
 String StrToLower(const char *szStr)
 {
 	String sNewStr = szStr;
@@ -207,29 +246,26 @@ String StrToUpper(const char *szStr)
 }
 
 
-
-void StrCutMesh(const char* path, char* name)
+const char* StrCutStr(const char *szStr, const char *szFinder)
 {
-	for(size_t i = 0; i<strlen(path); i++)
-	{
-		if(path[strlen(path) - i] == '\\')
-		{
-			if(i + 6 > 0 && i + 6 < strlen(path) &&
-				(path[(strlen(path) - i) - 1] == 's' || path[(strlen(path) - i) - 1] == 'S') &&
-				(path[(strlen(path) - i) - 2] == 'e' || path[(strlen(path) - i) - 2] == 'E') &&
-				(path[(strlen(path) - i) - 3] == 'h' || path[(strlen(path) - i) - 3] == 'H') &&
-				(path[(strlen(path) - i) - 4] == 's' || path[(strlen(path) - i) - 4] == 'S') &&
-				(path[(strlen(path) - i) - 5] == 'e' || path[(strlen(path) - i) - 5] == 'E') &&
-				(path[(strlen(path) - i) - 6] == 'm' || path[(strlen(path) - i) - 6] == 'M')
-				)
-			{
-				memcpy(name, path + (strlen(path) - i) + 1, i - 1);
-				name[(i - 1)] = 0;
-				break;
-			}
-		}
-	}
+	int iPos = StrFind(szStr, szFinder, 0);
+	if (iPos >= 0)
+		return szStr + iPos;
+
+	return 0;
 }
+
+String StrCutStrI(const char *szStr, const char *szFinder)
+{
+	String sStr = "";
+	int iPos = StrFindI(szStr, szFinder, 0);
+	if (iPos >= 0)
+		sStr = (iPos == 0 ? String("") : StrSubstr(szStr, 0, iPos)) + StrSubstr(szStr, iPos + strlen(szFinder));
+
+	return sStr;
+}
+
+
 
 void StrCutName(const char* path, char* name)
 {
