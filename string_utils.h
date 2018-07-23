@@ -30,21 +30,37 @@ String StrTrimR(const char *szStr, const char *szSyms = " \t\n\r");
 
 //##########################################################################
 
+//! инвертирование строки
+String StrInverse(const char *szStr);
+
 //! поиск в szStr подстроки szFinder с позиции iPos
 int StrFind(const char *szStr, const char *szFinder, int iPos = 0);
 
-//! поиск последнего вхождения строки szFinder в szStr
-int StrFindLast(const char *szStr, const char *szFinder);
+//! поиск последнего вхождения строки szFinder в szStr, iPos - позиция с конца
+int StrFindLast(const char *szStr, const char *szFinder, int iPos = 0);
 
 //! поиск в szStr подстроки szFinder с позиции iPos, без учета регистра
 int StrFindI(const char *szStr, const char *szFinder, int iPos = 0);
 
-//! поиск последнего вхождения строки szFinder в szStr, без учета регистра
-int StrFindILast(const char *szStr, const char *szFinder);
+//! поиск последнего вхождения строки szFinder в szStr, без учета регистра, iPos - позиция с конца
+int StrFindILast(const char *szStr, const char *szFinder, int iPos = 0);
 
 
 //! вырезает из строки szStr подстроку начиная с iStart и размером iLen, если iLen == 0 вырезает до конца строки
 String StrSubstr(const char *szStr, int iStart, int iLen=0);
+
+
+
+//! возвращает строку до вхождения szFinder в szStr
+String StrSubstrSpre(const char *szStr, const char *szFinder, int iPos = 0);
+
+inline String StrSubstrS(const char *szStr, const char *szFinder, int iPos = 0)
+{
+	return StrSubstrSpre(szStr, szFinder, iPos);
+}
+
+//! возвращает строку до вхождения szFinder в szStr
+String StrSubstrSpost(const char *szStr, const char *szFinder, int iPos = 0);
 
 //! возвращает количество вхождений строки szFinder в строку szStr
 int StrSubstrCount(const char *szStr, const char *szFinder);

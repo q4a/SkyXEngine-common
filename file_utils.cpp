@@ -101,7 +101,7 @@ Array<String> FileGetListRec(const char *szPath, FILE_LIST_TYPE type, const char
 					}
 
 					if (
-						(type == FILE_LIST_TYPE_FILES && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && szExt && FileStrIsExt(fd.cFileName, szExt)) ||
+						(type == FILE_LIST_TYPE_FILES && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && (!szExt || (szExt && FileStrIsExt(fd.cFileName, szExt)))) ||
 						(type == FILE_LIST_TYPE_DIRS && fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
 						(type == FILE_LIST_TYPE_ALL)
 						)
