@@ -1745,6 +1745,32 @@ public:
 		w = q.w;
 	}
 
+	SMQuaternion::SMQuaternion(const float3 & vFrom, const float3 & vTo)
+	{
+		float3 u = SMVector3Normalize(vFrom);
+		float3 v = SMVector3Normalize(vTo);
+		float3 vec;
+		if(u == -v)
+		{
+			float x = abs(v.x);
+			float y = abs(v.y);
+			float z = abs(v.z);
+			float3 vOther = x < y ? (x < z ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)) : (y < z ? float3(0.0f, 1.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f));
+
+			vec = SMVector3Cross(v, vOther);
+			w = 0.0f;
+		}
+		else
+		{
+			float3 v3Half = SMVector3Normalize(u + v);
+			vec = SMVector3Cross(u, v3Half);
+			w = -SMVector3Dot(u, v3Half);
+		}
+		x = vec.x;
+		y = vec.y;
+		z = vec.z;
+	}
+
 	SMQuaternion::SMQuaternion():x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 	{
 	}
