@@ -110,16 +110,16 @@ public:
 			}
 	}
 
-	inline Array & operator=(T* arr)
-	{
+	//inline Array & operator=(T* arr)
+	//{
 		//this->AllocSize = arr.AllocSize;
 		//this->Size = arr.Size;
 			/*for(int i = arr.Size - 1; i >= 0; i--)
 			{
 				(*this)[i] = arr[i];
 			}*/
-		return(*this);
-	}
+	//	return(*this);
+	//}
 
 	inline Array & operator=(const Array<T, BlockSize> & arr)
 	{
