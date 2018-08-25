@@ -11,6 +11,15 @@ template<typename T> class CConcurrentQueue
 	typedef std::unique_lock<std::mutex> ScopedLock;
 
 public:
+	CConcurrentQueue()
+	{
+	}
+
+	CConcurrentQueue(const CConcurrentQueue<T> &other)
+	{
+		m_queue = other.m_queue;
+	}
+
 	bool empty() const
 	{
 		ScopedLock lock(m_mutex);
@@ -69,6 +78,13 @@ public:
 	{
 		ScopedLock lock(m_mutex);
 		std::queue<T>().swap(m_queue);
+	}
+
+
+	CConcurrentQueue<T> &operator=(const CConcurrentQueue<T> &other)
+	{
+		m_queue = other.m_queue;
+		return(*this);
 	}
 
 private:
