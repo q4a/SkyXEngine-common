@@ -104,6 +104,15 @@ String::String(DWORD num)
 	SAFE_DELETE_A(tmp);
 }
 
+String::String(const UINT num)
+{
+	char * tmp = new char[64];
+	sprintf(tmp, "%lu", num);
+	m_szString = new char[strlen(tmp) + 1];
+	memcpy(m_szString, tmp, strlen(tmp) + 1);
+	SAFE_DELETE_A(tmp);
+}
+
 String::String(long num)
 {
 	char * tmp = new char[64];

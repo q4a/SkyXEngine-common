@@ -31,6 +31,7 @@ public:
 	String(const int		num);
 	String(const unsigned short		num);
 	String(const unsigned long	num);
+	String(const UINT num);
 	String(const long		num);
 	String(const double	num);
 	String(const bool		bf);
