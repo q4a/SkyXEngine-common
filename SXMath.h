@@ -11,6 +11,7 @@ See the license in LICENSE
 #include <math.h>
 #include <cstdlib>
 #include <assert.h>
+#include <float.h>
 
 #define SX_ALIGNED_OP_MEM \
 void* operator new(size_t size)\
@@ -51,6 +52,14 @@ void operator delete[](void* ptr)\
 #define sign2(x) (x >= 0 ? 1 : -1)
 #define SMToRadian(degree)((degree)*(SM_PI / 180.0f))
 #define SMToAngle(rad)((rad)*(180.0f / SM_PI))
+
+#ifndef max
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#endif
 
 inline float lerpf(float x,float y,float s)
 {
@@ -2159,6 +2168,30 @@ __forceinline float3 SMEulerToVec(const float3 & in, const float3 & basedir)
 __forceinline float3 TriGetNormal(const float4 &vPointA, const float4 &vPointB, const float4 &vPointC)
 {
 	return SMVector3Normalize(SMVector3Cross(vPointC - vPointA, vPointB - vPointA));
+}
+
+__forceinline float SMBoxRayIntersection(const float3 &vBoxMin, const float3 &vBoxMax, const float3 &vRayOrigin, const float3 &vRayDir)
+{
+	if (fabsf(vRayDir.x) <= FLT_EPSILON || fabsf(vRayDir.y) <= FLT_EPSILON || fabsf(vRayDir.z) <= FLT_EPSILON)
+	{
+		return(-1);
+	}
+
+	float3 vMin = (vBoxMin - vRayOrigin) / vRayDir;
+	float3 vMax = (vBoxMax - vRayOrigin) / vRayDir;
+
+
+	float3 vMin2 = SMVectorMin(vMin, vMax);
+	float3 vMax2 = SMVectorMax(vMin, vMax);
+
+	float fNear = max(vMin2.x, max(vMin2.y, vMin2.z));
+	float fFar = min(vMax2.x, min(vMax2.y, vMax2.z));
+
+	if (fNear > fFar) return(-1);
+	if (fFar < 0.0f) return(-1);
+
+	if (fNear > 0.0f) return(fNear);
+	return(fFar);
 }
 
 #endif

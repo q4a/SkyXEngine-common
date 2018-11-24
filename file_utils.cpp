@@ -316,9 +316,9 @@ String FileSetStrExt(const char *szPath, const char *szExt)
 	}
 
 	if (iPosPoint >= 0)
-		sPath = sPath.substr(0, iPosPoint + 1) + szExt;
+		sPath = sPath.substr(0, iPosPoint + (szExt[0] != 0 ? 1 : 0))+szExt;
 	else
-		sPath += szExt;
+		sPath += String(".") + szExt;
 
 	return sPath;
 }
