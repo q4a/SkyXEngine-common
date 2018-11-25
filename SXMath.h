@@ -1669,7 +1669,10 @@ __forceinline SMMATRIX SMMatrixInverse(float * pDeterminant, const SMMATRIX & M)
 	C6.mmv = _mm_shuffle_ps(C6, C6, _MM_SHUFFLE(3, 1, 2, 0));
 	
 	SMVECTOR vTemp = SMVector4DotV(C0, MT.r[0]);
-	*pDeterminant = vTemp.x;
+	if(pDeterminant)
+	{
+		*pDeterminant = vTemp.x;
+	}
 	vTemp.mmv = _mm_div_ps(float4(1.0f, 1.0f, 1.0f, 1.0f), vTemp);
 	SMMATRIX mResult;
 	mResult.r[0].mmv = _mm_mul_ps(C0, vTemp);
