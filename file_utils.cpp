@@ -317,8 +317,13 @@ String FileSetStrExt(const char *szPath, const char *szExt)
 
 	if (iPosPoint >= 0)
 		sPath = sPath.substr(0, iPosPoint + (szExt[0] != 0 ? 1 : 0))+szExt;
-	else
-		sPath += String(".") + szExt;
+	else if (szExt && szExt[0] != 0)
+	{
+		if (szExt[0] == '.')
+			sPath += szExt;
+		else
+			sPath += String(".") + szExt;
+	}
 
 	return sPath;
 }
