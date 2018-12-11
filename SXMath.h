@@ -2282,10 +2282,11 @@ __declspec(align(16)) struct SMPLANE: public float4
 	bool intersectLine(float3 *pOut, const float3 &vStart, const float3 &vEnd)
 	{
 		float3 n = SMVector3Normalize(*this);
-		// z = -(ax + by + d) / c
-		float3 t1(0.0f, 0.0f, z ? - w / z : 1.0f);
-		float d1 = SMVector3Dot((vStart - t1), n) / SMVector3Length(n),
-			d2 = SMVector3Dot((vEnd - t1), n) / SMVector3Length(n);
+		// a/a + b/b + c/c = -d
+		// z = -d / c
+		float3 t1 = n * -w;
+		float d1 = SMVector3Dot((vStart - t1), n),
+			d2 = SMVector3Dot((vEnd - t1), n);
 		if((d1 > 0 && d2 > 0) || (d1 < 0 && d2 < 0))
 			return(false);
 		if(pOut)
