@@ -618,6 +618,18 @@ __declspec(align(16)) struct SMMATRIX
 		r[2] = float4(m20, m21, m22, m23);
 		r[3] = float4(m30, m31, m32, m33);
 	};
+	SMMATRIX(
+		const float4 & r0,
+		const float4 & r1,
+		const float4 & r2,
+		const float4 & r3
+		)
+	{
+		r[0] = r0;
+		r[1] = r1;
+		r[2] = r2;
+		r[3] = r3;
+	};
 #ifdef SM_D3D_CONVERSIONS
 	SMMATRIX(const D3DXMATRIX & m)
 	{
@@ -1682,6 +1694,13 @@ __forceinline SMMATRIX SMMatrixInverse(float * pDeterminant, const SMMATRIX & M)
 	return(mResult);
 }
 
+__forceinline float SMMatrix3x3Determinant(const SMMATRIX & M)
+{
+	return(M._11 * (M._22 * M._33 - M._32 * M._23)
+		- M._12 * (M._21 * M._33 - M._31 * M._23)
+		+ M._13 * (M._21 * M._32 - M._31 * M._22));
+}
+
 __forceinline float3 operator*(const float3 & V, const SMMATRIX & M)
 {
 	return(SMVector3Transform(V, M));
@@ -2161,6 +2180,128 @@ __forceinline float3 SMEulerToVec(const float3 & in, const float3 & basedir)
 {
 	return(SMMatrixRotationX(in.x) * SMMatrixRotationY(in.y) * SMMatrixRotationZ(in.z) * basedir);
 }
+
+__forceinline float SMCrossLines(const float3 & pos1, const float3 & dir1,
+	const float3 & pos2, const float3 & dir2,
+	float3 * pH1 = NULL, float3 * pH2 = NULL)
+{
+	float3 n = SMVector3Cross(dir1, dir2);
+	float3 vRight = pos1 - pos2;
+
+	float d0 = SMMatrix3x3Determinant(SMMATRIX(dir2,   -dir1,     -n, float4()));
+	float ds = SMMatrix3x3Determinant(SMMATRIX(vRight, -dir1,     -n, float4()));
+	float dt = SMMatrix3x3Determinant(SMMATRIX(dir2,  vRight,     -n, float4()));
+	//float dl = SMMatrix3x3Determinant(SMMATRIX(dir2,   -dir1, vRight, float4()));
+
+	float s = ds / d0;
+	float t = dt / d0;
+	//float l = dl / d0;
+
+	float3 h1 = t * dir1 + pos1;
+	float3 h2 = s * dir2 + pos2;
+
+	if(pH1)
+	{
+		*pH1 = h1;
+	}
+
+	if(pH2)
+	{
+		*pH2 = h2;
+	}
+
+	return(SMVector3Length(h1 - h2));
+}
+
+//##########################################################################
+
+__declspec(align(16)) struct SMPLANE: public float4
+{
+	SMPLANE():float4(0.0f, 1.0f, 0.0f, 0.0f)
+	{
+	}
+
+	SMPLANE(float x, float y, float z, float w):float4(x, y, z, w)
+	{
+	}
+
+	SMPLANE(const SMPLANE & V)
+	{
+		mmv = V.mmv;
+	};
+
+	SMPLANE(const float2 & V, float _z, float _w):float4(V, _z, _w)
+	{
+	}
+
+	SMPLANE(const float3 & V, float _w):float4(V, _w)
+	{
+	}
+
+	SMPLANE(const SMVECTOR & V):float4(V)
+	{
+	}
+
+	SMPLANE(const float3 & a, const float3 & b, const float3 & c)
+	{
+		float4 vec = SMVector3Cross(b - a, c - a);
+		// ax + by + cz + d = 0
+		// d = -dot(vec, a)
+		vec.w = -SMVector3Dot(vec, a);
+		mmv = vec.mmv;
+	}
+
+	SMPLANE(const float3 & vNormal, const float3 & vPoint)
+	{
+		float4 vec = vNormal;
+		vec.w = -SMVector3Dot(vec, vPoint);
+		mmv = vec.mmv;
+	}
+
+	//
+	//#ifdef SM_D3D_CONVERSIONS
+	//	float4(const D3DXPLANE & v)
+	//	{
+	//		mmv = _mm_set_ps(v.d, v.c, v.b, v.a);
+	//	}
+	//#endif
+	//
+	operator SMVECTOR()
+	{
+		SMVECTOR r;
+		r.mmv = mmv;
+		return(r);
+	};
+
+	SMPLANE & operator=(const SMPLANE & V)
+	{
+		mmv = V.mmv;
+		return(*this);
+	};
+
+	bool intersectLine(float3 *pOut, const float3 &vStart, const float3 &vEnd)
+	{
+		float3 n = SMVector3Normalize(*this);
+		// z = -(ax + by + d) / c
+		float3 t1(0.0f, 0.0f, z ? - w / z : 1.0f);
+		float d1 = SMVector3Dot((vStart - t1), n) / SMVector3Length(n),
+			d2 = SMVector3Dot((vEnd - t1), n) / SMVector3Length(n);
+		if((d1 > 0 && d2 > 0) || (d1 < 0 && d2 < 0))
+			return(false);
+		if(pOut)
+		{
+			*pOut = vStart + (vEnd - vStart) * (-d1 / (d2 - d1));
+		}
+		return(true);
+	}
+
+	//#ifdef SM_D3D_CONVERSIONS
+	//	operator D3DXPLANE()
+	//	{
+	//		return(D3DXPLANE(x, y, z, w));
+	//	}
+	//#endif
+};
 
 
 #define FLOAT_INF ((float)INFINITY)
