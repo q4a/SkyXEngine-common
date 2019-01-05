@@ -239,6 +239,10 @@ protected:
 
 	inline void Realloc(UINT NewSize)
 	{
+		if(this->AllocSize == NewSize)
+		{
+			return;
+		}
 		T * tmpData = (T*)malloc(sizeof(T) * NewSize);
 		memcpy(tmpData, this->Data, min(NewSize, this->Size) * sizeof(T));
 			if(this->Size > NewSize)
