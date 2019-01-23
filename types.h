@@ -26,6 +26,7 @@ typedef unsigned char BYTE, byte;
 typedef unsigned int UINT;
 typedef wchar_t WCHAR;
 typedef unsigned long ULONG;
+typedef void* SXWINDOW;
 
 #ifndef max
 #define max(a, b) ((a) > (b) ? (a) : (b))

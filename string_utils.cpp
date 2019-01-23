@@ -6,13 +6,13 @@ See the license in LICENSE
 
 #include "string_utils.h"
 
-Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty)
+Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty, int iCount)
 {
 	Array<String> aStrings;
 	int iBeginPos = 0, iLen = 0;
 	const char *szFound = 0;
 
-	while(szStr)
+	while (szStr && (iCount <= 0 || (iCount-1) > aStrings.size()))
 	{
 		if((szFound = strstr(szStr, szDelimiter)) == 0)
 			break;

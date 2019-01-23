@@ -8,7 +8,7 @@ See the license in LICENSE
 #define Array_H
 
 #include <new>
-#include "sxtypes.h"
+#include "types.h"
 
 /*
 	¬нимание:

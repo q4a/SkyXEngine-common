@@ -15,7 +15,7 @@ See the license in LICENSE
 #else
 #	include <new>
 #endif
-#include "sxtypes.h"
+#include "types.h"
 #if defined(_WINDOWS)
 #	pragma warning(disable:4018)
 #endif

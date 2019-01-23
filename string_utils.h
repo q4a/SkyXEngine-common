@@ -13,7 +13,7 @@ See the license in LICENSE
 #include <iostream>
 
 //! разделяет строку szStr на подстроки на основании разделителя szDelimiter
-Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty = true);
+Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty = true, int iCount=0);
 
 //! соединение всех строк, между строками вставить szDelimiter
 String StrWeld(const char *szDelimiter, const char *szStr1, ...);
