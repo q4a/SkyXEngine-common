@@ -66,6 +66,14 @@ inline float lerpf(float x,float y,float s)
 	return x + s*(y - x);
 }
 
+inline int randi(int iMin, int iMax)
+{
+	if (iMin >= iMax)
+		return iMin;
+
+	return ((rand() % (iMax - iMin)) + iMin);
+}
+
 inline float randf(float lowBound, float highBound)
 {
 	if (lowBound >= highBound)
