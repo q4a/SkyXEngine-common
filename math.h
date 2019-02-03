@@ -369,6 +369,11 @@ __declspec(align(16)) struct float4: public SMVECTOR
 		mmv = _mm_setzero_ps();
 	};
 
+	float4(float x)
+	{
+		mmv = _mm_set_ps(x, x, x, x);
+	};
+
 	float4(float x, float y, float z, float w)
 	{
 		mmv = _mm_set_ps(w, z, y, x);
@@ -2312,6 +2317,17 @@ __declspec(align(16)) struct SMPLANE: public float4
 	//#endif
 };
 
+__forceinline SMMATRIX SMMatrixReflect(const SMPLANE &_plane)
+{
+	float4 plane = SMVector4Normalize(_plane);
+	float4 m2plane = -2.0f * float4((float3)plane, 0.0f);
+	return(SMMATRIX(
+		m2plane * plane.x + float4(1.0f, 0.0f, 0.0f, 0.0f),
+		m2plane * plane.y + float4(0.0f, 1.0f, 0.0f, 0.0f),
+		m2plane * plane.z + float4(0.0f, 0.0f, 1.0f, 0.0f),
+		m2plane * plane.w + float4(0.0f, 0.0f, 0.0f, 1.0f)
+		));
+}
 
 #define FLOAT_INF ((float)INFINITY)
 
