@@ -284,13 +284,15 @@ private:
 			if(!tmpNode)
 			{
 				//printf("Unable to allocate memory\n");
-#if defined(_WINDOWS)
+#if 0
+#if defined(WIN32)
 				_asm
 				{
 					int 3;
 				};
 #else
 				asm("int $3");
+#endif
 #endif
 			}
 		tmpNode->Key = key;
