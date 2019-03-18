@@ -103,10 +103,12 @@ public:
 			}
 			else
 			{
+#ifndef WIN64
 				_asm
 				{
 					int 3;
 				};
+#endif
 			}
 	}
 

@@ -20,7 +20,7 @@ typedef int32_t ID;
 typedef unsigned long DWORD;
 typedef unsigned long ULONG;
 typedef unsigned short WORD;
-typedef unsigned int size_t;
+//typedef unsigned int size_t;
 typedef int BOOL;
 typedef unsigned char BYTE, byte;
 typedef unsigned int UINT;
@@ -103,7 +103,7 @@ inline const char * canonize_path(char * str)
 
 inline const char * strip_prefix(const char * str, const char * pref)
 {
-	int len = strlen(pref);
+	size_t len = strlen(pref);
 	if(!memcmp(str, pref, len))
 	{
 		return(str + len);
