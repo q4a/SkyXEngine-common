@@ -28,6 +28,10 @@ typedef wchar_t WCHAR;
 typedef unsigned long ULONG;
 typedef void* SXWINDOW;
 
+#ifdef _MSC_VER
+#	define strcasecmp _stricmp
+#endif
+
 #ifndef max
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #endif

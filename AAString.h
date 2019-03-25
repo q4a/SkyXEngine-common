@@ -63,7 +63,13 @@ struct AAStringNR: public AAString
 
 	__forceinline bool operator==(const AAStringNR & str) const
 	{
-		return(stricmp(tmpName ? tmpName : Name, str.tmpName ? str.tmpName : str.Name) == 0);
+		return(
+#ifdef _MSC_VER
+			_stricmp
+#else 
+			strcasecmp
+#endif
+			(tmpName ? tmpName : Name, str.tmpName ? str.tmpName : str.Name) == 0);
 	}
 };
 

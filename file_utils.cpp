@@ -1,6 +1,6 @@
 
 /******************************************************
-Copyright © Vitaliy Buturlin, Evgeny Danilovich, 2018
+Copyright Â© Vitaliy Buturlin, Evgeny Danilovich, 2018
 See the license in LICENSE
 ******************************************************/
 
@@ -181,7 +181,7 @@ int FileCountNesting(const char *szPath)
 	if (szPath[strlen(szPath)-1] == '/' || szPath[strlen(szPath)-1] == '\\')
 		--iCount;
 
-	for (int i = 0, il = strlen(szPath); i < il; ++i)
+	for (int i = 0, il = (int)strlen(szPath); i < il; ++i)
 	{
 		if (szPath[i] == '/' || szPath[i] == '\\')
 			++iCount;
@@ -194,7 +194,7 @@ String FileGetPrevDir(const char *szPath)
 {
 	int iPosDel = 0;
 
-	for (int i = 1, il = strlen(szPath)-1; i < il; ++i)
+	for(int i = 1, il = (int)strlen(szPath) - 1; i < il; ++i)
 	{
 		if (szPath[il - i] == '/' || szPath[il - i] == '\\')
 		{
@@ -251,7 +251,7 @@ bool FileCreateDir(const char *szPath)
 {
 	if (!strstr(szPath, "\\") && !strstr(szPath, "/"))
 	{
-		return((bool)CreateDirectory(szPath, 0));
+		return(!!CreateDirectory(szPath, 0));
 	}
 
 	String sPath = FileAppendSlash(FileCanonizePathS(szPath).c_str());
@@ -272,7 +272,7 @@ bool FileCreateDir(const char *szPath)
 	return true;
 }
 
-UINT FileGetTimeLastModify(const char *szPath)
+time_t FileGetTimeLastModify(const char *szPath)
 {
 	HANDLE hFile = CreateFile(szPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
@@ -293,7 +293,7 @@ UINT FileGetTimeLastModify(const char *szPath)
 	tmObj.tm_min = stUTC.wMinute;
 	tmObj.tm_sec = stUTC.wSecond;
 
-	uint32_t tLastModify = mktime(&tmObj);
+	time_t tLastModify = mktime(&tmObj);
 
 	CloseHandle(hFile);
 
@@ -335,7 +335,7 @@ bool FileStrIsExt(const char *szPath, const char *szExt)
 
 	int iPosPoint = -1;
 
-	for (int i = 0, il = strlen(szPath); i < il; ++i)
+	for (int i = 0, il = (int)strlen(szPath); i < il; ++i)
 	{
 		if (szPath[(il - 1) - i] == '.')
 		{
@@ -344,5 +344,5 @@ bool FileStrIsExt(const char *szPath, const char *szExt)
 		}
 	}
 
-	return (iPosPoint >= 0 && stricmp(szPath + iPosPoint, szExt) == 0);
+	return (iPosPoint >= 0 && strcasecmp(szPath + iPosPoint, szExt) == 0);
 }

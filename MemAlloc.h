@@ -33,11 +33,22 @@ struct UsageStats
 	ULONG ulAllocMem; //Количество занятой элементами памяти
 };
 
-template <typename T, int SizeBlock = 256, int SizePage=16, const int alignBy=4>
+#ifndef WIN64
+#	define MEMALLOC_DEFAULT_ALIGN 4
+#	define MEMALLOC_DEFAULT_ALIGN_STR "4"
+#else
+#	define MEMALLOC_DEFAULT_ALIGN 16
+#	define MEMALLOC_DEFAULT_ALIGN_STR "16"
+#endif
+
+template <typename T, int SizeBlock = 256, int SizePage = 16, const int alignBy = MEMALLOC_DEFAULT_ALIGN>
 class MemAlloc
 {
-	static_assert(alignBy % 4 == 0 && alignBy >= 4, "alignBy should be multiply of 4");
+	static_assert(alignBy % MEMALLOC_DEFAULT_ALIGN == 0 && alignBy >= MEMALLOC_DEFAULT_ALIGN, "alignBy should be multiply of " MEMALLOC_DEFAULT_ALIGN_STR);
 	
+#undef MEMALLOC_DEFAULT_ALIGN
+#undef MEMALLOC_DEFAULT_ALIGN_STR
+
 #pragma pack(push, 1)
 	struct MemCell
 	{
@@ -304,7 +315,7 @@ public:
 
 		UINT * bnum = (UINT*)((intptr_t)pointer - alignBy);
 		UINT blockID = *bnum;
-		UINT curPos = ((intptr_t)bnum - (intptr_t)memblocks[blockID].mem) / sizeof(MemCell);
+		UINT curPos = (UINT)((intptr_t)bnum - (intptr_t)memblocks[blockID].mem) / sizeof(MemCell);
 		--this->memblocks[blockID].used;
 		pointer->~T();
 

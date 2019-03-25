@@ -9,10 +9,10 @@ See the license in LICENSE
 Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllowEmpty, int iCount)
 {
 	Array<String> aStrings;
-	int iBeginPos = 0, iLen = 0;
+	size_t iBeginPos = 0, iLen = 0;
 	const char *szFound = 0;
 
-	while (szStr && (iCount <= 0 || (iCount-1) > aStrings.size()))
+	while (szStr && (iCount <= 0 || (iCount-1) > (int)aStrings.size()))
 	{
 		if((szFound = strstr(szStr, szDelimiter)) == 0)
 			break;

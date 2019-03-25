@@ -1894,6 +1894,10 @@ public:
 		}
 	}
 };
+__forceinline bool operator==(const SMQuaternion & q1, const SMQuaternion & q2)
+{
+	return(q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
+}
 
 __forceinline SMQuaternion operator*(const SMQuaternion & q1, const SMQuaternion & q2)
 {

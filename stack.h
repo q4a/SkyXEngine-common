@@ -14,7 +14,14 @@ See the license in LICENSE
 #	pragma warning(disable:4715)
 #endif
 
-template <typename T, int pageSize=256, int alignBy=4>
+#ifndef WIN64
+#	define STACK_DEFAULT_ALIGN 4
+#else
+#	define STACK_DEFAULT_ALIGN 16
+#endif
+
+template <typename T, int pageSize = 256, int alignBy = STACK_DEFAULT_ALIGN>
+#undef STACK_DEFAULT_ALIGN
 class Stack
 {
 	struct StackNode
