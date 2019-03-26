@@ -58,12 +58,33 @@ public:
 
 	inline void resize(UINT NewSize)
 	{
+		if(NewSize == Size)
+		{
+			return;
+		}
 		Realloc(NewSize);
 		//ConstructInterval(this->Size, key);
 			if(this->Size < NewSize)
 			{
 				ConstructInterval(this->Size, NewSize - 1);
 			}
+		this->Size = NewSize;
+	}
+
+	inline void resizeFast(UINT NewSize)
+	{
+		if(NewSize == Size)
+		{
+			return;
+		}
+		if(this->Size < NewSize)
+		{
+			resize(NewSize);
+			return;
+		}
+
+		DestructInterval(NewSize, this->Size - 1);
+
 		this->Size = NewSize;
 	}
 
