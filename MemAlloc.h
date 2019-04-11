@@ -16,6 +16,7 @@ See the license in LICENSE
 #	include <new>
 #endif
 #include "types.h"
+#include <malloc.h>
 #if defined(_WINDOWS)
 #	pragma warning(disable:4018)
 #endif

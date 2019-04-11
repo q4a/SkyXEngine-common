@@ -28,8 +28,8 @@ Array<String> StrExplode(const char *szStr, const char *szDelimiter, bool isAllo
 			mem_delete_a(szNewStr);
 		}
 
-		iBeginPos += iLen + 1;
-		szStr += iLen + 1;
+		iBeginPos += iLen + strlen(szDelimiter);
+		szStr += iLen + strlen(szDelimiter);
 	}
 
 	if(iBeginPos == 0 || (szStr && (isAllowEmpty || (!isAllowEmpty && strlen(szStr) > 0))))
