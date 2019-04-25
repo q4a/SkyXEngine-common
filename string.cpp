@@ -36,7 +36,7 @@ See the license in LICENSE
 #define SAFE_DELETE_A(p) if(p)\
 	{\
 	delete[](p); \
-	(p) = NULL; \
+	(p) = nullptr; \
 	}
 #endif
 
@@ -44,7 +44,7 @@ See the license in LICENSE
 #define SAFE_DELETE(p) if(p)\
 	{\
 	delete (p); \
-	(p) = NULL; \
+	(p) = nullptr; \
 	}
 #endif
 
@@ -57,8 +57,7 @@ const char * String::c_str() const
 
 String::String()
 {
-	m_szString = new char[1];
-	m_szString[0] = 0;
+	m_szString = new char[1] {0};
 }
 
 String::String(const char * str)
@@ -153,7 +152,7 @@ String::String(String && other)
 {
 	//SAFE_DELETE_A(m_szString);
 	m_szString = other.m_szString;
-	other.m_szString = NULL;
+	other.m_szString = nullptr;
 }
 
 String::~String()
@@ -364,7 +363,7 @@ String & String::operator=(String && other)
 	{
 		SAFE_DELETE(m_szString);
 		m_szString = other.m_szString;
-		other.m_szString = NULL;
+		other.m_szString = nullptr;
 	}
 	return(*this);
 }
@@ -847,82 +846,52 @@ bool String::operator==(const bool & bf) const
 
 bool String::operator!=(const String & str) const
 {
-	if(*this == str)
-		return false;
-	else
-		return true;
+	return *this == str;
 }
 
 bool String::operator!=(const String * str) const
 {
-	if(*this == *str)
-		return false;
-	else
-		return true;
+	return *this == *str;
 }
 
 bool String::operator!=(const char * str) const
 {
-	if(*this == str)
-		return false;
-	else
-		return true;
+	return *this == str;
 }
 
 bool String::operator!=(const char & sym) const
 {
-	if(*this == sym)
-		return false;
-	else
-		return true;
+	return *this == sym;
 }
 
 bool String::operator!=(const int & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool String::operator!=(const WORD & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool String::operator!=(const DWORD & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool String::operator!=(const long & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool String::operator!=(const double & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool String::operator!=(const bool & bf) const
 {
-	if(*this == bf)
-		return false;
-	else
-		return true;
+	return *this == bf;
 }
 
 /////////////////////////////////////////////////////////
@@ -951,7 +920,7 @@ DWORD String::find(const char * str, DWORD pos) const
 	//sprintf(newChar,"%s",m_szString+BeginPos);
 	char *Find = strstr(m_szString + pos, str);
 
-	if(Find != NULL)
+	if (Find != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
 		return(Find - m_szString);
 	else
@@ -1212,15 +1181,15 @@ bool String::toBool() const
 DWORD String::find_last_of(const char * str, DWORD pos) const
 {
 
-	char * Find = NULL;
-	char * tmpFind = NULL;
+	char * Find = nullptr;
+	char * tmpFind = nullptr;
 	while((Find = strstr(m_szString + pos, str)))
 	{
 		pos = Find - m_szString + 1;
 		tmpFind = Find;
 	}
 
-	if(tmpFind != NULL)
+	if (tmpFind != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
 		return(tmpFind - m_szString);
 	else
@@ -1354,7 +1323,7 @@ StringW::StringW(StringW && other)
 {
 	//SAFE_DELETE_A(m_szString);
 	m_szString = other.m_szString;
-	other.m_szString = NULL;
+	other.m_szString = nullptr;
 }
 
 StringW::~StringW()
@@ -1566,7 +1535,7 @@ StringW & StringW::operator=(StringW && other)
 	{
 		SAFE_DELETE(m_szString);
 		m_szString = other.m_szString;
-		other.m_szString = NULL;
+		other.m_szString = nullptr;
 	}
 	return(*this);
 }
@@ -1995,15 +1964,7 @@ bool StringW::operator==(const WCHAR * str) const
 
 bool StringW::operator==(const WCHAR & sym) const
 {
-	if(length() == 1)
-	{
-		if(m_szString[0] != sym)
-			return false;
-	}
-	else
-		return false;
-
-	return true;
+	return (length() == 1 && m_szString[0] == sym);
 }
 
 bool StringW::operator==(const int & num) const
@@ -2049,82 +2010,52 @@ bool StringW::operator==(const bool & bf) const
 
 bool StringW::operator!=(const StringW & str) const
 {
-	if(*this == str)
-		return false;
-	else
-		return true;
+	return *this == str;
 }
 
 bool StringW::operator!=(const StringW * str) const
 {
-	if(*this == *str)
-		return false;
-	else
-		return true;
+	return *this == *str;
 }
 
 bool StringW::operator!=(const WCHAR * str) const
 {
-	if(*this == str)
-		return false;
-	else
-		return true;
+	return *this == str;
 }
 
 bool StringW::operator!=(const WCHAR & sym) const
 {
-	if(*this == sym)
-		return false;
-	else
-		return true;
+	return *this == sym;
 }
 
 bool StringW::operator!=(const int & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool StringW::operator!=(const WORD & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool StringW::operator!=(const DWORD & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool StringW::operator!=(const long & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool StringW::operator!=(const double & num) const
 {
-	if(*this == num)
-		return false;
-	else
-		return true;
+	return *this == num;
 }
 
 bool StringW::operator!=(const bool & bf) const
 {
-	if(*this == bf)
-		return false;
-	else
-		return true;
+	return *this == bf;
 }
 
 /////////////////////////////////////////////////////////
@@ -2155,7 +2086,7 @@ DWORD StringW::find(const WCHAR * str, DWORD pos) const
 
 	WCHAR *Find = wcsstr(m_szString + pos, str);
 
-	if(Find != NULL)
+	if (Find != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
 		return(Find - m_szString);
 	else
@@ -2381,15 +2312,15 @@ bool StringW::toBool() const
 DWORD StringW::find_last_of(const WCHAR * str, DWORD pos) const
 {
 
-	WCHAR * Find = NULL;
-	WCHAR * tmpFind = NULL;
+	WCHAR * Find = nullptr;
+	WCHAR * tmpFind = nullptr;
 	while((Find = wcsstr(m_szString + pos, str)))
 	{
 		pos = Find - m_szString + 1;
 		tmpFind = Find;
 	}
 
-	if(tmpFind != NULL)
+	if (tmpFind != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
 		return(tmpFind - m_szString);
 	else
@@ -2448,7 +2379,7 @@ StringW::operator String() const
 	String dst;
 	dst.reserve(length());
 #if defined(_WINDOWS)
-	WideCharToMultiByte(CP_UTF8, 0, m_szString, length() + 1, dst.m_szString, length() + 1, NULL, NULL);
+	WideCharToMultiByte(CP_UTF8, 0, m_szString, length() + 1, dst.m_szString, length() + 1, nullptr, nullptr);
 #else
 	wcstombs(dst.m_szString, m_szString, sizeof(WCHAR) * (length() + 1));
 #endif
