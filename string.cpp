@@ -792,15 +792,7 @@ bool String::operator==(const char * str) const
 
 bool String::operator==(const char & sym) const
 {
-	if(length() == 1)
-	{
-		if(m_szString[0] != sym)
-			return false;
-	}
-	else
-		return false;
-
-	return true;
+	return(length() == 1 && m_szString[0] == sym);
 }
 
 bool String::operator==(const int & num) const
@@ -846,52 +838,52 @@ bool String::operator==(const bool & bf) const
 
 bool String::operator!=(const String & str) const
 {
-	return *this == str;
+	return !(*this == str);
 }
 
 bool String::operator!=(const String * str) const
 {
-	return *this == *str;
+	return !(*this == *str);
 }
 
 bool String::operator!=(const char * str) const
 {
-	return *this == str;
+	return !(*this == str);
 }
 
 bool String::operator!=(const char & sym) const
 {
-	return *this == sym;
+	return !(*this == sym);
 }
 
 bool String::operator!=(const int & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool String::operator!=(const WORD & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool String::operator!=(const DWORD & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool String::operator!=(const long & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool String::operator!=(const double & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool String::operator!=(const bool & bf) const
 {
-	return *this == bf;
+	return !(*this == bf);
 }
 
 /////////////////////////////////////////////////////////
@@ -1189,7 +1181,7 @@ DWORD String::find_last_of(const char * str, DWORD pos) const
 		tmpFind = Find;
 	}
 
-	if (tmpFind != nullptr)
+	if(tmpFind != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
 		return(tmpFind - m_szString);
 	else
@@ -2010,52 +2002,52 @@ bool StringW::operator==(const bool & bf) const
 
 bool StringW::operator!=(const StringW & str) const
 {
-	return *this == str;
+	return !(*this == str);
 }
 
 bool StringW::operator!=(const StringW * str) const
 {
-	return *this == *str;
+	return !(*this == *str);
 }
 
 bool StringW::operator!=(const WCHAR * str) const
 {
-	return *this == str;
+	return !(*this == str);
 }
 
 bool StringW::operator!=(const WCHAR & sym) const
 {
-	return *this == sym;
+	return !(*this == sym);
 }
 
 bool StringW::operator!=(const int & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool StringW::operator!=(const WORD & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool StringW::operator!=(const DWORD & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool StringW::operator!=(const long & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool StringW::operator!=(const double & num) const
 {
-	return *this == num;
+	return !(*this == num);
 }
 
 bool StringW::operator!=(const bool & bf) const
 {
-	return *this == bf;
+	return !(*this == bf);
 }
 
 /////////////////////////////////////////////////////////
