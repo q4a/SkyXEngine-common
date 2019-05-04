@@ -34,7 +34,7 @@ public:
     //Создает пустой список
     List() = default;
 
-    explicit List(const std::initializer_list<Type> &list) : m_size(list.m_size())
+    explicit List(const std::initializer_list<Type> &list) : m_size(list.size())
     {
         chunk *iterator = nullptr;
 
@@ -90,10 +90,10 @@ public:
 
             fillHead(iterator);
         }
-        return this;
+        return *this;
     }
 
-    const List &operator=(const List &&other)
+    const List &operator=(List &&other)
     {
         m_pLast = other.m_pLast;
         m_pHead = other.m_pHead;
@@ -102,6 +102,8 @@ public:
         other.m_pLast = nullptr;
         other.m_pHead = nullptr;
         other.m_size = 0;
+
+        return *this;
     }
 
     //!true если в list пустой
@@ -110,7 +112,7 @@ public:
         return m_size == 0;
     }
 
-    int m_size() const
+    int size() const
     {
         return m_size;
     }

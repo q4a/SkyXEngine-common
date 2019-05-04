@@ -11,8 +11,8 @@ See the license in LICENSE
 #include "types.h"
 
 /*
-	¬нимание:
-		Ёлемент массива не имеет гарантированного расположени¤ в пам¤ти.
+	внимание:
+		Элемент массива не имеет гарантированного расположения в памяти.
 */
 
 /*#ifdef S4G
@@ -41,7 +41,7 @@ public:
 			}
 	}
 
-	inline void swap(Array &arr)
+    void swap(Array &arr)
 	{
 		UINT tmpS = Size;
 		Size = arr.Size;
@@ -56,7 +56,7 @@ public:
 		arr.Data = (T*)tmpD;
 	}
 
-	inline void resize(UINT NewSize)
+    void resize(UINT NewSize)
 	{
 		if(NewSize == Size)
 		{
@@ -71,7 +71,7 @@ public:
 		this->Size = NewSize;
 	}
 
-	inline void resizeFast(UINT NewSize)
+	void resizeFast(UINT NewSize)
 	{
 		if(NewSize == Size)
 		{
@@ -88,22 +88,22 @@ public:
 		this->Size = NewSize;
 	}
 
-	inline void reserve(UINT size)
+    void reserve(UINT size)
 	{
 		Realloc(size);
 	}
 
-	inline UINT size() const
+	UINT size() const
 	{
 		return(Size);
 	}
 
-	inline void push_back(const T & data)
+	void push_back(const T & data)
 	{
 		(*this)[this->Size] = data;
 	}
 
-	inline void erase(UINT key)
+	void erase(UINT key)
 	{
 			/*if(key < 0)
 			{
@@ -144,7 +144,7 @@ public:
 	//	return(*this);
 	//}
 
-	inline Array & operator=(const Array<T, BlockSize> & arr)
+	Array & operator=(const Array<T, BlockSize> & arr)
 	{
 		//this->AllocSize = arr.AllocSize;
 		//this->Size = arr.Size;
@@ -160,7 +160,7 @@ public:
 		return(*this);
 	}
 
-	inline T & operator[](UINT key)
+	T & operator[](UINT key)
 	{
 		if(key > ((UINT)-1) - 128)
 		{
@@ -179,17 +179,17 @@ public:
 	}
 
 
-	inline T & GetKeyOC(UINT key)
+	T & GetKeyOC(UINT key)
 	{
 		return(Data[key]);
 	}
 
-	inline void SetKeyOC(UINT key, T& val)
+	void SetKeyOC(UINT key, T& val)
 	{
 		Data[key] = val;
 	}
 
-	inline const T & operator[](UINT key) const
+	const T & operator[](UINT key) const
 	{
 			if(key >= this->Size)
 			{
@@ -212,7 +212,7 @@ public:
 		free(Data);
 	}
 
-	inline void clear()
+	void clear()
 	{
 			if(Size)
 			{
@@ -225,7 +225,7 @@ public:
 		Alloc();
 	}
 
-	inline void clearFast()
+    void clearFast()
 	{
 		if(Size)
 		{
@@ -234,7 +234,7 @@ public:
 		Size = 0;
 	}
 
-	inline UINT GetAllocSize()
+	UINT GetAllocSize()
 	{
 		return AllocSize;
 	}
@@ -255,12 +255,12 @@ protected:
 #ifdef S4G
 	friend s4g_Stack<T, BlockSize>;
 #endif*/
-	inline void Alloc()
+	void Alloc()
 	{
 		Realloc(BlockSize);
 	}
 
-	inline void Realloc(UINT NewSize)
+	void Realloc(UINT NewSize)
 	{
 		if(this->AllocSize == NewSize)
 		{
@@ -280,7 +280,7 @@ protected:
 		free(tmpDel);
 	}
 
-	inline void ConstructInterval(UINT start, UINT end)
+	void ConstructInterval(UINT start, UINT end)
 	{
 		//this->Data + start = new(this->Data + start) T[end - start + 1];
 			for(UINT i = start; i <= end; i++)
@@ -289,7 +289,7 @@ protected:
 			}
 	}
 
-	inline void DestructInterval(UINT start, UINT end)
+	void DestructInterval(UINT start, UINT end)
 	{
 			for(UINT i = start; i <= end; i++)
 			{
@@ -328,6 +328,7 @@ protected:
 		if(i<hi)
 			quickSortInternal(CompareFunc, i, hi);
 	}
+
 	void swap(int index0, int index1)
 	{
 		T temp = Data[index0];
