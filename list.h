@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <initializer_list>
+#include "types.h"
 
 template <typename Type>
 class List final
@@ -16,7 +17,7 @@ private:
 
     chunk *m_pLast = nullptr;
     chunk *m_pHead = nullptr;
-    int m_size = 0;
+    unsigned int m_size = 0;
 
     void fillHead(chunk *iterator)
     {
@@ -106,7 +107,7 @@ public:
         return *this;
     }
 
-    //!true если в list пустой
+    //!true если list пустой
     bool empty() const
     {
         return m_size == 0;
@@ -130,10 +131,10 @@ public:
         {
             iterator = m_pHead;
             m_pHead = m_pHead->m_prev;
-            delete iterator;
+            mem_delete(iterator);
         }
 
-        delete m_pHead;
+        mem_delete(m_pHead);
 
         m_pHead = nullptr;
         m_pLast = nullptr;
