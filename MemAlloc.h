@@ -75,7 +75,7 @@ public:
 	
 	MemAlloc():memblocks(NULL), NumCurBlock(0), NumCurBlockCount(0)
 	{
-		//printf("MemAlloc()\n");
+		assert((intptr_t)(&(((MemCell*)0)->data)) - (intptr_t)(((MemCell*)0)->_padding) == alignBy && "Invalid align specified!");
 		AllocBlock();
 	}
 

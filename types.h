@@ -11,6 +11,7 @@ See the license in LICENSE
 #include <string.h>
 #include <memory.h>
 #include <ctype.h>
+#include <assert.h>
 
 
 typedef float float32_t;
