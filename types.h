@@ -23,11 +23,20 @@ typedef unsigned long ULONG;
 typedef unsigned short WORD;
 //typedef unsigned int size_t;
 typedef int BOOL;
-typedef unsigned char BYTE, byte;
+typedef unsigned char BYTE, byte, UINT8;
 typedef unsigned int UINT;
+typedef uint16_t UINT16;
 typedef wchar_t WCHAR;
 typedef unsigned long ULONG;
 typedef void* SXWINDOW;
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
 
 #ifdef _MSC_VER
 #	define strcasecmp _stricmp
