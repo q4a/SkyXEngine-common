@@ -29,6 +29,7 @@ typedef uint16_t UINT16;
 typedef wchar_t WCHAR;
 typedef unsigned long ULONG;
 typedef void* SXWINDOW;
+#define XWINDOW_OS_HANDLE SXWINDOW
 
 #ifndef FALSE
 #define FALSE 0
