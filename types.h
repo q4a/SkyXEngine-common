@@ -92,7 +92,7 @@ inline const char * dirname(char * str)
 	char * pos = str, *ret = str;
 	while(*str)
 	{
-		if(*str == '/' || *str == '\\')
+		if((*str == '/' || *str == '\\') && *(str + 1))
 		{
 			pos = str + 1;
 		}
