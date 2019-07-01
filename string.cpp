@@ -902,7 +902,7 @@ const char & String::operator[](const DWORD & num) const
 
 DWORD String::length() const
 {
-	return(strlen(m_szString));
+	return((DWORD)strlen(m_szString));
 }
 
 DWORD String::find(const char * str, DWORD pos) const
@@ -914,7 +914,7 @@ DWORD String::find(const char * str, DWORD pos) const
 
 	if (Find != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
-		return(Find - m_szString);
+		return((DWORD)(Find - m_szString));
 	else
 		return -1;
 }
@@ -935,12 +935,12 @@ DWORD String::find(const String & str, DWORD pos) const
 DWORD String::replace(const char * str, const char * replace, DWORD pos)
 {
 	DWORD PosBeginFmt = find(str, pos);
-	DWORD StrLen = strlen(str);
+	size_t StrLen = strlen(str);
 
 	if(PosBeginFmt == ~0)
 		return(~0);
 
-	DWORD CountStrLen = strlen(replace) + length() - StrLen;
+	size_t CountStrLen = strlen(replace) + length() - StrLen;
 	char * CountStr = new char[CountStrLen + 1];
 
 	//sprintf(CountStr,"%s%s%s",SubStr(0,PosBeginFmt),replace,SubStr(PosBeginFmt+StrLen,length() - (PosBeginFmt+StrLen)));
@@ -961,13 +961,13 @@ DWORD String::replace(const String & str, const String & sReplace, DWORD pos)
 
 DWORD String::replaceAll(const char * str, const char * replace)
 {
-	DWORD PosCodeBegin = 0;
-	DWORD PosCodeOld = 0;
+	size_t PosCodeBegin = 0;
+	size_t PosCodeOld = 0;
 	DWORD CountCodeFMT = 0;
 
 	while(PosCodeBegin != ~0)
 	{
-		PosCodeBegin = find(str, PosCodeOld);
+		PosCodeBegin = find(str, (DWORD)PosCodeOld);
 		if(PosCodeBegin != ~0)
 		{
 			CountCodeFMT++;
@@ -978,18 +978,18 @@ DWORD String::replaceAll(const char * str, const char * replace)
 	}
 
 
-	DWORD StrLen = strlen(str);
-	DWORD count_str_len = length() + (CountCodeFMT * (strlen(replace) - StrLen));
+	size_t StrLen = strlen(str);
+	size_t count_str_len = length() + (CountCodeFMT * (strlen(replace) - StrLen));
 
 	//MessageBox(0,ToPointChar(ToString(length()) + "|" + ToString(CountCodeFMT) + "|" + ToString(StrLen)),ToPointChar(count_str_len),0);
 	//MessageBox(0,m_szString,ToPointChar(DWORD(strlen(m_szString))),0);
 
 	char * count_str = new char[count_str_len + 1];
-	DWORD PosBeginFmt = 0;
-	DWORD OldPosEndFmt = 0;
-	DWORD count_str_last_len = 0;
+	size_t PosBeginFmt = 0;
+	size_t OldPosEndFmt = 0;
+	size_t count_str_last_len = 0;
 
-	if((PosBeginFmt = find(str, OldPosEndFmt)) != DWORD(-1))
+	if((PosBeginFmt = find(str, (DWORD)OldPosEndFmt)) != size_t(-1))
 	{
 		//sprintf(count_str,"%s%s",SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,count_str,"count_str1",0);
@@ -1009,7 +1009,7 @@ DWORD String::replaceAll(const char * str, const char * replace)
 
 	//MessageBox(0,count_str,"count_str1",0);
 
-	while((PosBeginFmt = find(str, OldPosEndFmt)) != DWORD(-1))
+	while((PosBeginFmt = find(str, (DWORD)OldPosEndFmt)) != size_t(-1))
 	{
 		//sprintf(count_str,"%s%s%s",count_str,SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,ToPointChar(PosBeginFmt),"PosBeginFmt",0);
@@ -1031,7 +1031,7 @@ DWORD String::replaceAll(const char * str, const char * replace)
 
 	//MessageBox(0,count_str,"count_str++++++",0);
 
-	return OldPosEndFmt - StrLen;
+	return((DWORD)(OldPosEndFmt - StrLen));
 }
 
 DWORD String::replaceAll(const String & str, const String & replace)
@@ -1177,13 +1177,13 @@ DWORD String::find_last_of(const char * str, DWORD pos) const
 	char * tmpFind = nullptr;
 	while((Find = strstr(m_szString + pos, str)))
 	{
-		pos = Find - m_szString + 1;
+		pos = (DWORD)(Find - m_szString + 1);
 		tmpFind = Find;
 	}
 
 	if(tmpFind != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
-		return(tmpFind - m_szString);
+		return((DWORD)(tmpFind - m_szString));
 	else
 		return -1;
 }
@@ -2067,7 +2067,7 @@ const WCHAR & StringW::operator[](const DWORD & num) const
 
 DWORD StringW::length() const
 {
-	return(wcslen(m_szString));
+	return((DWORD)wcslen(m_szString));
 }
 
 DWORD StringW::find(const WCHAR * str, DWORD pos) const
@@ -2080,7 +2080,7 @@ DWORD StringW::find(const WCHAR * str, DWORD pos) const
 
 	if (Find != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
-		return(Find - m_szString);
+		return((DWORD)(Find - m_szString));
 	else
 		return -1;
 }
@@ -2101,12 +2101,12 @@ DWORD StringW::find(const StringW & str, DWORD pos) const
 DWORD StringW::replace(const WCHAR * str, const WCHAR * replace, DWORD pos)
 {
 	DWORD PosBeginFmt = find(str, pos);
-	DWORD StrLen = wcslen(str);
+	size_t StrLen = wcslen(str);
 
 	if(PosBeginFmt == ~0)
 		return(~0);
 
-	DWORD CountStrLen = wcslen(replace) + length() - StrLen;
+	size_t CountStrLen = wcslen(replace) + length() - StrLen;
 	WCHAR * CountStr = new WCHAR[CountStrLen + 1];
 
 	//sprintf(CountStr,"%s%s%s",SubStr(0,PosBeginFmt),replace,SubStr(PosBeginFmt+StrLen,length() - (PosBeginFmt+StrLen)));
@@ -2128,12 +2128,12 @@ DWORD StringW::replace(const StringW & str, const StringW & sReplace, DWORD pos)
 DWORD StringW::replaceAll(const WCHAR * str, const WCHAR * replace)
 {
 	DWORD PosCodeBegin = 0;
-	DWORD PosCodeOld = 0;
+	size_t PosCodeOld = 0;
 	DWORD CountCodeFMT = 0;
 
 	while(PosCodeBegin != ~0)
 	{
-		PosCodeBegin = find(str, PosCodeOld);
+		PosCodeBegin = find(str, (DWORD)PosCodeOld);
 		if(PosCodeBegin != ~0)
 		{
 			CountCodeFMT++;
@@ -2144,18 +2144,18 @@ DWORD StringW::replaceAll(const WCHAR * str, const WCHAR * replace)
 	}
 
 
-	DWORD StrLen = wcslen(str);
-	DWORD count_str_len = length() + (CountCodeFMT * (wcslen(replace) - StrLen));
+	size_t StrLen = wcslen(str);
+	size_t count_str_len = length() + (CountCodeFMT * (wcslen(replace) - StrLen));
 
 	//MessageBox(0,ToPointWCHAR(ToString(length()) + "|" + ToString(CountCodeFMT) + "|" + ToString(StrLen)),ToPointWCHAR(count_str_len),0);
 	//MessageBox(0,m_szString,ToPointWCHAR(DWORD(strlen(m_szString))),0);
 
 	WCHAR * count_str = new WCHAR[count_str_len + 1];
-	DWORD PosBeginFmt = 0;
-	DWORD OldPosEndFmt = 0;
-	DWORD count_str_last_len = 0;
+	size_t PosBeginFmt = 0;
+	size_t OldPosEndFmt = 0;
+	size_t count_str_last_len = 0;
 
-	if((PosBeginFmt = find(str, OldPosEndFmt)) != DWORD(-1))
+	if((PosBeginFmt = find(str, (DWORD)OldPosEndFmt)) != size_t(-1))
 	{
 		//sprintf(count_str,"%s%s",SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,count_str,"count_str1",0);
@@ -2175,7 +2175,7 @@ DWORD StringW::replaceAll(const WCHAR * str, const WCHAR * replace)
 
 	//MessageBox(0,count_str,"count_str1",0);
 
-	while((PosBeginFmt = find(str, OldPosEndFmt)) != DWORD(-1))
+	while((PosBeginFmt = find(str, (DWORD)OldPosEndFmt)) != size_t(-1))
 	{
 		//sprintf(count_str,"%s%s%s",count_str,SubStr(OldPosEndFmt,PosBeginFmt-OldPosEndFmt),replace);
 		//MessageBox(0,ToPointWCHAR(PosBeginFmt),"PosBeginFmt",0);
@@ -2197,7 +2197,7 @@ DWORD StringW::replaceAll(const WCHAR * str, const WCHAR * replace)
 
 	//MessageBox(0,count_str,"count_str++++++",0);
 
-	return OldPosEndFmt - StrLen;
+	return((DWORD)(OldPosEndFmt - StrLen));
 }
 
 DWORD StringW::replaceAll(const StringW & str, const StringW & replace)
@@ -2308,13 +2308,13 @@ DWORD StringW::find_last_of(const WCHAR * str, DWORD pos) const
 	WCHAR * tmpFind = nullptr;
 	while((Find = wcsstr(m_szString + pos, str)))
 	{
-		pos = Find - m_szString + 1;
+		pos = (DWORD)(Find - m_szString + 1);
 		tmpFind = Find;
 	}
 
 	if (tmpFind != nullptr)
 		// return Find - (m_szString + pos) + pos; // - pos + pos == 0 ? �����?
-		return(tmpFind - m_szString);
+		return((DWORD)(tmpFind - m_szString));
 	else
 		return -1;
 }
