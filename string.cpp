@@ -1101,7 +1101,7 @@ UINT String::remove(DWORD pos, DWORD len)
 
 String String::trim()
 {
-	UINT pos = ~0;
+	UINT pos = length();
 	UINT len = 0;
 	for(UINT i = 0, l = length(); i < l; ++i)
 	{
@@ -1119,7 +1119,7 @@ String String::trim()
 
 StringW StringW::trim()
 {
-	UINT pos = ~0;
+	UINT pos = length();
 	UINT len = 0;
 	for(UINT i = 0, l = length(); i < l; ++i)
 	{
