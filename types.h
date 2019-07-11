@@ -12,6 +12,10 @@ See the license in LICENSE
 #include <memory.h>
 #include <ctype.h>
 #include <assert.h>
+#include <mutex>
+
+using std::mutex;
+typedef std::unique_lock<std::mutex> ScopedLock;
 
 
 typedef float float32_t;

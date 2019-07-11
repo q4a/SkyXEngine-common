@@ -8,8 +8,6 @@
 
 template<typename T> class CConcurrentQueue
 {
-	typedef std::unique_lock<std::mutex> ScopedLock;
-
 public:
 	CConcurrentQueue()
 	{
@@ -71,7 +69,7 @@ public:
 	{
 		ScopedLock lock(m_mutex);
 
-		return(mQueue.size());
+		return(m_queue.size());
 	}
 
 	void clear()
