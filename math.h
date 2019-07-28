@@ -698,6 +698,11 @@ __forceinline SMVECTOR SMVectorMax(const SMVECTOR & V1, const SMVECTOR & V2)
 	return(v);
 }
 
+__forceinline SMVECTOR SMVectorAbs(const SMVECTOR &V)
+{
+	return(SMVectorMax(V, -V));
+}
+
 __forceinline SMVECTOR SMVectorLerp(const SMVECTOR & V1, const SMVECTOR & V2, float t)
 {
 	SMVECTOR L, S;
@@ -2334,6 +2339,247 @@ __forceinline SMMATRIX SMMatrixReflect(const SMPLANE &_plane)
 }
 
 #define FLOAT_INF ((float)INFINITY)
+
+__forceinline SMPLANE SMPlaneTransform(const SMPLANE &P, const SMMATRIX &M)
+{
+	float fDeterminant;
+	SMMATRIX m = SMMatrixTranspose(SMMatrixInverse(&fDeterminant, M));
+	return(
+		float4(P.x) * m.r[0] + 
+		float4(P.y) * m.r[1] + 
+		float4(P.z) * m.r[2] +
+		float4(P.w) * m.r[3]
+		);
+}
+
+__forceinline SMPLANE SMPlaneNormalize(const SMPLANE &P)
+{
+	float fInvLen = 1.0f / SMVector3Length(P);
+	return(P * fInvLen);
+}
+
+__forceinline bool SMPlaneIntersectAABB(const SMPLANE &P, const float3 &vMin, const float3 &vMax)
+{
+	int i = 0;
+	i += (SMVector3Dot(P, vMin) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMin.x, vMin.y, vMax.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMin.x, vMax.y, vMin.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMin.x, vMax.y, vMax.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMax.x, vMin.y, vMin.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMax.x, vMin.y, vMax.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, float3(vMax.x, vMax.y, vMin.z)) > -P.w) ? 1 : 0;
+	i += (SMVector3Dot(P, vMax) > -P.w) ? 1 : 0;
+	return(i > 0 && i < 8);
+}
+
+__forceinline bool SMAABBIntersectAABB(const float3 &vMinA, const float3 &vMaxA, const float3 &vMinB, const float3 &vMaxB)
+{
+	if(vMaxA.x < vMinB.x || vMinA.x > vMaxB.x) return(false);
+	if(vMaxA.y < vMinB.y || vMinA.y > vMaxB.y) return(false);
+	if(vMaxA.z < vMinB.z || vMinA.z > vMaxB.z) return(false);
+	return(true);
+}
+
+__forceinline bool SMVector4EqualEpsilon(const float4 &A, const float4 &B, float fEpsilon)
+{
+	float4 vDelta = A - B;
+	SMVECTOR vTemp = SMVectorAbs(vDelta);
+	vTemp.mmv = _mm_cmple_ps(vTemp, float4(fEpsilon));
+	return((_mm_movemask_ps(vTemp) == 0xf) != 0);
+}
+
+
+__forceinline bool SMPlaneEqualEpsilon(const SMPLANE &A, const SMPLANE &B, float fEpsilon)
+{
+	return(SMVector4EqualEpsilon(SMPlaneNormalize(A), SMPlaneNormalize(B), fEpsilon));
+}
+
+//##########################################################################
+
+__forceinline float SMDistancePointAABB(const float3 &vPoint, const float3 &vMin, const float3 &vMax)
+{
+	bool bXlo = vPoint.x < vMin.x;
+	bool bXhi = vPoint.x > vMax.x;
+	bool isInX = !bXlo && !bXhi;
+
+	bool bYlo = vPoint.y < vMin.y;
+	bool bYhi = vPoint.y > vMax.y;
+	bool isInY = !bYlo && !bYhi;
+
+	bool bZlo = vPoint.z < vMin.z;
+	bool bZhi = vPoint.z > vMax.z;
+	bool isInZ = !bZlo && !bZhi;
+
+	if(isInX && isInY && isInZ)
+	{
+		return(0.0f);
+	}
+
+	if(isInX && isInY)
+	{
+		if(bZlo)
+		{
+			return(vMin.z - vPoint.z);
+		}
+		else
+		{
+			return(vPoint.z - vMax.z);
+		}
+	}
+	if(isInX && isInZ)
+	{
+		if(bYlo)
+		{
+			return(vMin.y - vPoint.y);
+		}
+		else
+		{
+			return(vPoint.y - vMax.y);
+		}
+	}
+	if(isInY && isInZ)
+	{
+		if(bXlo)
+		{
+			return(vMin.x - vPoint.x);
+		}
+		else
+		{
+			return(vPoint.x - vMax.x);
+		}
+	}
+
+	if(isInX)
+	{
+		if(bYlo)
+		{
+			if(bZlo)
+			{
+				return(SMVector2Length(float2(vPoint.y, vPoint.z) - float2(vMin.y, vMin.z)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.y, vPoint.z) - float2(vMin.y, vMax.z)));
+			}
+		}
+		else
+		{
+			if(bZlo)
+			{
+				return(SMVector2Length(float2(vPoint.y, vPoint.z) - float2(vMax.y, vMin.z)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.y, vPoint.z) - float2(vMax.y, vMax.z)));
+			}
+		}
+	}
+	if(isInY)
+	{
+		if(bXlo)
+		{
+			if(bZlo)
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.z) - float2(vMin.x, vMin.z)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.z) - float2(vMin.x, vMax.z)));
+			}
+		}
+		else
+		{
+			if(bZlo)
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.z) - float2(vMax.x, vMin.z)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.z) - float2(vMax.x, vMax.z)));
+			}
+		}
+	}
+	if(isInZ)
+	{
+		if(bXlo)
+		{
+			if(bYlo)
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.y) - float2(vMin.x, vMin.y)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.y) - float2(vMin.x, vMax.y)));
+			}
+		}
+		else
+		{
+			if(bYlo)
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.y) - float2(vMax.x, vMin.y)));
+			}
+			else
+			{
+				return(SMVector2Length(float2(vPoint.x, vPoint.y) - float2(vMax.x, vMax.y)));
+			}
+		}
+	}
+
+	// else
+	{
+		if(bXlo)
+		{
+			if(bYlo)
+			{
+				if(bZlo)
+				{
+					return(SMVector3Length(vPoint - float3(vMin.x, vMin.y, vMin.z)));
+				}
+				else
+				{
+					return(SMVector3Length(vPoint - float3(vMin.x, vMin.y, vMax.z)));
+				}
+			}
+			else
+			{
+				if(bZlo)
+				{
+					return(SMVector3Length(vPoint - float3(vMin.x, vMax.y, vMin.z)));
+				}
+				else
+				{
+					return(SMVector3Length(vPoint - float3(vMin.x, vMax.y, vMax.z)));
+				}
+			}
+		}
+		else
+		{
+			if(bYlo)
+			{
+				if(bZlo)
+				{
+					return(SMVector3Length(vPoint - float3(vMax.x, vMin.y, vMin.z)));
+				}
+				else
+				{
+					return(SMVector3Length(vPoint - float3(vMax.x, vMin.y, vMax.z)));
+				}
+			}
+			else
+			{
+				if(bZlo)
+				{
+					return(SMVector3Length(vPoint - float3(vMax.x, vMax.y, vMin.z)));
+				}
+				else
+				{
+					return(SMVector3Length(vPoint - float3(vMax.x, vMax.y, vMax.z)));
+				}
+			}
+		}
+	}
+
+}
 
 //##########################################################################
 
