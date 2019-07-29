@@ -8,7 +8,7 @@ See the license in LICENSE
 #define SX_AssotiativeArray_H
 //#include "DSbase.h"
 #include <common/MemAlloc.h>
-#include <common/Stack.h>
+#include <common/stack.h>
 
 #ifndef NULL
 #define NULL 0
@@ -455,6 +455,7 @@ public:
 					this->CurNode = this->nodes.pop();
 					this->first = &(this->CurNode->Key);
 					this->second = this->CurNode->Val;
+					//! @fixme Check this assignment!
 					this->CurNode = this->CurNode;
 					return(*this);
 				}
@@ -616,7 +617,7 @@ public:
 
 	AssotiativeArray(const AssotiativeArray & a):RootNode(NULL), Size_(0),TmpNode(NULL)
 	{
-		for(AssotiativeArray<SX_KEYTYPE, SX_VALTYPE>::Iterator i = a.begin(); i; i++)
+		for(typename AssotiativeArray<SX_KEYTYPE, SX_VALTYPE>::Iterator i = a.begin(); i; i++)
 		{
 			(*this)[*(i.first)] = *(i.second);
 		}
@@ -659,7 +660,7 @@ public:
 
 	AssotiativeArray & operator=(const AssotiativeArray & a)
 	{
-		for(AssotiativeArray<SX_KEYTYPE, SX_VALTYPE>::Iterator i = a.begin(); i; i++)
+		for(typename AssotiativeArray<SX_KEYTYPE, SX_VALTYPE>::Iterator i = a.begin(); i; i++)
 		{
 			this->operator[](*i.first) = *i.second;
 		}

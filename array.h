@@ -105,32 +105,17 @@ public:
 
 	void erase(UINT key)
 	{
-			/*if(key < 0)
-			{
-				_asm
-				{
-					int 3;
-				};
-			}*/
+		assert(key < this->Size);
 
-			if(key < this->Size)
+		if(key < this->Size)
+		{
+			(&this->Data[key])->~T();
+			if(key < this->Size - 1)
 			{
-				(&this->Data[key])->~T();
-				if(key < this->Size - 1)
-				{
-					memcpy(&this->Data[key], &this->Data[key + 1], sizeof(T)* (this->Size - key - 1));
-				}
-				this->Size--;
+				memcpy(&this->Data[key], &this->Data[key + 1], sizeof(T)* (this->Size - key - 1));
 			}
-			else
-			{
-#ifndef WIN64
-				_asm
-				{
-					int 3;
-				};
-#endif
-			}
+			this->Size--;
+		}
 	}
 
 	//inline Array & operator=(T* arr)

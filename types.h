@@ -45,7 +45,12 @@ typedef void* SXWINDOW;
 
 #ifdef _MSC_VER
 #	define strcasecmp _stricmp
+#else
+#	define _aligned_malloc(size, align) memalign((align), (size))
+#	define _aligned_free(ptr) free(ptr)
+#	define __forceinline inline
 #endif
+
 
 #ifndef max
 #define max(a, b) ((a) > (b) ? (a) : (b))
