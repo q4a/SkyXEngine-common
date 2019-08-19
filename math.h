@@ -2352,6 +2352,16 @@ __forceinline SMPLANE SMPlaneTransform(const SMPLANE &P, const SMMATRIX &M)
 		);
 }
 
+__forceinline SMPLANE SMPlaneTransformTI(const SMPLANE &P, const SMMATRIX &m)
+{
+	return(
+		float4(P.x) * m.r[0] +
+		float4(P.y) * m.r[1] +
+		float4(P.z) * m.r[2] +
+		float4(P.w) * m.r[3]
+		);
+}
+
 __forceinline SMPLANE SMPlaneNormalize(const SMPLANE &P)
 {
 	float fInvLen = 1.0f / SMVector3Length(P);

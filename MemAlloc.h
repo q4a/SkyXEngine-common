@@ -199,6 +199,25 @@ public:
 		//AllocBlock();
 	}
 
+	void clearFast()
+	{
+		for(int i = 0; i < this->NumCurBlockCount; i++)
+		{
+			if(this->memblocks[i].mem)
+			{
+				for(int j = 0; j < this->memblocks[i].size; j++)
+				{
+					if(!(this->memblocks[i].mem[j].IsFree & 0x80000000))
+					{
+						(&(this->memblocks[i].mem[j].data))->~T();
+					}
+					this->memblocks[i].mem[j].IsFree = 0x80000000 | (j + 1);
+				}
+			}
+		}
+		this->NumCurBlock = 0;
+	}
+
 	void AllocBlock(UINT size = SizeBlock)
 	{
 		MemBlock * tmpMB = this->memblocks;
