@@ -203,7 +203,7 @@ public:
 	{
 		for(int i = 0; i < this->NumCurBlockCount; i++)
 		{
-			if(this->memblocks[i].mem)
+			if(this->memblocks[i].mem && this->memblocks[i].used)
 			{
 				for(int j = 0; j < this->memblocks[i].size; j++)
 				{
@@ -213,6 +213,8 @@ public:
 					}
 					this->memblocks[i].mem[j].IsFree = 0x80000000 | (j + 1);
 				}
+				this->memblocks[i].pos = 0;
+				this->memblocks[i].used = 0;
 			}
 		}
 		this->NumCurBlock = 0;
