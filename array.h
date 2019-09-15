@@ -25,7 +25,7 @@ template<typename T, int BlockSize=16>
 class Array
 {
 public:
-	Array():Size(0),AllocSize(0),Data(NULL)
+	Array():Size(0), AllocSize(0), Data(NULL)
 	{
 		Alloc();
 	}
@@ -35,13 +35,13 @@ public:
 		Alloc();
 		//this->AllocSize = arr.AllocSize;
 		//this->Size = arr.Size;
-			for(int i = arr.Size - 1; i >= 0; i--)
-			{
-				(*this)[i] = arr[i];
-			}
+		for(int i = arr.Size - 1; i >= 0; i--)
+		{
+			(*this)[i] = arr[i];
+		}
 	}
 
-    void swap(Array &arr)
+	void swap(Array &arr)
 	{
 		UINT tmpS = Size;
 		Size = arr.Size;
@@ -56,7 +56,7 @@ public:
 		arr.Data = (T*)tmpD;
 	}
 
-    void resize(UINT NewSize)
+	void resize(UINT NewSize)
 	{
 		if(NewSize == Size)
 		{
@@ -64,10 +64,10 @@ public:
 		}
 		Realloc(NewSize);
 		//ConstructInterval(this->Size, key);
-			if(this->Size < NewSize)
-			{
-				ConstructInterval(this->Size, NewSize - 1);
-			}
+		if(this->Size < NewSize)
+		{
+			ConstructInterval(this->Size, NewSize - 1);
+		}
 		this->Size = NewSize;
 	}
 
@@ -88,7 +88,7 @@ public:
 		this->Size = NewSize;
 	}
 
-    void reserve(UINT size)
+	void reserve(UINT size)
 	{
 		Realloc(size);
 	}
@@ -120,12 +120,12 @@ public:
 
 	//inline Array & operator=(T* arr)
 	//{
-		//this->AllocSize = arr.AllocSize;
-		//this->Size = arr.Size;
-			/*for(int i = arr.Size - 1; i >= 0; i--)
-			{
-				(*this)[i] = arr[i];
-			}*/
+	//this->AllocSize = arr.AllocSize;
+	//this->Size = arr.Size;
+	/*for(int i = arr.Size - 1; i >= 0; i--)
+	{
+	(*this)[i] = arr[i];
+	}*/
 	//	return(*this);
 	//}
 
@@ -151,15 +151,15 @@ public:
 		{
 
 		}
-			if(key >= this->Size)
+		if(key >= this->Size)
+		{
+			if(key >= this->AllocSize)
 			{
-					if(key >= this->AllocSize)
-					{
-						Realloc(max(this->AllocSize, key) + BlockSize);
-					}
-				ConstructInterval(this->Size, key);
-				this->Size = key + 1;
+				Realloc(max(this->AllocSize, key) + BlockSize);
 			}
+			ConstructInterval(this->Size, key);
+			this->Size = key + 1;
+		}
 		return(Data[key]);
 	}
 
@@ -176,33 +176,33 @@ public:
 
 	const T & operator[](UINT key) const
 	{
-			if(key >= this->Size)
+		if(key >= this->Size)
+		{
+			/*_asm
 			{
-				/*_asm
-				{
-					int 3;
-				};*/
-				//SkyXEngine::Core::InError("exit in array");
-			}
+			int 3;
+			};*/
+			//SkyXEngine::Core::InError("exit in array");
+		}
 		return(Data[key]);
 	}
-	
+
 
 	~Array()
 	{
-			if(Size)
-			{
-				DestructInterval(0, Size - 1);
-			}
+		if(Size)
+		{
+			DestructInterval(0, Size - 1);
+		}
 		free(Data);
 	}
 
 	void clear()
 	{
-			if(Size)
-			{
-				DestructInterval(0, Size - 1);
-			}
+		if(Size)
+		{
+			DestructInterval(0, Size - 1);
+		}
 		free(Data);
 		Size = 0;
 		AllocSize = 0;
@@ -210,7 +210,7 @@ public:
 		Alloc();
 	}
 
-    void clearFast()
+	void clearFast()
 	{
 		if(Size)
 		{
@@ -228,7 +228,7 @@ public:
 	void quickSort(const L& CompareFunc)
 	{
 		//don't sort 0 or 1 elements
-		if(size()>1)
+		if(size() > 1)
 		{
 			quickSortInternal(CompareFunc, 0, size() - 1);
 		}
@@ -239,7 +239,7 @@ protected:
 	/*
 #ifdef S4G
 	friend s4g_Stack<T, BlockSize>;
-#endif*/
+	#endif*/
 	void Alloc()
 	{
 		Realloc(BlockSize);
@@ -253,12 +253,12 @@ protected:
 		}
 		T * tmpData = (T*)malloc(sizeof(T) * NewSize);
 		memcpy(tmpData, this->Data, min(NewSize, this->Size) * sizeof(T));
-			if(this->Size > NewSize)
-			{
-				DestructInterval(NewSize, this->Size - 1);
-				this->Size = NewSize;
-			}
-		
+		if(this->Size > NewSize)
+		{
+			DestructInterval(NewSize, this->Size - 1);
+			this->Size = NewSize;
+		}
+
 		this->AllocSize = NewSize;
 		T * tmpDel = this->Data;
 		this->Data = tmpData;
@@ -268,18 +268,18 @@ protected:
 	void ConstructInterval(UINT start, UINT end)
 	{
 		//this->Data + start = new(this->Data + start) T[end - start + 1];
-			for(UINT i = start; i <= end; i++)
-			{
-				new(&this->Data[i]) T;
-			}
+		for(UINT i = start; i <= end; i++)
+		{
+			new(&this->Data[i]) T;
+		}
 	}
 
 	void DestructInterval(UINT start, UINT end)
 	{
-			for(UINT i = start; i <= end; i++)
-			{
-				(&this->Data[i])->~T();
-			}
+		for(UINT i = start; i <= end; i++)
+		{
+			(&this->Data[i])->~T();
+		}
 	}
 
 
@@ -308,9 +308,9 @@ protected:
 		while(i <= j);
 
 		//  recursion
-		if(lo<j)
+		if(lo < j)
 			quickSortInternal(CompareFunc, lo, j);
-		if(i<hi)
+		if(i < hi)
 			quickSortInternal(CompareFunc, i, hi);
 	}
 

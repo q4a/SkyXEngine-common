@@ -72,25 +72,26 @@ public:
 		this->CurrentNode->data = data;
 	}
 
-	T pop()
+	bool pop(T *pOut)
 	{
-			if(SP)
-			{
-				StackNode * tmp = this->CurrentNode;
-				CurrentNode = this->CurrentNode->Parent;
-				this->SP--;
-				T data = tmp->data;
-				//remove tmp
-				Data.Delete(tmp);
-				return(data);
-			}
-		//return(NULL);
-	}
-	void pop(int countpop)
-	{
-		for (int i = 0; i < countpop; ++i)
+		assert(pOut);
+		if(SP)
 		{
-			if (SP)
+			StackNode * tmp = this->CurrentNode;
+			CurrentNode = this->CurrentNode->Parent;
+			this->SP--;
+			*pOut = tmp->data;
+			//remove tmp
+			Data.Delete(tmp);
+			return(true);
+		}
+		return(false);
+	}
+	void popN(int countpop)
+	{
+		for(int i = 0; i < countpop; ++i)
+		{
+			if(SP)
 			{
 				StackNode * tmp = this->CurrentNode;
 				CurrentNode = this->CurrentNode->Parent;
@@ -123,12 +124,12 @@ public:
 
 	T get(int id)
 	{
-		if (id < 0)
+		if(id < 0)
 		{
 			id += this->SP;
 		}
 		--id;
-		if (id < 0 || id >= this->SP)
+		if(id < 0 || id >= this->SP)
 		{
 			return(NULL);
 		}

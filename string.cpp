@@ -177,15 +177,6 @@ String String::operator+(const String &str) const
 	return(newSXStr);
 }
 
-String String::operator+(const String *str)
-{
-	char * ns = new char[length() + str->length() + 1];
-	sprintf(ns, "%s%s", m_szString, str->c_str());
-	String newSXStr = ns;
-	SAFE_DELETE_A(ns);
-	return(newSXStr);
-}
-
 String String::operator+(const char * str)
 {
 	char * ns = new char[length() + strlen(str) + 1];
@@ -263,17 +254,12 @@ String String::operator+(const bool & bf)
 
 String & String::operator=(const String & str)
 {
-	release();
-	m_szString = new char[str.length() + 1];
-	memcpy(m_szString, str.c_str(), str.length() + 1);
-	return(*this);
-}
-
-String & String::operator=(const String * str)
-{
-	release();
-	m_szString = new char[str->length() + 1];
-	memcpy(m_szString, str->c_str(), str->length() + 1);
+	if(&str != this)
+	{
+		release();
+		m_szString = new char[str.length() + 1];
+		memcpy(m_szString, str.c_str(), str.length() + 1);
+	}
 	return(*this);
 }
 
@@ -380,15 +366,6 @@ String & String::operator+=(const String & str)
 	return(*this);
 }
 
-String & String::operator+=(const String * str)
-{
-	char * ns = new char[length() + str->length() + 1];
-	sprintf(ns, "%s%s", m_szString, str->c_str());
-	SAFE_DELETE_A(m_szString);
-	m_szString = ns;
-	return(*this);
-}
-
 String & String::operator+=(const char * str)
 {
 	char * newstring = new char[length() + strlen(str) + 1];
@@ -470,13 +447,6 @@ String String::operator-(const String & str)
 	return(newStr);
 }
 
-String String::operator-(const String * str)
-{
-	String newStr = this;
-	newStr.replace(str, "", 0);
-	return(newStr);
-}
-
 String String::operator-(const char * str)
 {
 	String newStr = this;
@@ -541,12 +511,6 @@ String & String::operator-=(const String & str)
 	return(*this);
 }
 
-String & String::operator-=(const String * str)
-{
-	replace(str, "", 0);
-	return(*this);
-}
-
 String & String::operator-=(const char * str)
 {
 	replace(str, "", 0);
@@ -598,13 +562,6 @@ String & String::operator-=(const bool & bf)
 /////////////////////////////////////////////////////////
 
 String String::operator/(const String & str)
-{
-	String newStr = this;
-	newStr.replaceAll(str, "");
-	return(newStr);
-}
-
-String String::operator/(const String * str)
 {
 	String newStr = this;
 	newStr.replaceAll(str, "");
@@ -675,12 +632,6 @@ String & String::operator/=(const String & str)
 	return(*this);
 }
 
-String & String::operator/=(const String * str)
-{
-	replaceAll(str, "");
-	return(*this);
-}
-
 String & String::operator/=(const char * str)
 {
 	replaceAll(str, "");
@@ -733,37 +684,15 @@ String & String::operator/=(const bool & bf)
 
 bool String::operator==(const String & str) const
 {
-	/*if(this->length() == str.length())
+	if(&str == this || !strcmp(m_szString, str.m_szString))
 	{
-	DWORD len = this->length();
-	for(DWORD i = 0; i<len; i++)
-	{
-	if(this->m_szString[i] != str.m_szString[i])
-	return false;
+		return(true);
 	}
-	}
-	else
-	return false;
-
-	return true;*/
-	return(operator==(&str));
-}
-
-bool String::operator==(const String * str) const
-{
-	if(length() == str->length())
-	{
-		DWORD len = length();
-		for(DWORD i = 0; i<len; i++)
-		{
-			if(m_szString[i] != str->m_szString[i])
-				return false;
-		}
-	}
-	else
-		return false;
+	
+	return(false);
 
 	return true;
+	return(operator==(&str));
 }
 
 bool String::operator==(const char * str) const
@@ -839,11 +768,6 @@ bool String::operator==(const bool & bf) const
 bool String::operator!=(const String & str) const
 {
 	return !(*this == str);
-}
-
-bool String::operator!=(const String * str) const
-{
-	return !(*this == *str);
 }
 
 bool String::operator!=(const char * str) const
@@ -968,7 +892,7 @@ DWORD String::replaceAll(const char * str, const char * replace)
 	while(PosCodeBegin != ~0)
 	{
 		PosCodeBegin = find(str, (DWORD)PosCodeOld);
-		if(PosCodeBegin != ~0)
+		if(PosCodeBegin != (size_t)((DWORD)~0))
 		{
 			CountCodeFMT++;
 			PosCodeOld = PosCodeBegin + strlen(str);
@@ -1000,7 +924,7 @@ DWORD String::replaceAll(const char * str, const char * replace)
 		OldPosEndFmt = PosBeginFmt+StrLen;*/
 		memcpy(count_str, m_szString + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
-		memcpy(count_str + count_str_last_len, replace, strlen(replace));
+		strcpy(count_str + count_str_last_len, replace);
 		count_str_last_len += strlen(replace);
 		OldPosEndFmt = PosBeginFmt + StrLen;
 	}
@@ -1016,7 +940,7 @@ DWORD String::replaceAll(const char * str, const char * replace)
 		memcpy(count_str + count_str_last_len, m_szString + OldPosEndFmt, PosBeginFmt - OldPosEndFmt);
 		count_str_last_len += PosBeginFmt - OldPosEndFmt;
 
-		memcpy(count_str + count_str_last_len, replace, strlen(replace));
+		strcpy(count_str + count_str_last_len, replace);
 		count_str_last_len += strlen(replace);
 
 		OldPosEndFmt = PosBeginFmt + StrLen;
@@ -1341,15 +1265,6 @@ StringW StringW::operator+(const StringW &str) const
 	return(newSXStr);
 }
 
-StringW StringW::operator+(const StringW *str)
-{
-	WCHAR * ns = new WCHAR[length() + str->length() + 1];
-	swprintf(ns, length() + str->length() + 1, L"%ls%ls", m_szString, str->c_str());
-	StringW newSXStr = ns;
-	SAFE_DELETE_A(ns);
-	return(newSXStr);
-}
-
 StringW StringW::operator+(const WCHAR * str)
 {
 	WCHAR * ns = new WCHAR[length() + wcslen(str) + 1];
@@ -1427,17 +1342,12 @@ StringW StringW::operator+(const bool & bf)
 
 StringW & StringW::operator=(const StringW & str)
 {
-	release();
-	m_szString = new WCHAR[str.length() + 1];
-	memcpy(m_szString, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
-	return(*this);
-}
-
-StringW & StringW::operator=(const StringW * str)
-{
-	release();
-	m_szString = new WCHAR[str->length() + 1];
-	memcpy(m_szString, str->c_str(), sizeof(WCHAR) * (str->length() + 1));
+	if(&str != this)
+	{
+		release();
+		m_szString = new WCHAR[str.length() + 1];
+		memcpy(m_szString, str.c_str(), sizeof(WCHAR) * (str.length() + 1));
+	}
 	return(*this);
 }
 
@@ -1544,15 +1454,6 @@ StringW & StringW::operator+=(const StringW & str)
 	return(*this);
 }
 
-StringW & StringW::operator+=(const StringW * str)
-{
-	WCHAR * ns = new WCHAR[length() + str->length() + 1];
-	swprintf(ns, length() + str->length() + 1, L"%ls%ls", m_szString, str->c_str());
-	SAFE_DELETE_A(m_szString);
-	m_szString = ns;
-	return(*this);
-}
-
 StringW & StringW::operator+=(const WCHAR * str)
 {
 	WCHAR * newstring = new WCHAR[length() + wcslen(str) + 1];
@@ -1634,13 +1535,6 @@ StringW StringW::operator-(const StringW & str)
 	return(newStr);
 }
 
-StringW StringW::operator-(const StringW * str)
-{
-	StringW newStr = this;
-	newStr.replace(str, "", 0);
-	return(newStr);
-}
-
 StringW StringW::operator-(const WCHAR * str)
 {
 	StringW newStr = this;
@@ -1705,12 +1599,6 @@ StringW & StringW::operator-=(const StringW & str)
 	return(*this);
 }
 
-StringW & StringW::operator-=(const StringW * str)
-{
-	replace(str, "", 0);
-	return(*this);
-}
-
 StringW & StringW::operator-=(const WCHAR * str)
 {
 	replace(str, "", 0);
@@ -1762,13 +1650,6 @@ StringW & StringW::operator-=(const bool & bf)
 /////////////////////////////////////////////////////////
 
 StringW StringW::operator/(const StringW & str)
-{
-	StringW newStr = this;
-	newStr.replaceAll(str, L"");
-	return(newStr);
-}
-
-StringW StringW::operator/(const StringW * str)
 {
 	StringW newStr = this;
 	newStr.replaceAll(str, L"");
@@ -1839,12 +1720,6 @@ StringW & StringW::operator/=(const StringW & str)
 	return(*this);
 }
 
-StringW & StringW::operator/=(const StringW * str)
-{
-	replaceAll(str, L"");
-	return(*this);
-}
-
 StringW & StringW::operator/=(const WCHAR * str)
 {
 	replaceAll(str, L"");
@@ -1897,37 +1772,12 @@ StringW & StringW::operator/=(const bool & bf)
 
 bool StringW::operator==(const StringW & str) const
 {
-	/*if(this->length() == str.length())
+	if(&str == this || !lstrcmpW(m_szString, str.m_szString))
 	{
-	DWORD len = this->length();
-	for(DWORD i = 0; i<len; i++)
-	{
-	if(this->m_szString[i] != str.m_szString[i])
-	return false;
+		return(true);
 	}
-	}
-	else
-	return false;
 
-	return true;*/
-	return(operator==(&str));
-}
-
-bool StringW::operator==(const StringW * str) const
-{
-	if(length() == str->length())
-	{
-		DWORD len = length();
-		for(DWORD i = 0; i<len; i++)
-		{
-			if(m_szString[i] != str->m_szString[i])
-				return false;
-		}
-	}
-	else
-		return false;
-
-	return true;
+	return(false);
 }
 
 bool StringW::operator==(const WCHAR * str) const
@@ -2003,11 +1853,6 @@ bool StringW::operator==(const bool & bf) const
 bool StringW::operator!=(const StringW & str) const
 {
 	return !(*this == str);
-}
-
-bool StringW::operator!=(const StringW * str) const
-{
-	return !(*this == *str);
 }
 
 bool StringW::operator!=(const WCHAR * str) const
@@ -2292,7 +2137,7 @@ double StringW::toDouble() const
 {
 	//return(atof(m_szString));
 	double tmp;
-	swscanf(m_szString, L"%G", &tmp);
+	swscanf(m_szString, L"%lg", &tmp);
 	return(tmp);
 }
 

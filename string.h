@@ -50,7 +50,6 @@ public:
 	//который и содержит результат сложения строк
 
 	String operator+(const String & str) const;
-	String operator+(const String * str);
 
 	String operator+(const char *	str);
 	String operator+(const char &	sym);
@@ -65,7 +64,6 @@ public:
 	//операции присваивания
 
 	String & operator=(const String & str);
-	String & operator=(const String * str);
 
 	String & operator=(const char *	str);
 	String & operator=(const char &	sym);
@@ -81,7 +79,6 @@ public:
 	////////////////////////////////////
 	//операции сложения строк объекта к которому применяется сложение и слагаемого
 	String & operator+=(const String &str);
-	String & operator+=(const String *str);
 
 	String & operator+=(const char *	str);
 	String & operator+=(const char &	sym);
@@ -96,7 +93,6 @@ public:
 	//искоючить первое нахождение из строки
 	//возвращается новый объект String, который содержит результат
 	String operator-(const String & str);
-	String operator-(const String * str);
 
 	String operator-(const char *	str);
 	String operator-(const char &	sym);
@@ -110,7 +106,6 @@ public:
 	////////////////////////////////////
 	//исключает первое нахождение из данного объекта
 	String & operator-=(const String &str);
-	String & operator-=(const String *str);
 
 	String & operator-=(const char *	str);
 	String & operator-=(const char &	sym);
@@ -125,7 +120,6 @@ public:
 	//исключить все похожие нахождения
 	//возвращается новый объект String
 	String operator / (const String &str);
-	String operator / (const String *str);
 
 	String operator/(const char *	str);
 	String operator/(const char &	sym);
@@ -139,7 +133,6 @@ public:
 	////////////////////////////////////
 	//исключить все похожие нахождения
 	String & operator/=(const String &str);
-	String & operator/=(const String *str);
 
 	String & operator/=(const char *	str);
 	String & operator/=(const char &	sym);
@@ -153,7 +146,6 @@ public:
 	////////////////////////////////////
 
 	bool operator==(const String &str) const;
-	bool operator==(const String *str) const;
 
 	bool operator==(const char *	str) const;
 	bool operator==(const char &	sym) const;
@@ -167,7 +159,6 @@ public:
 	//////////////////////////////////////
 
 	bool operator!= (const String &str) const;
-	bool operator!= (const String *str) const;
 
 	bool operator!=(const char *	str) const;
 	bool operator!=(const char &	sym) const;
@@ -255,7 +246,6 @@ public:
 	//который и содержит результат сложения строк
 
 	StringW operator+(const StringW & str) const;
-	StringW operator+(const StringW * str);
 
 	StringW operator+(const WCHAR *	str);
 	StringW operator+(const WCHAR &	sym);
@@ -270,7 +260,6 @@ public:
 	//операции присвоения
 
 	StringW & operator=(const StringW & str);
-	StringW & operator=(const StringW * str);
 
 	StringW & operator=(const WCHAR *	str);
 	StringW & operator=(const WCHAR &	sym);
@@ -286,7 +275,6 @@ public:
 	////////////////////////////////////
 	//операции сложения строк объекта к которому применяется сложение и слагаемого
 	StringW & operator+=(const StringW &str);
-	StringW & operator+=(const StringW *str);
 
 	StringW & operator+=(const WCHAR *	str);
 	StringW & operator+=(const WCHAR &	sym);
@@ -301,7 +289,6 @@ public:
 	//искоючить первое нахождение из строки
 	//возвращается новый объект String, который содержит результат
 	StringW operator-(const StringW & str);
-	StringW operator-(const StringW * str);
 
 	StringW operator-(const WCHAR *	str);
 	StringW operator-(const WCHAR &	sym);
@@ -315,7 +302,6 @@ public:
 	////////////////////////////////////
 	//исключает первое нахождение из данного объекта
 	StringW & operator-=(const StringW &str);
-	StringW & operator-=(const StringW *str);
 
 	StringW & operator-=(const WCHAR *	str);
 	StringW & operator-=(const WCHAR &	sym);
@@ -330,7 +316,6 @@ public:
 	//исключить все похожие нахождения
 	//возвращается новый объект StringW
 	StringW operator / (const StringW &str);
-	StringW operator / (const StringW *str);
 
 	StringW operator/(const WCHAR *	str);
 	StringW operator/(const WCHAR &	sym);
@@ -344,7 +329,6 @@ public:
 	////////////////////////////////////
 	//исключить все похожие нахождения
 	StringW & operator/=(const StringW &str);
-	StringW & operator/=(const StringW *str);
 
 	StringW & operator/=(const WCHAR *	str);
 	StringW & operator/=(const WCHAR &	sym);
@@ -358,7 +342,6 @@ public:
 	////////////////////////////////////
 
 	bool operator==(const StringW &str) const;
-	bool operator==(const StringW *str) const;
 
 	bool operator==(const WCHAR *	str) const;
 	bool operator==(const WCHAR &	sym) const;
@@ -372,7 +355,6 @@ public:
 	//////////////////////////////////////
 
 	bool operator!= (const StringW &str) const;
-	bool operator!= (const StringW *str) const;
 
 	bool operator!=(const WCHAR *	str) const;
 	bool operator!=(const WCHAR &	sym) const;

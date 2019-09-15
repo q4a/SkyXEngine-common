@@ -47,9 +47,9 @@ void operator delete[](void* ptr)\
 #define SM_PIDIV2           1.570796327f
 #define SM_PIDIV4           0.785398163f
 
-#define vlerp(x,y,s) (x + s*(y - x))
-#define sign(x) (x >= 0 ? (x>0 ?1 :0) : -1)
-#define sign2(x) (x >= 0 ? 1 : -1)
+#define vlerp(x,y,s) ((x) + (s)*((y) - (x)))
+#define sign(x) ((x) >= 0 ? ((x)>0 ?1 :0) : -1)
+#define sign2(x) ((x) >= 0 ? 1 : -1)
 #define SMToRadian(degree)((degree)*(SM_PI / 180.0f))
 #define SMToAngle(rad)((rad)*(180.0f / SM_PI))
 
