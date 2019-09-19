@@ -85,7 +85,7 @@ const char* StrCutStr(const char *szStr, const char *szFinder);
 String StrCutStrI(const char *szStr, const char *szFinder);
 
 
-#define STR_VALIDATE(str) (str && str[0]!=0 && str[0]!='0')
+#define STR_VALIDATE(str) ((str) && (str)[0]!=0 && (str)[0]!='0')
 
 void StrCutName(const char* path, char* name);
 

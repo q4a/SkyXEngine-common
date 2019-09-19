@@ -251,7 +251,12 @@ protected:
 		{
 			return;
 		}
-		T * tmpData = (T*)malloc(sizeof(T) * NewSize);
+		T *tmpData = (T*)malloc(sizeof(T) * NewSize);
+		assert(tmpData);
+		if(!tmpData)
+		{
+			return;
+		}
 		memcpy(tmpData, this->Data, min(NewSize, this->Size) * sizeof(T));
 		if(this->Size > NewSize)
 		{

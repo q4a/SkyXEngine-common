@@ -18,6 +18,7 @@ See the license in LICENSE
 #include "types.h"
 #include <malloc.h>
 #if defined(_WINDOWS)
+#	pragma warning(push)
 #	pragma warning(disable:4018)
 #endif
 
@@ -103,51 +104,54 @@ public:
 
 	MemAlloc & operator=(const MemAlloc & al)
 	{//clear mem
-		for(int i = 0; i < this->NumCurBlockCount; i++)
+		if(&al != this)
 		{
-			if(this->memblocks[i].mem)
+			for(int i = 0; i < this->NumCurBlockCount; i++)
 			{
-				for(int j = 0; j < this->memblocks[i].size; j++)
+				if(this->memblocks[i].mem)
 				{
-					if(!(this->memblocks[i].mem[j].IsFree & 0x80000000))
+					for(int j = 0; j < this->memblocks[i].size; j++)
 					{
-						this->memblocks[i].mem[j].data.~T();
+						if(!(this->memblocks[i].mem[j].IsFree & 0x80000000))
+						{
+							this->memblocks[i].mem[j].data.~T();
+						}
+
 					}
-
+					_aligned_free(this->memblocks[i].mem);
 				}
-				_aligned_free(this->memblocks[i].mem);
+				//SX_SAFE_DELETE_A(this->memblocks[i].mem);
 			}
-			//SX_SAFE_DELETE_A(this->memblocks[i].mem);
-		}
-		mem_delete_a(this->memblocks);
+			mem_delete_a(this->memblocks);
 
-		this->NumCurBlock = al.NumCurBlock;
-		this->NumCurBlockCount = al.NumCurBlockCount;
-		this->memblocks = new MemBlock[this->NumCurBlockCount];
-		//SX_DBG_NEW(this->NumCurBlockCount * sizeof(MemBlock), this->memblocks);
-		for(int i = 0; i < this->NumCurBlockCount; i++)
-		{
-			this->memblocks[i].size = al.memblocks[i].size;
-			this->memblocks[i].pos = al.memblocks[i].pos;
+			this->NumCurBlock = al.NumCurBlock;
+			this->NumCurBlockCount = al.NumCurBlockCount;
+			this->memblocks = new MemBlock[this->NumCurBlockCount];
+			//SX_DBG_NEW(this->NumCurBlockCount * sizeof(MemBlock), this->memblocks);
+			for(int i = 0; i < this->NumCurBlockCount; i++)
+			{
+				this->memblocks[i].size = al.memblocks[i].size;
+				this->memblocks[i].pos = al.memblocks[i].pos;
 
-			if(!this->memblocks[i].size)
-			{
-				this->memblocks[i].mem = NULL;
-			}
-			else
-			{
-				this->memblocks[i].mem = (MemCell*)_aligned_malloc(al.memblocks[i].size * sizeof(MemCell), alignBy);
-				//SX_DBG_NEW(al.memblocks[i].size, this->memblocks[i].mem);
-				for(int j = 0; (unsigned int)j < al.memblocks[i].size; j++)
+				if(!this->memblocks[i].size)
 				{
-					this->memblocks[i].mem[j].IsFree = al.memblocks[i].mem[j].IsFree;
-					if(!(al.memblocks[i].mem[j].IsFree & 0x80000000))
+					this->memblocks[i].mem = NULL;
+				}
+				else
+				{
+					this->memblocks[i].mem = (MemCell*)_aligned_malloc(al.memblocks[i].size * sizeof(MemCell), alignBy);
+					//SX_DBG_NEW(al.memblocks[i].size, this->memblocks[i].mem);
+					for(int j = 0; (unsigned int)j < al.memblocks[i].size; j++)
 					{
-						this->memblocks[i].mem[j].data = al.memblocks[i].mem[j].data;
+						this->memblocks[i].mem[j].IsFree = al.memblocks[i].mem[j].IsFree;
+						if(!(al.memblocks[i].mem[j].IsFree & 0x80000000))
+						{
+							this->memblocks[i].mem[j].data = al.memblocks[i].mem[j].data;
+						}
 					}
 				}
+				//SX_SAFE_DELETE_A(memblocks[i].mem);
 			}
-			//SX_SAFE_DELETE_A(memblocks[i].mem);
 		}
 		return(*this);
 	}
@@ -413,7 +417,7 @@ public:
 };
 
 #if defined(_WINDOWS)
-#	pragma warning(default:4018)
+#	pragma warning(pop)
 #endif
 #if defined(_LINUX) || defined(_MAC)
 #	pragma GCC diagnostic pop

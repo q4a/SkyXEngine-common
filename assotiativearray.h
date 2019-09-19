@@ -119,10 +119,8 @@ private:
 			tmpNode->Right->Parent = node;
 		}
 
-		if(tmpNode)
-		{
-			tmpNode->Parent = node->Parent;
-		}
+		tmpNode->Parent = node->Parent;
+		
 		if(node->Parent)
 		{
 			if(node == node->Parent->Right)
@@ -140,10 +138,8 @@ private:
 		}
 
 		tmpNode->Right = node;
-		if(node)
-		{
-			node->Parent = tmpNode;
-		}
+		
+		node->Parent = tmpNode;
 	}
 
 	void TreeFixIns(Node * node)
@@ -267,7 +263,7 @@ private:
 		node->IsBlack = true;
 	}
 
-	Node * TreeInsert(const SX_KEYTYPE & key, bool * found = NULL)
+	Node* TreeInsert(const SX_KEYTYPE & key, bool * found = NULL)
 	{
 		Node * tmpCur;
 		Node * tmpParent;
@@ -294,19 +290,10 @@ private:
 		this->Size_++;
 		// tmpNode = new Node;
 		tmpNode = this->MemNodes.Alloc();
+		assert(tmpNode);
 		if(!tmpNode)
 		{
-			//printf("Unable to allocate memory\n");
-#if 0
-#if defined(WIN32)
-			_asm
-			{
-				int 3;
-			};
-#else
-			asm("int $3");
-#endif
-#endif
+			return(NULL);
 		}
 		tmpNode->Key = key;
 		//tmpNode->Val = new SX_VALTYPE;

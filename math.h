@@ -1752,7 +1752,7 @@ public:
 		x = f.x;
 		y = f.y;
 		z = f.z;
-		Renormalize();
+		w = Renormalize().w;
 	}
 
 	SMQuaternion::SMQuaternion(const float4 & f)
@@ -1803,10 +1803,10 @@ public:
 		float3 vec;
 		if(u == -v)
 		{
-			float x = abs(v.x);
-			float y = abs(v.y);
-			float z = abs(v.z);
-			float3 vOther = x < y ? (x < z ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)) : (y < z ? float3(0.0f, 1.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f));
+			float _x = abs(v.x);
+			float _y = abs(v.y);
+			float _z = abs(v.z);
+			float3 vOther = _x < _y ? (_x < _z ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)) : (_y < _z ? float3(0.0f, 1.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f));
 
 			vec = SMVector3Cross(v, vOther);
 			w = 0.0f;
@@ -1884,8 +1884,8 @@ public:
 				s = sqrt((m[i][i] - (m[j][j] + m[k][k])) + 1.0f);
 
 				q[i] = s * 0.5f;
-
-				if(s != 0.0) s = 0.5f / s;
+				
+				if(fabs(s) < FLT_EPSILON) s = 0.5f / s;
 
 				q[3] = (m[j][k] - m[k][j]) * s;
 				q[j] = (m[i][j] + m[j][i]) * s;
@@ -1901,7 +1901,7 @@ public:
 };
 __forceinline bool operator==(const SMQuaternion & q1, const SMQuaternion & q2)
 {
-	return(q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
+	return(fabs(q1.x - q2.x) < FLT_EPSILON && fabs(q1.y - q2.y) < FLT_EPSILON && fabs(q1.z - q2.z) < FLT_EPSILON && fabs(q1.w - q2.w) < FLT_EPSILON);
 }
 
 __forceinline SMQuaternion operator*(const SMQuaternion & q1, const SMQuaternion & q2)
