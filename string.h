@@ -34,7 +34,7 @@ public:
 	String(const UINT num);
 	String(const long		num);
 	String(const double	num);
-	String(const bool		bf);
+	explicit String(bool bf);
 	String(const String & str);
 	String(const String * str);
 
@@ -230,7 +230,7 @@ public:
 	StringW(const unsigned long	num);
 	StringW(const long		num);
 	StringW(const double	num);
-	StringW(const bool		bf);
+	explicit StringW(bool bf);
 	StringW(const StringW & str);
 	StringW(const StringW * str);
 
