@@ -685,8 +685,8 @@ bool String::operator==(const String & str) const
 	
 	return(false);
 
-	return true;
-	return(operator==(&str));
+	//return true;
+	//return(operator==(&str));
 }
 
 bool String::operator==(const char * str) const

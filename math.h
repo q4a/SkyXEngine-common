@@ -1885,7 +1885,7 @@ public:
 
 				q[i] = s * 0.5f;
 				
-				if(fabs(s) < FLT_EPSILON) s = 0.5f / s;
+				if(fabs(s) > FLT_EPSILON) s = 0.5f / s;
 
 				q[3] = (m[j][k] - m[k][j]) * s;
 				q[j] = (m[i][j] + m[j][i]) * s;
