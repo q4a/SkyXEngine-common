@@ -234,6 +234,25 @@ public:
 		}
 	}
 
+	int indexOf(const T &other)
+	{
+		return(indexOf(other, [](const T &a, const T &b){
+			return(a == b);
+		}));
+	}
+
+	template <typename L>
+	int indexOf(const T &other, const L& CompareFunc)
+	{
+		for(int i = 0, l = size(); i < l; ++i) 
+		{
+			if(CompareFunc(operator[](i), other))
+			{
+				return(i);
+			}
+		}
+		return(-1);
+	}
 
 protected:
 	/*
