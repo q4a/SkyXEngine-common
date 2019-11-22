@@ -27,7 +27,7 @@ class Stack
 	struct StackNode
 	{
 		T data;
-		StackNode * Parent;
+		StackNode *Parent;
 	};
 
 	MemAlloc<StackNode, pageSize, 16, alignBy> Data;
@@ -122,21 +122,22 @@ public:
 		return(Data.GetAt(page, pageOffset));
 	}
 
-	T get(int id)
+	T& get(int id)
 	{
 		if(id < 0)
 		{
 			id += this->SP;
 		}
-		--id;
-		if(id < 0 || id >= this->SP)
+		//--id;
+		assert(id >= 0 && id < SP);
+		/*if(id < 0 || id >= this->SP)
 		{
 			return(NULL);
-		}
+		}*/
 
 		int page = id / pageSize;
 		int pageOffset = id % pageSize;
-		return(*Data.GetAt(page, pageOffset));
+		return(Data.GetAt(page, pageOffset)->data);
 	}
 
 	inline int count()

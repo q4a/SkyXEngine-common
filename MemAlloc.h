@@ -329,7 +329,7 @@ public:
 	{
 		if(!(memblocks[page].mem[offset].IsFree & 0x80000000))
 		{
-			return(memblocks[page].mem[offset].data);
+			return(&memblocks[page].mem[offset].data);
 		}
 		return(NULL);
 	}
