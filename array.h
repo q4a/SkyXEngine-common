@@ -241,8 +241,8 @@ public:
 		}));
 	}
 
-	template <typename L>
-	int indexOf(const T &other, const L& CompareFunc)
+	template <typename L, typename O>
+	int indexOf(const O &other, const L& CompareFunc)
 	{
 		for(int i = 0, l = size(); i < l; ++i) 
 		{
