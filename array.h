@@ -25,17 +25,31 @@ template<typename T, int BlockSize=16>
 class Array
 {
 public:
-	Array():Size(0), AllocSize(0), Data(NULL)
+	Array()
 	{
 		Alloc();
 	}
 
-	Array(const Array & arr):Size(0), AllocSize(0), Data(NULL)
+	Array(const T &val, UINT iCount)
 	{
-		Alloc();
+		Realloc(iCount);
+		for(UINT i = 0; i < iCount; ++i)
+		{
+			(*this)[i] = val;
+		}
+	}
+
+	explicit Array(UINT iCount)
+	{
+		Realloc(iCount);
+	}
+
+	Array(const Array &arr)
+	{
+		Realloc(arr.Size);
 		//this->AllocSize = arr.AllocSize;
 		//this->Size = arr.Size;
-		for(int i = arr.Size - 1; i >= 0; i--)
+		for(UINT i = 0; i < arr.Size; ++i)
 		{
 			(*this)[i] = arr[i];
 		}
@@ -345,10 +359,10 @@ protected:
 		Data[index1] = temp;
 	}
 
-	T * Data;
+	T *Data = NULL;
 
-	UINT Size;
-	UINT AllocSize;
+	UINT Size = 0;
+	UINT AllocSize = 0;
 };
 
 
