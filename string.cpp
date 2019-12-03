@@ -259,9 +259,12 @@ String & String::operator=(const String & str)
 
 String & String::operator=(const char * str)
 {
-	release();
-	m_szString = new char[strlen(str) + 1];
-	memcpy(m_szString, str, strlen(str) + 1);
+    if (str != m_szString)
+    {
+        release();
+        m_szString = new char[strlen(str) + 1];
+        memcpy(m_szString, str, strlen(str) + 1);
+    }
 	return(*this);
 }
 
@@ -1341,9 +1344,12 @@ StringW & StringW::operator=(const StringW & str)
 
 StringW & StringW::operator=(const WCHAR * str)
 {
-	release();
-	m_szString = new WCHAR[wcslen(str) + 1];
-	memcpy(m_szString, str, sizeof(WCHAR) * (wcslen(str) + 1));
+    if (m_szString != str)
+    {
+        release();
+        m_szString = new WCHAR[wcslen(str) + 1];
+        memcpy(m_szString, str, sizeof(WCHAR)* (wcslen(str) + 1));
+    }
 	return(*this);
 }
 

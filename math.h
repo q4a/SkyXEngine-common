@@ -493,7 +493,7 @@ struct float4_t
 	{
 	}
 
-	float4_t(const float4 & f):x(f.x), y(f.y), z(f.z), w(f.w)
+    float4_t(const float4 & f) : float4_t(f.x, f.y, f.z, f.w)
 	{
 	}
 
