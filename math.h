@@ -485,9 +485,11 @@ struct float4_t
 	float z;
 	float w;
 
+	float4_t() : float4_t(0.0, 0.0, 0.0, 0.0)
 	{
 	}
 
+	float4_t(float _x, float _y, float _z, float _w) :x(_x), y(_y), z(_z), w(_w)
 	{
 	}
 
