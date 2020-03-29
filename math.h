@@ -1803,9 +1803,9 @@ public:
 		float3 vec;
 		if(u == -v)
 		{
-			float _x = abs(v.x);
-			float _y = abs(v.y);
-			float _z = abs(v.z);
+			float _x = fabsf(v.x);
+			float _y = fabsf(v.y);
+			float _z = fabsf(v.z);
 			float3 vOther = _x < _y ? (_x < _z ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)) : (_y < _z ? float3(0.0f, 1.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f));
 
 			vec = SMVector3Cross(v, vOther);
